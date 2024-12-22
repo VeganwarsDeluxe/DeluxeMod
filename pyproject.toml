@@ -1,0 +1,39 @@
+[build-system]
+requires = [
+    "setuptools>=60",
+    "setuptools-scm>=8.0"
+]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "DeluxeMod"
+description = "Mod with community made content for VeganwarsDeluxe engine."
+readme = "README.rst"
+dynamic = ["version"]
+requires-python = ">=3.12"
+keywords = ["veganwars", "game", "mod"]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Development Status :: 3 - Alpha",
+
+    "Topic :: Games/Entertainment :: Turn Based Strategy"
+]
+dependencies = [
+    "VegansDeluxe >= 1.5.9",
+]
+authors = [
+    {name = "Vezono", email = "vezono@gts.org.ua"},
+    {name = "Archdemon"}
+]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.dynamic]
+version = {attr = "DeluxeMod.__version__"}
+
+[project.urls]
+Homepage = "https://onedev.gts.org.ua/vezono/vegans-deluxe"
+Repository = "https://onedev.gts.org.ua/vezono/vegans-deluxe"
+Documentation = "https://veganwarsdeluxe.readthedocs.io"
+Issues = "https://onedev.gts.org.ua/vezono/vegans-deluxe/~issues"

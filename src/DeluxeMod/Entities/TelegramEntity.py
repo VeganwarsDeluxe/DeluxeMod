@@ -1,0 +1,36 @@
+import uuid
+
+from VegansDeluxe.core import AttachedAction
+from VegansDeluxe.core.Actions.EntityActions import ReloadAction, SkipTurnAction, ApproachAction
+from VegansDeluxe.core.Entities.Entity import Entity
+
+
+class TelegramEntity(Entity):
+    def __init__(self, session_id: str, user_name, user_id, code=''):
+        super().__init__(session_id)
+        self.user_id = user_id
+        self.id = str(user_id) if user_id else str(uuid.uuid4())
+
+        self.name = user_name
+        self.locale = code
+
+        self.skill_cycle = 0
+
+    @property
+    def npc(self):
+        return self.type == 'npc'
+
+
+@AttachedAction(TelegramEntity)
+class ApproachAction(ApproachAction):
+    pass
+
+
+@AttachedAction(TelegramEntity)
+class ReloadAction(ReloadAction):
+    pass
+
+
+@AttachedAction(TelegramEntity)
+class SkipTurnAction(SkipTurnAction):
+    pass
