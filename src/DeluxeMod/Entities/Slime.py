@@ -9,7 +9,6 @@ from VegansDeluxe.core.utils import percentage_chance
 from VegansDeluxe.rebuild import DamageThreshold, Aflame
 
 from VegansDeluxe.core.Entities.NPC import NPC
-from .TelegramEntity import TelegramEntity
 
 
 class Slime(NPC):
@@ -28,7 +27,7 @@ class Slime(NPC):
         async def post_actions(context: EventContext[VegansDeluxe.core.Events.PostActionsGameEvent]):
             self.get_state(Aflame).extinguished = True
 
-    async def choose_act(self, session: Session[TelegramEntity], action_manager):
+    async def choose_act(self, session: Session[Entity], action_manager):
         if session.turn == 1:
             self.get_state(DamageThreshold).threshold = 5
 

@@ -8,7 +8,6 @@ from VegansDeluxe.core.utils import percentage_chance
 from VegansDeluxe.rebuild import DamageThreshold
 
 from VegansDeluxe.core.Entities.NPC import NPC
-from .TelegramEntity import TelegramEntity
 
 
 class Beast(NPC):
@@ -25,7 +24,7 @@ class Beast(NPC):
 
         self.evade_cooldown_turn = 0
 
-    async def choose_act(self, session: Session[TelegramEntity], action_manager):
+    async def choose_act(self, session: Session[Entity], action_manager):
         if session.turn == 1:
             self.get_state(DamageThreshold).threshold = 6
 

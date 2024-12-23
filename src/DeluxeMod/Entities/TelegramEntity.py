@@ -1,8 +1,10 @@
 import uuid
 
-from VegansDeluxe.core import AttachedAction
+from VegansDeluxe.core import AttachedAction, FreeAction, OwnOnly, ls
 from VegansDeluxe.core.Actions.EntityActions import ReloadAction, SkipTurnAction, ApproachAction
 from VegansDeluxe.core.Entities.Entity import Entity
+from VegansDeluxe.core.Question.Question import Question
+from VegansDeluxe.core.Question.QuestionEvents import QuestionGameEvent
 
 
 class TelegramEntity(Entity):
@@ -16,9 +18,8 @@ class TelegramEntity(Entity):
 
         self.skill_cycle = 0
 
-    @property
-    def npc(self):
-        return self.type == 'npc'
+
+
 
 
 @AttachedAction(TelegramEntity)
