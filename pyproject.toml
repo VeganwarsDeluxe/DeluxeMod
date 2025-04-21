@@ -19,7 +19,7 @@ classifiers = [
     "Topic :: Games/Entertainment :: Turn Based Strategy"
 ]
 dependencies = [
-    "VegansDeluxe >= 1.6.0",
+    "VegansDeluxe >= 1.6.2",
 ]
 authors = [
     {name = "Vezono", email = "vezono@gts.org.ua"},

@@ -32,18 +32,13 @@ class EnergyGrenadeAction(DecisiveItem):
         damage = 0
 
         targets = []
-        for _ in range(self.range):
-            target_pool = list(filter(lambda t: t not in targets,
-                                      filter_targets(source, Enemies(), self.session.entities)
-                                      ))
-            if not target_pool:
-                continue  # Skip if no more valid targets
-            selected_target = random.choice(target_pool)
-            damage = selected_target.energy  # Damage based on target's energy
-            post_damage = await self.publish_post_damage_event(source, selected_target, damage)
-            selected_target.inbound_dmg.add(source, post_damage, self.session.turn)
-            source.outbound_dmg.add(source, post_damage, self.session.turn)
-            targets.append(selected_target)
+
+        selected_target = target
+        damage = selected_target.energy  # Damage based on target's energy
+        post_damage = await self.publish_post_damage_event(source, selected_target, damage)
+        selected_target.inbound_dmg.add(source, post_damage, self.session.turn)
+        source.outbound_dmg.add(source, post_damage, self.session.turn)
+        targets.append(selected_target)
 
         # Reduce the source's energy
         source.energy = max(source.energy - 2, 0)
@@ -51,7 +46,7 @@ class EnergyGrenadeAction(DecisiveItem):
         # Announce the action
         self.session.say(
             ls("item.energy_grenade_text")
-            .format(source.name, damage, LocalizedList([t.name for t in targets]))
+            .format(source.name, damage, target.name)
         )
 
     async def publish_post_damage_event(self, source, target, damage):

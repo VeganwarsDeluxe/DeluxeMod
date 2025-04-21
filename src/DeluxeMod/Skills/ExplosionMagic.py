@@ -53,6 +53,10 @@ class Explosion(DecisiveStateAction):
     def hidden(self) -> bool:
         return self.session.turn < self.state.cooldown_turn
 
+    @property
+    def blocked(self) -> bool:
+        return self.source.energy < 5
+
     async def func(self, source: Entity, target: Entity):
         self.session.say(ls("skill.explosion.staff_text").format(source.name, target.name))
         random_text = random.choice(self.state.preparation_texts)

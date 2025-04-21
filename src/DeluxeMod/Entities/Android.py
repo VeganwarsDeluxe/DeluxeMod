@@ -85,6 +85,8 @@ class Android(NPC):
     def targeted_action(self, action_manager, action_id: str, session: Session[Entity],
                         target: Entity | None = None):
         action = action_manager.get_action(session, self, action_id)
+        if not action:
+            return
         if not action.targets:
             action.target = action.source
         elif not target:
@@ -334,6 +336,7 @@ class Android(NPC):
             print("Skipping 4")
 
         # CHOICE SELECTION
+        acts = [act for act in acts if act]
         act: Action = random.choice(acts)
 
         if not self.get_state(ZombieState).active:
@@ -497,10 +500,11 @@ class Android(NPC):
                 elif (action_manager.is_action_available(session, self, SledgehammerCrush.id)
                       and self.energy >= 4 and not self.get_state(Knockdown).active):
                     act = self.targeted_action(action_manager, SledgehammerCrush.id, session, target)
-                else:
+                elif percentage_chance(50):
                     act = self.targeted_action(action_manager, SkipTurnAction.id, session)
-                    print("Skipping 1")
-
+                    print("Forceskip 1")
+                else:
+                    act: Action = random.choice(acts)
         if not act:
             session.say("🐭| 😭🍵.")
             act = self.targeted_action(action_manager, SkipTurnAction.id, session)

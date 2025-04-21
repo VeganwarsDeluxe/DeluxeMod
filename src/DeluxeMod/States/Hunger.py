@@ -1,4 +1,5 @@
-from VegansDeluxe.core import PostUpdatesGameEvent, At, AttackGameEvent, PreMoveGameEvent
+from VegansDeluxe.core import PostUpdatesGameEvent, At, AttackGameEvent, PreMoveGameEvent, PreActionsGameEvent, \
+    ActionTag
 from VegansDeluxe.core import RegisterState, RegisterEvent
 from VegansDeluxe.core import Session
 from VegansDeluxe.core import State
@@ -71,15 +72,9 @@ async def register(root_context: StateContext[Hunger]):
             source.max_energy += state.removed_energy
             state.removed_energy = 0
 
-    @RegisterEvent(session.id, event=PostUpdatesGameEvent)
-    async def use_items(context: EventContext[PostUpdatesGameEvent]):
-        hunger_reducing_items = {'adrenaline', 'jet', 'chitin', 'rage-serum', 'stimulator'}
-
-        for item in list(source.inventory):
-            if item.id in hunger_reducing_items:
-                if state.hunger >= 3:
-                    state.hunger -= 3
-                else:
-                    state.hunger = 0
-                session.say(ls("state.hunger.reduced_by_item").format(source.name, item.name, state.hunger))
-                source.inventory.remove(item)
+    @RegisterEvent(session.id, PreActionsGameEvent)
+    async def pre_actions(context: EventContext[PreActionsGameEvent]):
+        for action in context.action_manager.get_queued_session_actions(session):
+            if ActionTag.MEDICINE in action.tags and action.target == source and not action.canceled:
+                state.hunger = max(0, state.hunger-3)
+                session.say(ls("state.hunger.reduced_by_item").format(source.name, action.item.name, state.hunger))

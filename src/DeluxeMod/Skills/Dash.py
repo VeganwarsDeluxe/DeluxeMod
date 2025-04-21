@@ -53,8 +53,8 @@ class DashAction(DecisiveStateAction):
 
         attack_action = MeleeAttack(self.session, source, weapon)
 
-        attack_result = await attack_action.attack(source, target)
-        total_damage = attack_result.dealt + 1
+        attack_result = attack_action.calculate_damage(source, target)
+        total_damage = attack_result + 1
 
         if total_damage:
             self.session.say(
