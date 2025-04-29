@@ -45,24 +45,28 @@ class NeedleFanAttack(RangedAttack):
         """
         Actually performs attack on target, dealing damage.
         """
-        calculated_damage = self.calculate_damage(source, target)
         if pay_energy:
             source.energy = max(source.energy - self.weapon.energy_cost, 0)
 
+
         if self.weapon.current_needles > 0:
             used_needles = self.weapon.current_needles
-            calculated_damage = calculated_damage * used_needles
+            calculated_damage = 0
             self.weapon.current_needles = 0
+            for i in range(used_needles):
+                calculated_damage += self.calculate_damage(source, target)
         else:
+            # Convert to a melee attack if no needles and hit yourself if target is unreachable
             target = target if target in source.nearby_entities else source
+            calculated_damage = self.calculate_damage(source, target)
 
         displayed_damage = await self.publish_attack_event(source, target, calculated_damage)
-        self.send_attack_message(source, target, displayed_damage)
+        self.send_attack_message(source, target, displayed_damage.damage)
         dealt_damage = await self.publish_post_attack_event(source, target, displayed_damage)
 
-        target.inbound_dmg.add(source, dealt_damage, self.session.turn)
+        target.inbound_dmg.add(source, dealt_damage.damage, self.session.turn)
         source.outbound_dmg.add(target, dealt_damage, self.session.turn)
-        return DamageData(calculated_damage, displayed_damage, dealt_damage)
+        return DamageData(calculated_damage, displayed_damage.damage, dealt_damage.damage)
 
     async def publish_post_damage_event(self, source: Entity, target: Entity, damage: int) -> int:
         message = PostDamageGameEvent(self.session.id, self.session.turn, source, target, damage)
