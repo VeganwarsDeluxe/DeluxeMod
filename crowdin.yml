@@ -1,3 +1,0 @@
-files:
-  - source: /src/DeluxeMod/localizations/locale_ru.properties
-    translation: /src/DeluxeMod/localizations/locale_%two_letters_code%.properties

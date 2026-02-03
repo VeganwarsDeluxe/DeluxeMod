@@ -1,1 +1,1 @@
-git+https://onedev.gts.org.ua/vezono/vegans-deluxe#egg=VegansDeluxe
+git+https://git.gts.org.ua/veganwars-deluxe/VeganwarsDeluxe#egg=VegansDeluxe
