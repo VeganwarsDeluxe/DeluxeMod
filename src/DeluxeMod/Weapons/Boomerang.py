@@ -1,13 +1,10 @@
-import random
-
-from VegansDeluxe.core import EventContext
-from VegansDeluxe.core import RangedAttack, RegisterWeapon, Entity, Enemies, AttachedAction, At
-from VegansDeluxe.core.Actions.Action import filter_targets
+from VegansDeluxe.core import EventContext, CallActionsGameEvent
+from VegansDeluxe.core import RangedAttack, RegisterWeapon, Entity, AttachedAction, At
 from VegansDeluxe.core.Events import PostDamageGameEvent, PreActionsGameEvent
 from VegansDeluxe.core.Session import Session
 from VegansDeluxe.core.Translator.LocalizedString import ls
 from VegansDeluxe.core.Weapons.Weapon import RangedWeapon
-from VegansDeluxe.rebuild import DroppedWeapon
+from VegansDeluxe.rebuild import Fist
 
 
 @RegisterWeapon
@@ -27,6 +24,7 @@ class Boomerang(RangedWeapon):
         self.turns_until_return = 2
         self.is_thrown = False
         self.throw_energy = 0
+        self.return_target_id = None
 
 
 @AttachedAction(Boomerang)
@@ -36,16 +34,12 @@ class BoomerangAttack(RangedAttack):
         super().__init__(session, source, weapon)
 
     async def func(self, source: Entity, target: Entity):
-        if self.session.turn < self.weapon.return_turn + 1 or self.weapon.is_thrown:
+        if self.weapon.is_thrown:
             return
 
         await self.attack_boomerang(source, target)
 
     async def attack_boomerang(self, source: Entity, target: Entity):
-        if source.energy < self.weapon.energy_cost:
-            self.session.say(ls("weapon.boomerang.attack_text_miss").format(source.name, target.name))
-            return
-
         self.weapon.throw_energy = source.energy
 
         total_damage = self.calculate_damage(source, target)
@@ -62,18 +56,21 @@ class BoomerangAttack(RangedAttack):
 
         self.weapon.is_thrown = True
         self.weapon.return_turn = self.session.turn + self.weapon.turns_until_return
-        state = source.get_state(DroppedWeapon)
-        state.drop_weapon(source)
+        self.weapon.return_target_id = target.id
+        source.weapon = Fist(source.session_id, source.id)
 
-        @At(self.session.id, turn=self.weapon.return_turn, event=PreActionsGameEvent)
-        async def handle_boomerang_return(context: EventContext[PreActionsGameEvent]):
+        @At(self.session.id, turn=self.weapon.return_turn, event=CallActionsGameEvent)
+        async def handle_boomerang_return(context: EventContext[CallActionsGameEvent]):
             await self.return_boomerang(source)
 
     async def return_boomerang(self, source: Entity):
-        target_pool = list(filter_targets(source, Enemies(), self.session.entities))
-        if not target_pool:
-            target_pool = [source]  # Fallback to self-target if no enemies found
-        target = random.choice(target_pool)
+        target = self.session.get_entity(self.weapon.return_target_id)
+        if not target:
+            source.weapon = self.weapon
+            self.weapon.is_thrown = False
+            self.weapon.throw_energy = 0
+            self.weapon.return_target_id = None
+            return
 
         total_damage = self.calculate_damage(source, target, self.weapon.throw_energy)
 
@@ -88,6 +85,8 @@ class BoomerangAttack(RangedAttack):
 
         self.weapon.is_thrown = False
         self.weapon.throw_energy = 0
+        self.weapon.return_target_id = None
+        source.weapon = self.weapon
 
     async def publish_post_damage_event(self, source: Entity, target: Entity, damage: int) -> int:
         message = PostDamageGameEvent(self.session.id, self.session.turn, source, target, damage)

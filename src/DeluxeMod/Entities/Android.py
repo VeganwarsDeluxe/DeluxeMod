@@ -1,9 +1,10 @@
 import random
 
 from VegansDeluxe import rebuild
-from VegansDeluxe.core import AttachedAction, Session, ls, percentage_chance, Action, Enemies, Distance
+from VegansDeluxe.core import AttachedAction, Session, ls, percentage_chance, Action, Enemies, Distance, ActionTag
 from VegansDeluxe.core.Actions.Action import filter_targets
 from VegansDeluxe.core.Entities import Entity
+from VegansDeluxe.matchmakery.Entities.NPC import NPC
 from VegansDeluxe.rebuild import Bleeding, ZombieState, Stun, DroppedWeapon, ThrowingKnife, Berserk, \
     Knockdown, Grenade, Molotov, Aflame, Rifle, Ninja, Chitin, FlashGrenade, GasMask, Stimulator, Armor, \
     Flamethrower, Jet
@@ -18,6 +19,7 @@ from VegansDeluxe.rebuild.Items.Stimulator import StimulatorAction
 from VegansDeluxe.rebuild.Items.ThrowingKnife import ThrowingKnifeAction
 from VegansDeluxe.rebuild.Skills.Inquisitor import Pray
 from VegansDeluxe.rebuild.Skills.ShieldGen import ShieldGenAction
+from VegansDeluxe.rebuild.Skills.Weaponsmith import Weaponsmith
 from VegansDeluxe.rebuild.States.Dodge import DodgeAction
 from VegansDeluxe.rebuild.States.DroppedWeapon import PickUp
 from VegansDeluxe.rebuild.States.KnockDown import StandUp
@@ -28,7 +30,6 @@ from VegansDeluxe.rebuild.Weapons.Shaft import KnockDown
 from VegansDeluxe.rebuild.Weapons.Sledgehammer import SledgehammerCrush
 from VegansDeluxe.rebuild.Weapons.Spear import CounterAttack
 
-from VegansDeluxe.core.Entities.NPC import NPC
 from VegansDeluxe.core.Actions.EntityActions import ReloadAction, SkipTurnAction, ApproachAction
 from ..Skills.Dash import Dash, DashAction
 from ..Skills.ExplosionMagic import Explosion
@@ -58,6 +59,7 @@ class Android(NPC):
 
     def choose_skills(self):
         pool = self.skill_pool.copy()
+        pool.remove(Weaponsmith) if Weaponsmith in pool else None
         random.shuffle(pool)
 
         return pool[:2]
@@ -512,10 +514,10 @@ class Android(NPC):
             if item.item not in self.items:
                 continue
             action_manager.queue_action_instance(item)
-            if item.type == 'item':
+            if ActionTag.ITEM in item.tags:
                 self.items.remove(item.item)
         action_manager.queue_action_instance(act)
-        if act.type == 'item' and act.item in self.items:
+        if ActionTag.ITEM in act.tags and act.item in self.items:
             self.items.remove(act.item)
 
 

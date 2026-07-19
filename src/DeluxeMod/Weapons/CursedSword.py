@@ -24,12 +24,11 @@ class CursedSwordAttack(MeleeAttack):
         if not damage:
             return damage
 
-        # 99% chance to apply the weakness effect
-        if percentage_chance(99):
+        if percentage_chance(40):
             weakness = target.get_state(Weakness)
 
-            self.session.say(ls("weapon.cursed_sword.effect").format(target.name))
-            weakness.weakness += 2  # Increase the weakness stack
-            weakness.active = True  # Activate the weakness effect
+            message_key = "weapon.cursed_sword.increase" if weakness.turns else "weapon.cursed_sword.effect"
+            weakness.apply(self.session)
+            self.session.say(ls(message_key).format(target.name, weakness.turns))
 
         return damage

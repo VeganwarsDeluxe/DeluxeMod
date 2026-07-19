@@ -6,8 +6,6 @@ from VegansDeluxe.core import Enemies
 from VegansDeluxe.core import Entity
 from VegansDeluxe.core import Item
 from VegansDeluxe.core import Session, PostDamageGameEvent
-from VegansDeluxe.core.Actions.Action import filter_targets
-from VegansDeluxe.core.Translator.LocalizedList import LocalizedList
 from VegansDeluxe.core.Translator.LocalizedString import ls
 
 
@@ -22,15 +20,15 @@ class EnergyGrenadeAction(DecisiveItem):
     id = 'energy_grenade'
     name = ls("item.energy_grenade_name")
     target_type = Enemies()
+    priority = 1
+
+    tags = DecisiveItem.tags + [ActionTag.HARMFUL]
 
     def __init__(self, session: Session, source: Entity, item: Item):
         super().__init__(session, source, item)
-        self.tags += [ActionTag.HARMFUL]
         self.range = 1  # Number of targets to hit, set to 1 for now
 
     async def func(self, source, target):
-        damage = 0
-
         targets = []
 
         selected_target = target

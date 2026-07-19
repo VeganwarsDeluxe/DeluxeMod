@@ -1,6 +1,6 @@
 import random
 
-from VegansDeluxe.core import RangedAttack, FreeWeaponAction, RegisterWeapon, Entity, Enemies, OwnOnly, AttachedAction
+from VegansDeluxe.core import RangedAttack, FreeWeaponAction, RegisterWeapon, Entity, Enemies, SelfOnly, AttachedAction
 from VegansDeluxe.core.Actions.Action import filter_targets
 from VegansDeluxe.core.Events import PostDamageGameEvent
 from VegansDeluxe.core.Session import Session
@@ -100,7 +100,7 @@ class GrenadeLauncherAttack(RangedAttack):
 @AttachedAction(GrenadeLauncher)
 class SwitchGrenadeLauncher(FreeWeaponAction):
     id = 'switch_grenade_launcher'
-    target_type = OwnOnly()
+    target_type = SelfOnly()
     priority = -10
 
     @property

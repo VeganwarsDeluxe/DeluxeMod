@@ -41,7 +41,7 @@ class NeedleFanAttack(RangedAttack):
     def __init__(self, session: Session, source: Entity, weapon: NeedleFan):
         super().__init__(session, source, weapon)
 
-    async def attack(self, source: Entity, target, pay_energy=True) -> DamageData:
+    async def attack(self, source: Entity, target: Entity, pay_energy=True, *args, **kwargs) -> DamageData:
         """
         Actually performs attack on target, dealing damage.
         """
@@ -62,10 +62,10 @@ class NeedleFanAttack(RangedAttack):
 
         displayed_damage = await self.publish_attack_event(source, target, calculated_damage)
         self.send_attack_message(source, target, displayed_damage.damage)
-        dealt_damage = await self.publish_post_attack_event(source, target, displayed_damage)
+        dealt_damage = await self.publish_post_attack_event(source, target, displayed_damage.damage)
 
         target.inbound_dmg.add(source, dealt_damage.damage, self.session.turn)
-        source.outbound_dmg.add(target, dealt_damage, self.session.turn)
+        source.outbound_dmg.add(target, dealt_damage.damage, self.session.turn)
         return DamageData(calculated_damage, displayed_damage.damage, dealt_damage.damage)
 
     async def publish_post_damage_event(self, source: Entity, target: Entity, damage: int) -> int:

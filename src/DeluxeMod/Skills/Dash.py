@@ -48,26 +48,15 @@ class DashAction(DecisiveStateAction):
     async def func(self, source: Entity, target: Entity):
         self.state.cooldown_turn = self.session.turn + 3
 
-        # Получаем текущее оружие
         weapon = source.weapon
-
         attack_action = MeleeAttack(self.session, source, weapon)
+        damage = await attack_action.attack(source, target, bonus_damage=1, send_message=False)
 
-        attack_result = attack_action.calculate_damage(source, target)
-        total_damage = attack_result + 1
-
-        if total_damage:
-            self.session.say(
-                ls("skill.dash.text").format(source.name, target.name, total_damage)
-            )
+        if damage.displayed:
+            self.session.say(ls("skill.dash.text").format(source.name, target.name, damage.displayed))
         else:
-            self.session.say(
-                ls("skill.dash.text_miss").format(source.name, target.name)
-            )
-
-        post_damage = await self.publish_post_damage_event(source, target, total_damage)
-        target.inbound_dmg.add(source, post_damage, self.session.turn)
-        source.outbound_dmg.add(target, post_damage, self.session.turn)
+            self.session.say(ls("skill.dash.text_miss").format(source.name, target.name))
+            return
 
         if source not in target.nearby_entities:
             target.nearby_entities.append(source)

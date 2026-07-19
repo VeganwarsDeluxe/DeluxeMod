@@ -19,9 +19,7 @@ class DeathGrenadeAction(DecisiveItem):
 
     priority = -1
 
-    def __init__(self, *args):
-        super().__init__(*args)
-        self.tags += [ActionTag.HARMFUL]
+    tags = DecisiveItem.tags + [ActionTag.HARMFUL]
 
     async def func(self, source, target):
         source.energy = max(source.energy - 2, 0)

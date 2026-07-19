@@ -1,6 +1,6 @@
 import random
 
-from VegansDeluxe.core import AttachedAction, RegisterWeapon
+from VegansDeluxe.core import AttachedAction, RegisterWeapon, percentage_chance
 from VegansDeluxe.core import MeleeAttack
 from VegansDeluxe.core.Translator.LocalizedString import ls
 from VegansDeluxe.core.Weapons.Weapon import MeleeWeapon
@@ -23,11 +23,11 @@ class Dagger(MeleeWeapon):
 @AttachedAction(Dagger)
 class DaggerAttack(MeleeAttack):
     async def func(self, source, target):
-        damage = (await super().attack(source, target)).dealt
+        damage = (await super().attack(source, target)).calculated
         if not damage:
             return damage
 
-        if random.randint(0, 100) > 99:
+        if percentage_chance(60):
             return damage
 
         mutilation = target.get_state(Mutilation)

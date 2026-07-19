@@ -1,5 +1,5 @@
-from VegansDeluxe.core import AttachedAction, Allies, Own
-from VegansDeluxe.core import OwnOnly
+from VegansDeluxe.core import AttachedAction, Allies, Selfishness
+from VegansDeluxe.core import SelfOnly
 from VegansDeluxe.core import RegisterState
 from VegansDeluxe.core import Session
 from VegansDeluxe.core import StateContext
@@ -31,7 +31,7 @@ class HeroismAction(DecisiveStateAction):
     id = 'heroism'
     name = ls("skill.heroism_action.name")
     priority = 0
-    target_type = OwnOnly()
+    target_type = SelfOnly()
 
     def __init__(self, session: Session, source: Entity, skill: Heroism):
         super().__init__(session, source, skill)
@@ -42,7 +42,7 @@ class HeroismAction(DecisiveStateAction):
         return self.session.turn < self.state.cooldown_turn
 
     def get_allies(self, source: Entity) -> list[Entity]:
-        return filter_targets(source, Allies(own=Own.SELF_EXCLUDED), self.session.entities)
+        return filter_targets(source, Allies(own=Selfishness.SELF_EXCLUDED), self.session.entities)
 
     async def func(self, source: Entity, target: Entity):
         # Set long cooldown

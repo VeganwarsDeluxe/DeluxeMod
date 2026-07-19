@@ -1,5 +1,6 @@
-from VegansDeluxe.core import PostDamageGameEvent
-from VegansDeluxe.core import RangedAttack, RegisterWeapon, Entity, AttachedAction, OwnOnly, FreeWeaponAction
+from VegansDeluxe.core import PostDamageGameEvent, RegisterEvent, PreMoveGameEvent, EventContext, DecisiveWeaponAction
+from VegansDeluxe.core import RangedAttack, RegisterWeapon, Entity, AttachedAction, SelfOnly, FreeWeaponAction
+from VegansDeluxe.core.Actions.WeaponAction import InstantWeaponAction
 from VegansDeluxe.core.Session import Session
 from VegansDeluxe.core.Translator.LocalizedString import ls
 from VegansDeluxe.core.Weapons.Weapon import RangedWeapon
@@ -20,6 +21,13 @@ class Shurikens(RangedWeapon):
         super().__init__(*args, **kwargs)
         self.double_shuriken = False
         self.ammo = 4
+
+        @RegisterEvent(self.session_id, event=PreMoveGameEvent)
+        async def pre_move(context: EventContext[PreMoveGameEvent]):
+            source = context.session.get_entity(self.entity_id)
+            source.notifications.append(
+                ls("weapon.shurikens.notification").format(self.ammo, int(self.double_shuriken)+1)
+        )
 
 
 @AttachedAction(Shurikens)
@@ -74,10 +82,10 @@ class ShurikenAttack(RangedAttack):
 
 
 @AttachedAction(Shurikens)
-class SwitchShurikenMode(FreeWeaponAction):
+class SwitchShurikenMode(InstantWeaponAction):
     id = 'switch_shuriken_mode'
     name = ls("weapon.shurikens.switch_shuriken_mode")
-    target_type = OwnOnly()
+    target_type = SelfOnly()
     priority = -10
 
     async def func(self, source, target):
@@ -88,11 +96,12 @@ class SwitchShurikenMode(FreeWeaponAction):
             self.session.say(ls("weapon.shurikens.switch_to_single_shuriken_text").format(source.name))
 
 
+
 @AttachedAction(Shurikens)
-class PickUpShuriken(FreeWeaponAction):
+class PickUpShuriken(DecisiveWeaponAction):
     id = 'pick_up'
     name = ls("weapon.shurikens.pickup.name")
-    target_type = OwnOnly()
+    target_type = SelfOnly()
 
     def __init__(self, session: Session, source: Entity, weapon: Shurikens):
         super().__init__(session, source, weapon)

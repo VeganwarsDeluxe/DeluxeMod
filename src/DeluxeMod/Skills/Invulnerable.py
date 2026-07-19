@@ -1,4 +1,4 @@
-from VegansDeluxe.core import OwnOnly
+from VegansDeluxe.core import SelfOnly
 from VegansDeluxe.core import RegisterState, AttachedAction
 from VegansDeluxe.core import StateContext, Session, percentage_chance
 from VegansDeluxe.core.Actions.StateAction import DecisiveStateAction
@@ -28,7 +28,7 @@ async def register(root_context: StateContext[Invulnerable]):
 class InvulnerableAction(DecisiveStateAction):
     id = 'invulnerable_action'
     priority = 0
-    target_type = OwnOnly()
+    target_type = SelfOnly()
 
     def __init__(self, session: Session, source: Entity, skill: Invulnerable):
         super().__init__(session, source, skill)

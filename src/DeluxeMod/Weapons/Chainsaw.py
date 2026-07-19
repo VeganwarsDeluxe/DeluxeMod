@@ -1,7 +1,7 @@
 from VegansDeluxe.core import AttachedAction, RegisterWeapon, At, percentage_chance, RegisterEvent, PreMoveGameEvent, \
     DecisiveWeaponAction
 from VegansDeluxe.core import MeleeAttack, PostTickGameEvent, Entity, PostDamageGameEvent
-from VegansDeluxe.core import OwnOnly, EventContext
+from VegansDeluxe.core import SelfOnly, EventContext
 from VegansDeluxe.core.Session import Session
 from VegansDeluxe.core.Translator.LocalizedString import ls
 from VegansDeluxe.core.Weapons.Weapon import MeleeWeapon
@@ -84,7 +84,7 @@ class ChainsawAttack(MeleeAttack):
 @AttachedAction(Chainsaw)
 class WoundUpChainsaw(DecisiveWeaponAction):
     id = 'wound_up_chainsaw'
-    target_type = OwnOnly()
+    target_type = SelfOnly()
     priority = -10
 
     @property

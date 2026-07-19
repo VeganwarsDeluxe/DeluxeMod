@@ -22,10 +22,11 @@ class Emitter(RangedWeapon):
 class EmitterAttack(RangedAttack):
     async def func(self, source, target):
         damage = await super().attack(source, target)
-        if not damage.displayed:
+        if not damage.calculated:
             return
 
         if percentage_chance(20):
             hunger = target.get_state(Hunger)
-            hunger.hunger += 10
-            self.session.say(ls("weapon.emitter.effect").format(target.name, hunger.hunger))
+            hunger.hunger += 1
+            self.session.say(ls("weapon.emitter.effect")
+                             .format(target.name, hunger.hunger))

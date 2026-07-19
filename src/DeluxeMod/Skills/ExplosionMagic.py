@@ -1,6 +1,6 @@
 import random
 
-from VegansDeluxe.core import AttachedAction
+from VegansDeluxe.core import AttachedAction, CallActionsGameEvent
 from VegansDeluxe.core import Enemies
 from VegansDeluxe.core import Entity
 from VegansDeluxe.core import PreActionsGameEvent
@@ -67,20 +67,21 @@ class Explosion(DecisiveStateAction):
 
         self.state.cooldown_turn = self.session.turn + 12
 
-        @At(self.session.id, turn=self.session.turn + 1, event=PreActionsGameEvent)
-        async def apply_explosion(context: EventContext[PreActionsGameEvent]):
+        @At(self.session.id, turn=self.session.turn + 1, event=CallActionsGameEvent)
+        async def apply_explosion(context: EventContext[CallActionsGameEvent]):
             calculated_damage = self.state.damage
             displayed_damage = await self.publish_pre_damage_event(source, target, calculated_damage)
 
             source.energy = max(0, source.energy - 10)
             self.session.say(ls("skill.explosion.stun_text").format(source.name))
 
+            dealt_damage = await self.publish_post_damage_event(source, target, displayed_damage)
             aflame = target.get_state(Aflame)
             aflame.add_flame(self.session, target, source, 6)
             self.session.say(ls("skill.explosion.text").format(source.name))
-            self.session.say(ls("skill.explosion.effect_text").format(target.name, displayed_damage, source.name))
+            effect_text = ls("skill.explosion.effect_text" if dealt_damage else "skill.explosion.blocked_text")
+            self.session.say(effect_text.format(target.name, dealt_damage, source.name))
 
-            dealt_damage = await self.publish_post_damage_event(source, target, displayed_damage)
             target.inbound_dmg.add(source, dealt_damage, self.session.turn)
             source.outbound_dmg.add(target, dealt_damage, self.session.turn)
 

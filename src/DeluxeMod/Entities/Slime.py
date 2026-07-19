@@ -3,12 +3,12 @@ import random
 import VegansDeluxe.core.Events.Events
 from VegansDeluxe.core import AttachedAction, RegisterWeapon, MeleeAttack, MeleeWeapon, Entity, Enemies, RegisterEvent, \
     EventContext, Session, ls
-from VegansDeluxe.core import OwnOnly
+from VegansDeluxe.core import SelfOnly
 from VegansDeluxe.core.Actions.Action import DecisiveAction
 from VegansDeluxe.core.utils import percentage_chance
 from VegansDeluxe.rebuild import DamageThreshold, Aflame
 
-from VegansDeluxe.core.Entities.NPC import NPC
+from VegansDeluxe.matchmakery.Entities.NPC import NPC
 
 
 class Slime(NPC):
@@ -60,7 +60,7 @@ class Slime(NPC):
 class SlimeApproach(DecisiveAction):
     id = 'slime_approach'
     name = ls("slime.approach.name")
-    target_type = OwnOnly()
+    target_type = SelfOnly()
 
     async def func(self, source, target):
         source.nearby_entities = list(filter(lambda t: t != source, self.session.entities))
@@ -73,7 +73,7 @@ class SlimeApproach(DecisiveAction):
 class SlimeReload(DecisiveAction):
     id = 'slime_reload'
     name = ls("slime.reload.name")
-    target_type = OwnOnly()
+    target_type = SelfOnly()
 
     async def func(self, source, target):
         self.session.say(ls("slime.reload.text").format(source.name, source.max_energy))
@@ -84,7 +84,7 @@ class SlimeReload(DecisiveAction):
 class SlimeEvade(DecisiveAction):
     id = 'slime_evade'
     name = ls("slime.evade.name")
-    target_type = OwnOnly()
+    target_type = SelfOnly()
 
     async def func(self, source, target):
         self.source.inbound_accuracy_bonus = -5
@@ -95,7 +95,7 @@ class SlimeEvade(DecisiveAction):
 class SlimeSlop(DecisiveAction):
     id = 'slime_slop'
     name = ls("slime.slop.name")
-    target_type = OwnOnly()
+    target_type = SelfOnly()
 
     async def func(self, source, target):
         self.session.say(ls("slime.slop.text").format(source.name))

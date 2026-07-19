@@ -52,6 +52,7 @@ async def register(root_context: StateContext[Hunger]):
         if not state.removed_energy:
             state.removed_energy = max_energy_penalty
             source.max_energy -= state.removed_energy
+            source.energy = min(source.energy, source.max_energy)
 
         @At(session.id, turn=session.turn, event=AttackGameEvent)
         async def attack_handler(actions_context: EventContext[AttackGameEvent]):
@@ -75,6 +76,8 @@ async def register(root_context: StateContext[Hunger]):
     @RegisterEvent(session.id, PreActionsGameEvent)
     async def pre_actions(context: EventContext[PreActionsGameEvent]):
         for action in context.action_manager.get_queued_session_actions(session):
-            if ActionTag.MEDICINE in action.tags and action.target == source and not action.canceled:
-                state.hunger = max(0, state.hunger-3)
-                session.say(ls("state.hunger.reduced_by_item").format(source.name, action.item.name, state.hunger))
+            if (ActionTag.MEDICINE in action.tags and action.target == source
+                    and not action.canceled and state.hunger > 0):
+
+                    state.hunger = max(0, state.hunger-3)
+                    session.say(ls("state.hunger.reduced_by_item").format(source.name, action.item.name, state.hunger))

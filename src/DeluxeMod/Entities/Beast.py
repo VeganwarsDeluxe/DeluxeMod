@@ -1,13 +1,13 @@
 import random
 
 from VegansDeluxe.core import AttachedAction, RegisterWeapon, MeleeAttack, MeleeWeapon, Entity, Enemies, Session, ls
-from VegansDeluxe.core import OwnOnly
+from VegansDeluxe.core import SelfOnly
 from VegansDeluxe.core import PostDamageGameEvent
 from VegansDeluxe.core.Actions.Action import DecisiveAction
 from VegansDeluxe.core.utils import percentage_chance
 from VegansDeluxe.rebuild import DamageThreshold
 
-from VegansDeluxe.core.Entities.NPC import NPC
+from VegansDeluxe.matchmakery.Entities.NPC import NPC
 
 
 class Beast(NPC):
@@ -87,7 +87,7 @@ class Beast(NPC):
 class BeastApproach(DecisiveAction):
     id = 'beast_approach'
     name = ls("beast.approach.name")
-    target_type = OwnOnly()
+    target_type = SelfOnly()
 
     async def func(self, source, target):
         source.nearby_entities = list(filter(lambda t: t != source, self.session.entities))
@@ -101,7 +101,7 @@ class BeastApproach(DecisiveAction):
 class BeastReload(DecisiveAction):
     id = 'beast_reload'
     name = ls("beast.reload.name")
-    target_type = OwnOnly()
+    target_type = SelfOnly()
 
     async def func(self, source, target):
         self.session.say(ls("beast.reload.text").format(source.name, source.max_energy))
@@ -112,7 +112,7 @@ class BeastReload(DecisiveAction):
 class BeastEvade(DecisiveAction):
     id = 'beast_evade'
     name = ls("beast.evade.name")
-    target_type = OwnOnly()
+    target_type = SelfOnly()
 
     async def func(self, source, target):
         self.source.inbound_accuracy_bonus = -6
@@ -123,7 +123,7 @@ class BeastEvade(DecisiveAction):
 class BeastGrowl(DecisiveAction):
     id = 'beast_growl'
     name = ls("beast.growl.name")
-    target_type = OwnOnly()
+    target_type = SelfOnly()
 
     async def func(self, source, target):
         self.session.say(ls("beast.growl.text").format(source.name))

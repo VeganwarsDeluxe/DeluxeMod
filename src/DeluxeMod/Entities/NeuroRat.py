@@ -1,11 +1,11 @@
 import random
 
 from VegansDeluxe.core import AttachedAction, ls
-from VegansDeluxe.core import OwnOnly
+from VegansDeluxe.core import SelfOnly
 from VegansDeluxe.core.Actions.Action import DecisiveAction
 
 import DeluxeMod.content as content
-from VegansDeluxe.core.Entities.NPC import NPC
+from VegansDeluxe.matchmakery.Entities.NPC import NPC
 
 
 class NeuroRat(NPC):
@@ -65,7 +65,7 @@ class NeuroRat(NPC):
             action = engine.action_manager.get_action(session, self, action_id)
             action.target = random.choice(action.targets)
 
-        if action.type == "item":
+        if ActionTag.ITEM in action.tags:
             if action.item:
                 self.items.remove(action.item)
             else:
@@ -89,7 +89,7 @@ class NeuroRat(NPC):
 class SlimeReload(DecisiveAction):
     id = 'reload'
     name = ls("slime.reload.name")
-    target_type = OwnOnly()
+    target_type = SelfOnly()
 
     async def func(self, source, target):
         self.session.say(ls("slime.reload.text").format(source.name, source.max_energy))
@@ -100,7 +100,7 @@ class SlimeReload(DecisiveAction):
 class SlimeApproach(DecisiveAction):
     id = 'approach'
     name = ls("slime.approach.name")
-    target_type = OwnOnly()
+    target_type = SelfOnly()
 
     async def func(self, source, target):
         source.nearby_entities = list(filter(lambda t: t != source, self.session.entities))

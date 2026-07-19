@@ -1,5 +1,5 @@
 from VegansDeluxe.core import Item, FreeItem, AttachedAction, ActionTag
-from VegansDeluxe.core import OwnOnly, EventContext, PostDamagesGameEvent
+from VegansDeluxe.core import SelfOnly, EventContext, PostDamagesGameEvent
 from VegansDeluxe.core import RegisterItem, At
 from VegansDeluxe.core.Translator.LocalizedString import ls
 
@@ -14,12 +14,10 @@ class SourCandy(Item):
 class SourCandyAction(FreeItem):
     id = 'sour_candy'
     name = ls("item.sour_candy.name")
-    target_type = OwnOnly()
+    target_type = SelfOnly()
     priority = -2
 
-    def __init__(self, *args):
-        super().__init__(*args)
-        self.tags += [ActionTag.MEDICINE]
+    tags = FreeItem.tags + [ActionTag.MEDICINE]
 
     async def func(self, source, target):
         target.max_energy += 1

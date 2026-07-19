@@ -1,7 +1,7 @@
 import random
 
 from VegansDeluxe.core import AttachedAction
-from VegansDeluxe.core import OwnOnly, ActionTag
+from VegansDeluxe.core import SelfOnly, ActionTag
 from VegansDeluxe.core import PreActionsGameEvent, At
 from VegansDeluxe.core import RegisterEvent, PreDeathGameEvent, EventContext
 from VegansDeluxe.core import RegisterState
@@ -49,12 +49,13 @@ class FinalBlowAction(DecisiveStateAction):
     id = 'final_blow'
     name = ls("skill.final_blow_action.name")
     priority = 0
-    target_type = OwnOnly()
+    target_type = SelfOnly()
+
+    tags = DecisiveStateAction.tags + [ActionTag.HARMFUL]
 
     def __init__(self, session: Session, source: Entity, skill: FinalBlow):
         super().__init__(session, source, skill)
         self.state = skill
-        self.tags += [ActionTag.HARMFUL]
         self.targets_count = 2
 
     @property

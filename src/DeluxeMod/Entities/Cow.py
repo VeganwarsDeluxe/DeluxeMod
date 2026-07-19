@@ -1,13 +1,13 @@
 import random
 
-from VegansDeluxe.core import AttachedAction, RegisterWeapon, MeleeWeapon, ls
+from VegansDeluxe.core import AttachedAction, RegisterWeapon, MeleeWeapon, ls, DecisiveWeaponAction
 from VegansDeluxe.core import FreeItem
 from VegansDeluxe.core import Item
-from VegansDeluxe.core import OwnOnly
+from VegansDeluxe.core import SelfOnly
 from VegansDeluxe.core.Actions.Action import DecisiveAction
 from VegansDeluxe.core.Actions.EntityActions import ApproachAction
 
-from VegansDeluxe.core.Entities.NPC import NPC
+from VegansDeluxe.matchmakery.Entities.NPC import NPC
 
 
 class Cow(NPC):
@@ -39,7 +39,7 @@ class Cow(NPC):
 @AttachedAction(Cow)
 class CowApproach(ApproachAction):
     id = 'cow_approach'
-    target_type = OwnOnly()
+    target_type = SelfOnly()
 
     async def func(self, source, target):
         source.nearby_entities = list(filter(lambda t: t != source, self.session.entities))
@@ -48,21 +48,12 @@ class CowApproach(ApproachAction):
         self.session.say(ls("cow.approach.text").format(source.name))
 
 
-@AttachedAction(Cow)
-class Silence(DecisiveAction):
-    id = 'cow_silence'
-    name = ls("cow.silence.name")
-    target_type = OwnOnly()
-
-    async def func(self, source, target):
-        source.items.append(MilkItem())
-
 
 @AttachedAction(Cow)
 class Run(DecisiveAction):
     id = 'cow_dodge'
     name = ls("cow.dodge.name")
-    target_type = OwnOnly()
+    target_type = SelfOnly()
 
     async def func(self, source, target):
         self.source.inbound_accuracy_bonus = -5
@@ -73,7 +64,7 @@ class Run(DecisiveAction):
 class WalkAway(DecisiveAction):
     id = 'cow_walk_away'
     name = ls("cow.walk_away.name")
-    target_type = OwnOnly()
+    target_type = SelfOnly()
 
     async def func(self, source, target):
         for entity in source.nearby_entities:
@@ -86,7 +77,7 @@ class WalkAway(DecisiveAction):
 class EatGrassReload(DecisiveAction):
     id = 'eat_grass'
     name = ls("cow.eat_grass.name")
-    target_type = OwnOnly()
+    target_type = SelfOnly()
 
     async def func(self, source, target):
         source.energy = source.max_energy
@@ -103,6 +94,19 @@ class CowWeapon(MeleeWeapon):
     energy_cost = 0
     accuracy_bonus = 0
 
+@AttachedAction(CowWeapon)
+class Silence(DecisiveWeaponAction):
+    id = 'cow_silence'
+    name = ls("cow.silence.name")
+    target_type = SelfOnly()
+
+    def __init__(self, session, source, weapon):
+        super().__init__(session, source, weapon)
+        self.weapon = weapon
+
+
+    async def func(self, source, target):
+            source.items.append(MilkItem())
 
 class MilkItem(Item):
     id = 'milk'
@@ -113,8 +117,8 @@ class MilkItem(Item):
 class Milk(FreeItem):
     id = 'milk'
     name = ls("cow.item.milk")
-    target_type = OwnOnly()
+    target_type = SelfOnly()
 
-    async def use(self):
-        self.target.energy = self.target.max_energy
-        self.session.say(ls("cow.item.milk.text").format(self.source.name))
+    async def func(self, source, target):
+        target.energy = target.max_energy
+        self.session.say(ls("cow.item.milk.text").format(source.name))

@@ -1,5 +1,5 @@
 from VegansDeluxe.core import Item, FreeItem, AttachedAction, ActionTag, After
-from VegansDeluxe.core import OwnOnly, EventContext, PostDamagesGameEvent
+from VegansDeluxe.core import SelfOnly, EventContext, PostDamagesGameEvent
 from VegansDeluxe.core import RegisterItem
 from VegansDeluxe.core.Translator.LocalizedString import ls
 
@@ -14,12 +14,10 @@ class CaffeineCandy(Item):
 class CaffeineCandyAction(FreeItem):
     id = 'caffeine_candy'
     name = ls("item.caffeine.candy_name")
-    target_type = OwnOnly()
+    target_type = SelfOnly()
     priority = -2
 
-    def __init__(self, *args):
-        super().__init__(*args)
-        self.tags += [ActionTag.MEDICINE]
+    tags = FreeItem.tags + [ActionTag.MEDICINE]
 
     async def func(self, source, target):
         @After(self.session.id, 0, event=PostDamagesGameEvent, repeats=3)

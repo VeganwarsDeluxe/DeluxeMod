@@ -21,9 +21,7 @@ class MucusInTheBottleAction(DecisiveItem):
     target_type = Enemies()
     priority = 0
 
-    def __init__(self, session: Session, source: Entity, item: Item):
-        super().__init__(session, source, item)
-        self.tags += [ActionTag.HARMFUL]
+    tags = DecisiveItem.tags + [ActionTag.HARMFUL]
 
     async def func(self, source: Entity, target: Entity):
         # Check and deduct energy from the source

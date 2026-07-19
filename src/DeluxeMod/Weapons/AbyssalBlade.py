@@ -22,7 +22,7 @@ class AbyssalBlade(MeleeWeapon):
 class AbyssalBladeAttack(MeleeAttack):
     async def func(self, source, target):
         damage = await super().attack(source, target)
-        if not damage.dealt:
+        if not damage.calculated:
             return damage
 
         if percentage_chance(45):

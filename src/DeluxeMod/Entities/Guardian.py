@@ -3,13 +3,13 @@ import random
 from VegansDeluxe.core import (
     AttachedAction, RegisterWeapon, RangedAttack, RangedWeapon,
     Entity, Enemies, Session,
-    ls, PostDamageGameEvent, OwnOnly, ActionTag
+    ls, PostDamageGameEvent, SelfOnly, ActionTag
 )
 from VegansDeluxe.core.Actions.Action import DecisiveAction, filter_targets
 from VegansDeluxe.core.utils import percentage_chance
 from VegansDeluxe.rebuild import DamageThreshold, Armor, Stun
 
-from VegansDeluxe.core.Entities.NPC import NPC
+from VegansDeluxe.matchmakery.Entities.NPC import NPC
 
 
 class Guardian(NPC):
@@ -243,12 +243,10 @@ class GuardianYellowHeart(RangedAttack):
 class GuardianGreenHeart(RangedAttack):
     id = 'guardian.green_heart'
     name = ls("guardian.green_heart.name")
-    target_type = OwnOnly()
+    target_type = SelfOnly()
     priority = -2
 
-    def __init__(self, *args):
-        super().__init__(*args)
-        self.tags += [ActionTag.MEDICINE]
+    tags = RangedAttack.tags + [ActionTag.MEDICINE]
 
     async def func(self, source, target):
         # ну ви звісно генії дофіга. будьте обережні з цим
@@ -262,7 +260,7 @@ class GuardianGreenHeart(RangedAttack):
 class GuardianReload(DecisiveAction):
     id = 'guardian.reload'
     name = ls("guardian.reload.name")
-    target_type = OwnOnly()
+    target_type = SelfOnly()
     energy = 0
     priority = -1
 
