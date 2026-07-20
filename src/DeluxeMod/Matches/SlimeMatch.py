@@ -1,13 +1,12 @@
+from VegansDeluxe.core import ls
 from VegansDeluxe.matchmakery.Matches.Match import Match
 
 import DeluxeMod.content
 from DeluxeMod.Entities.Slime import Slime
-from VegansDeluxe.core import ls
-
 from DeluxeMod.Matches.BasicMatch import BasicMatch
 
 
-class SlimeDungeon(BasicMatch):
+class SlimeMatch(BasicMatch):
     name = ls("matches.slimes")
 
     def __init__(self, chat_id, engine):

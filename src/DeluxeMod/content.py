@@ -14,9 +14,10 @@ from DeluxeMod.Matches.AndroidMatch import AndroidMatch
 from DeluxeMod.Matches.BasicMatch import BasicMatch
 from DeluxeMod.Matches.BeastDungeon import BeastDungeon
 from DeluxeMod.Matches.BotDungeon import BotDungeon
-from DeluxeMod.Matches.ElementalDungeon import ElementalDungeon
+from DeluxeMod.Matches.ElementalMatch import ElementalMatch
 from DeluxeMod.Matches.GuardianDungeon import GuardianDungeon
-from DeluxeMod.Matches.SlimeDungeon import SlimeDungeon
+from DeluxeMod.Matches.Room57 import Room57
+from DeluxeMod.Matches.SlimeMatch import SlimeMatch
 from DeluxeMod.Matches.TestGameMatch import TestGameMatch
 from DeluxeMod.Matches.TournierMatch import TournierMatch
 from DeluxeMod.Skills.Dash import Dash
@@ -27,12 +28,12 @@ from DeluxeMod.Skills.Heroism import Heroism
 from DeluxeMod.Skills.SweetTooth import SweetTooth
 from DeluxeMod.Skills.Tactician import Tactician
 from DeluxeMod.Skills.Toad import Toad
+from DeluxeMod.States.Blindness import Blindness
 from DeluxeMod.States.CorrosiveMucus import CorrosiveMucus
 from DeluxeMod.States.CryoFreeze import CryoFreeze
 from DeluxeMod.States.Dehydration import Dehydration
 from DeluxeMod.States.Emptiness import Emptiness
 from DeluxeMod.States.Hunger import Hunger
-from DeluxeMod.States.Blindness import Blindness
 from DeluxeMod.States.Mutilation import Mutilation
 from DeluxeMod.States.Regeneration import Regeneration
 from DeluxeMod.States.Weakness import Weakness
@@ -52,8 +53,8 @@ from DeluxeMod.Weapons.MagicMirror import MagicMirror
 from DeluxeMod.Weapons.NeedleFan import NeedleFan
 from DeluxeMod.Weapons.Shurikens import Shurikens
 from DeluxeMod.Weapons.StarBow import StarBow
-from DeluxeMod.Weapons.Tomahawk import Tomahawk
 from DeluxeMod.Weapons.ThrowingSickles import ThrowingSickles
+from DeluxeMod.Weapons.Tomahawk import Tomahawk
 from DeluxeMod.Weapons.VampiricWhip import VampiricWhip
 
 all_states = (rebuild.all_states + deluxe.all_states + [Emptiness] + [Weakness, Hunger, Dehydration, Mutilation] +
@@ -75,7 +76,7 @@ all_skills = (rebuild.all_skills + deluxe.all_skills + [ExplosionMagic, SweetToo
 
 game_items_pool = rebuild.game_items_pool + [MucusInTheBottle]
 
-all_matches = [AndroidMatch, BasicMatch, BeastDungeon, BotDungeon, ElementalDungeon, GuardianDungeon,
-               SlimeDungeon, TestGameMatch, TournierMatch]
+all_matches = [AndroidMatch, BasicMatch, BeastDungeon, BotDungeon, ElementalMatch, GuardianDungeon,
+               Room57, SlimeMatch, TestGameMatch, TournierMatch]
 
 Stockpile.item_pool = Stockpile.item_pool + [CryoGrenade, EnergyGrenade, DeathGrenade]
