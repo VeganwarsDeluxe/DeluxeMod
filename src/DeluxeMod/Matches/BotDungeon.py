@@ -11,7 +11,7 @@ from DeluxeMod.Matches.BasicMatch import BasicMatch
 
 
 class BotDungeon(BasicMatch):
-    name = ls("matches.bots")
+    name = ls("deluxe.matches.bots")
 
     async def init_async(self):
         await super().init_async()

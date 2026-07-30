@@ -13,8 +13,8 @@ from VegansDeluxe.core.Weapons.Weapon import MeleeWeapon
 @RegisterWeapon
 class ElectricWhip(MeleeWeapon):
     id = 'electric_whip'
-    name = ls("weapon.electric_whip.name")
-    description = ls("weapon.electric_whip.description")
+    name = ls("deluxe.weapon.electric_whip.name")
+    description = ls("deluxe.weapon.electric_whip.description")
 
     cubes = 2
     accuracy_bonus = 0
@@ -57,19 +57,19 @@ class ElectricWhipAttack(MeleeAttack):
 
         if primary_damage == 0 and secondary_damage == 0 and tertiary_damage == 0:
             self.session.say(
-                ls("weapon.electric_whip.text_miss")
+                ls("deluxe.weapon.electric_whip.text_miss")
                 .format(source.name, target.name)
             , source_id=source.id, target_id=target.id)
         else:
             if len(secondary_targets) == 0:
                 self.session.say(
-                    ls("weapon.electric_whip.single_target_text")
+                    ls("deluxe.weapon.electric_whip.single_target_text")
                     .format(source.name, target.name, primary_damage)
                 , source_id=source.id, target_id=target.id)
             elif len(secondary_targets) == 1:
                 secondary_target_name = secondary_targets[0].name
                 self.session.say(
-                    ls("weapon.electric_whip.multiple_targets_text")
+                    ls("deluxe.weapon.electric_whip.multiple_targets_text")
                     .format(
                         source.name,
                         target.name,
@@ -82,7 +82,7 @@ class ElectricWhipAttack(MeleeAttack):
                 secondary_targets_name = LocalizedList([t.name for t in secondary_targets[:-1]])
                 tertiary_target_name = secondary_targets[-1].name
                 self.session.say(
-                    ls("weapon.electric_whip.tertiary_targets_text")
+                    ls("deluxe.weapon.electric_whip.tertiary_targets_text")
                     .format(
                         source.name,
                         target.name,

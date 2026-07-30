@@ -88,22 +88,22 @@ class NeuroRat(NPC):
 @AttachedAction(NeuroRat)
 class SlimeReload(DecisiveAction):
     id = 'reload'
-    name = ls("slime.reload.name")
+    name = ls("deluxe.slime.reload.name")
     target_type = SelfOnly()
 
     async def func(self, source, target):
-        self.session.say(ls("slime.reload.text").format(source.name, source.max_energy), source_id=source.id, target_id=target.id)
+        self.session.say(ls("deluxe.slime.reload.text").format(source.name, source.max_energy), source_id=source.id, target_id=target.id)
         source.energy = source.max_energy
 
 
 @AttachedAction(NeuroRat)
 class SlimeApproach(DecisiveAction):
     id = 'approach'
-    name = ls("slime.approach.name")
+    name = ls("deluxe.slime.approach.name")
     target_type = SelfOnly()
 
     async def func(self, source, target):
         source.nearby_entities = list(filter(lambda t: t != source, self.session.entities))
         for entity in source.nearby_entities:
             entity.nearby_entities.append(source) if source not in entity.nearby_entities else None
-        self.session.say(ls("slime.approach.text").format(source.name), source_id=source.id, target_id=target.id)
+        self.session.say(ls("deluxe.slime.approach.text").format(source.name), source_id=source.id, target_id=target.id)

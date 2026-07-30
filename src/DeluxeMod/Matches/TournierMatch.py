@@ -13,7 +13,7 @@ from VegansDeluxe.core import ls
 from VegansDeluxe.rebuild import Necromancer, Visor
 
 class TournierMatch(BasicMatch):
-    name = ls("matches.tournier")
+    name = ls("deluxe.matches.tournier")
 
     def __init__(self, chat_id, engine):
         super().__init__(chat_id, engine)

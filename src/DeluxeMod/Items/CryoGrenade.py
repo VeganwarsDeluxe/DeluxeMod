@@ -17,13 +17,13 @@ from DeluxeMod.States.CryoFreeze import CryoFreeze
 @RegisterItem
 class CryoGrenade(Item):
     id = 'cryo_grenade'
-    name = ls("item.cryo.grenade_name")
+    name = ls("deluxe.item.cryo.grenade_name")
 
 
 @AttachedAction(CryoGrenade)
 class CryoGrenadeAction(DecisiveItem):
     id = 'cryo_grenade'
-    name = ls("item.cryo.grenade_name")
+    name = ls("deluxe.item.cryo.grenade_name")
     target_type = Enemies()
 
     tags = DecisiveItem.tags + [ActionTag.HARMFUL]
@@ -60,12 +60,12 @@ class CryoGrenadeAction(DecisiveItem):
         source.energy = max(source.energy - 2, 0)
         if frozen_targets:
             self.session.say(
-                ls("item.cryo.grenade_text")
+                ls("deluxe.item.cryo.grenade_text")
                 .format(source.name, LocalizedList([t.name for t in frozen_targets]))
             , source_id=source.id, target_id=target.id)
         if extinguished_targets:
             self.session.say(
-                ls("item.cryo.grenade_extinguish_text")
+                ls("deluxe.item.cryo.grenade_extinguish_text")
                 .format(LocalizedList([t.name for t in extinguished_targets]))
             , source_id=source.id, target_id=target.id)
 

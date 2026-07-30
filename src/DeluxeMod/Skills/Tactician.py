@@ -8,8 +8,8 @@ from VegansDeluxe.core.Translator.LocalizedString import ls
 
 class Tactician(Skill):
     id = 'tactician'
-    name = ls("skill.tactician_name")
-    description = ls("skill.tactician_description")
+    name = ls("deluxe.skill.tactician_name")
+    description = ls("deluxe.skill.tactician_description")
 
     def __init__(self):
         super().__init__()
@@ -26,5 +26,5 @@ async def register(root_context: StateContext[Tactician]):
             return
 
         if percentage_chance(25):
-            session.say(ls("skill.tactician_effect_text").format(source.name), source_id=source.id, target_id=source.id)
+            session.say(ls("deluxe.skill.tactician_effect_text").format(source.name), source_id=source.id, target_id=source.id)
             context.event.energy_payment = 0

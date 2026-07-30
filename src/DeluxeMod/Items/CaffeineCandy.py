@@ -7,13 +7,13 @@ from VegansDeluxe.core.Translator.LocalizedString import ls
 @RegisterItem
 class CaffeineCandy(Item):
     id = 'caffeine_candy'
-    name = ls("item.caffeine.candy_name")
+    name = ls("deluxe.item.caffeine.candy_name")
 
 
 @AttachedAction(CaffeineCandy)
 class CaffeineCandyAction(FreeItem):
     id = 'caffeine_candy'
-    name = ls("item.caffeine.candy_name")
+    name = ls("deluxe.item.caffeine.candy_name")
     target_type = SelfOnly()
     priority = -2
 
@@ -24,6 +24,6 @@ class CaffeineCandyAction(FreeItem):
         async def handle_at(context: EventContext[PostDamagesGameEvent]):
             energy_recovered = min(1, source.max_energy - source.energy)
             source.energy += energy_recovered
-            self.session.say(ls("item.caffeine.candy_effect").format(target.name, target.energy), source_id=source.id, target_id=target.id)
+            self.session.say(ls("deluxe.item.caffeine.candy_effect").format(target.name, target.energy), source_id=source.id, target_id=target.id)
 
-        self.session.say(ls("item.caffeine.candy_use").format(source.name, target.name), source_id=source.id, target_id=target.id)
+        self.session.say(ls("deluxe.item.caffeine.candy_use").format(source.name, target.name), source_id=source.id, target_id=target.id)

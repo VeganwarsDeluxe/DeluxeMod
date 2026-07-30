@@ -10,8 +10,8 @@ from VegansDeluxe.core.Weapons.Weapon import MeleeWeapon
 @RegisterWeapon
 class Chainsaw(MeleeWeapon):
     id = 'chainsaw'
-    name = ls("weapon.chainsaw.name")
-    description = ls("weapon.chainsaw.description")
+    name = ls("deluxe.weapon.chainsaw.name")
+    description = ls("deluxe.weapon.chainsaw.description")
 
     def __init__(self, session_id: str, entity_id: str):
         super().__init__(session_id, entity_id)
@@ -24,7 +24,7 @@ class Chainsaw(MeleeWeapon):
                 return
             source = context.session.get_entity(self.entity_id)
             source.notifications.append(
-                ls("weapon.chainsaw.active").format(self.cooldown_turn - context.session.turn)
+                ls("deluxe.weapon.chainsaw.active").format(self.cooldown_turn - context.session.turn)
             )
 
     def reset_stats(self):
@@ -42,7 +42,7 @@ class ChainsawAttack(MeleeAttack):
 
     async def func(self, source: Entity, target: Entity):
         if percentage_chance(5):
-            self.session.say(ls("weapon.chainsaw.jammed").format(source.name), source_id=source.id, target_id=target.id)
+            self.session.say(ls("deluxe.weapon.chainsaw.jammed").format(source.name), source_id=source.id, target_id=target.id)
             self.weapon.wound_up = False
             self.weapon.reset_stats()
             return
@@ -93,16 +93,16 @@ class WoundUpChainsaw(DecisiveWeaponAction):
 
     @property
     def name(self):
-        return ls("weapon.chainsaw.enable_name")
+        return ls("deluxe.weapon.chainsaw.enable_name")
 
     async def func(self, source, target):
         self.weapon.wound_up = True
         self.weapon.cooldown_turn = self.session.turn + 4
 
-        self.session.say(ls("weapon.chainsaw.switch_text").format(source.name), source_id=source.id, target_id=target.id)
+        self.session.say(ls("deluxe.weapon.chainsaw.switch_text").format(source.name), source_id=source.id, target_id=target.id)
 
         @At(self.session.id, turn=self.weapon.cooldown_turn, event=PostTickGameEvent)
         async def disable_chainsaw(context: EventContext[PostTickGameEvent]):
             self.weapon.wound_up = False
             self.weapon.reset_stats()
-            context.session.say(ls("weapon.chainsaw.disable_text").format(source.name), source_id=source.id, target_id=source.id)
+            context.session.say(ls("deluxe.weapon.chainsaw.disable_text").format(source.name), source_id=source.id, target_id=source.id)

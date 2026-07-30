@@ -12,8 +12,8 @@ from VegansDeluxe.core.Translator.LocalizedString import ls
 
 class Heroism(Skill):
     id = 'heroism'
-    name = ls("skill.heroism.name")
-    description = ls("skill.heroism.description")
+    name = ls("deluxe.skill.heroism.name")
+    description = ls("deluxe.skill.heroism.description")
 
     def __init__(self):
         super().__init__()
@@ -29,7 +29,7 @@ async def register(root_context: StateContext[Heroism]):
 @AttachedAction(Heroism)
 class HeroismAction(DecisiveStateAction):
     id = 'heroism'
-    name = ls("skill.heroism_action.name")
+    name = ls("deluxe.skill.heroism_action.name")
     priority = 0
     target_type = SelfOnly()
 
@@ -50,7 +50,7 @@ class HeroismAction(DecisiveStateAction):
 
         # Deduct 1 HP from the user (source)
         source.hp -= 1
-        self.session.say(ls("state.heroism.hp.lost").format(source.name, source.hp), source_id=source.id, target_id=target.id)
+        self.session.say(ls("deluxe.state.heroism.hp.lost").format(source.name, source.hp), source_id=source.id, target_id=target.id)
 
         # Heal 1 HP for all allies
         allies = self.get_allies(source)
@@ -58,4 +58,4 @@ class HeroismAction(DecisiveStateAction):
             if ally.hp < ally.max_hp:
                 health_recovered = min(1, ally.max_hp - ally.hp)
                 ally.hp += health_recovered
-                self.session.say(ls("state.heroism.hp.recovery").format(ally.name, ally.hp), source_id=source.id, target_id=target.id)
+                self.session.say(ls("deluxe.state.heroism.hp.recovery").format(ally.name, ally.hp), source_id=source.id, target_id=target.id)

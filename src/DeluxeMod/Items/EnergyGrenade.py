@@ -12,13 +12,13 @@ from VegansDeluxe.core.Translator.LocalizedString import ls
 @RegisterItem
 class EnergyGrenade(Item):
     id = 'energy_grenade'
-    name = ls("item.energy_grenade_name")
+    name = ls("deluxe.item.energy_grenade_name")
 
 
 @AttachedAction(EnergyGrenade)
 class EnergyGrenadeAction(DecisiveItem):
     id = 'energy_grenade'
-    name = ls("item.energy_grenade_name")
+    name = ls("deluxe.item.energy_grenade_name")
     target_type = Enemies()
     priority = 1
 
@@ -43,7 +43,7 @@ class EnergyGrenadeAction(DecisiveItem):
 
         # Announce the action
         self.session.say(
-            ls("item.energy_grenade_text")
+            ls("deluxe.item.energy_grenade_text")
             .format(source.name, damage, target.name)
         , source_id=source.id, target_id=target.id)
 

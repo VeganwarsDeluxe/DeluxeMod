@@ -7,7 +7,7 @@ from DeluxeMod.Matches.BasicMatch import BasicMatch
 
 
 class ElementalMatch(BasicMatch):
-    name = ls("matches.elemental")
+    name = ls("deluxe.matches.elemental")
 
     def __init__(self, chat_id, engine):
         super().__init__(chat_id, engine)

@@ -12,7 +12,7 @@ from VegansDeluxe.matchmakery.Entities.NPC import NPC
 
 
 class Slime(NPC):
-    def __init__(self, session_id: str, name=ls("slime.name")):
+    def __init__(self, session_id: str, name=ls("deluxe.slime.name")):
         super().__init__(session_id, name)
 
         self.weapon = SlimeWeapon(session_id, self.id)
@@ -59,52 +59,52 @@ class Slime(NPC):
 @AttachedAction(Slime)
 class SlimeApproach(DecisiveAction):
     id = 'slime_approach'
-    name = ls("slime.approach.name")
+    name = ls("deluxe.slime.approach.name")
     target_type = SelfOnly()
 
     async def func(self, source, target):
         source.nearby_entities = list(filter(lambda t: t != source, self.session.entities))
         for entity in source.nearby_entities:
             entity.nearby_entities.append(source) if source not in entity.nearby_entities else None
-        self.session.say(ls("slime.approach.text").format(source.name), source_id=source.id, target_id=target.id)
+        self.session.say(ls("deluxe.slime.approach.text").format(source.name), source_id=source.id, target_id=target.id)
 
 
 @AttachedAction(Slime)
 class SlimeReload(DecisiveAction):
     id = 'slime_reload'
-    name = ls("slime.reload.name")
+    name = ls("deluxe.slime.reload.name")
     target_type = SelfOnly()
 
     async def func(self, source, target):
-        self.session.say(ls("slime.reload.text").format(source.name, source.max_energy), source_id=source.id, target_id=target.id)
+        self.session.say(ls("deluxe.slime.reload.text").format(source.name, source.max_energy), source_id=source.id, target_id=target.id)
         source.energy = source.max_energy
 
 
 @AttachedAction(Slime)
 class SlimeEvade(DecisiveAction):
     id = 'slime_evade'
-    name = ls("slime.evade.name")
+    name = ls("deluxe.slime.evade.name")
     target_type = SelfOnly()
 
     async def func(self, source, target):
         self.source.inbound_accuracy_bonus = -5
-        self.session.say(ls("slime.evade.text").format(source.name), source_id=source.id, target_id=target.id)
+        self.session.say(ls("deluxe.slime.evade.text").format(source.name), source_id=source.id, target_id=target.id)
 
 
 @AttachedAction(Slime)
 class SlimeSlop(DecisiveAction):
     id = 'slime_slop'
-    name = ls("slime.slop.name")
+    name = ls("deluxe.slime.slop.name")
     target_type = SelfOnly()
 
     async def func(self, source, target):
-        self.session.say(ls("slime.slop.text").format(source.name), source_id=source.id, target_id=target.id)
+        self.session.say(ls("deluxe.slime.slop.text").format(source.name), source_id=source.id, target_id=target.id)
 
 
 @RegisterWeapon
 class SlimeWeapon(MeleeWeapon):
     id = 'slime_weapon'
-    name = ls("slime.weapon.name")
+    name = ls("deluxe.slime.weapon.name")
 
     cubes = 3
     damage_bonus = 0
@@ -115,14 +115,14 @@ class SlimeWeapon(MeleeWeapon):
 @AttachedAction(SlimeWeapon)
 class SlimeAttack(MeleeAttack):
     id = 'slime_attack'
-    name = ls("slime.attack.name")
+    name = ls("deluxe.slime.attack.name")
     target_type = Enemies()
 
     def __init__(self, *args):
 
         super().__init__(*args)
-        self.ATTACK_MESSAGE = ls("slime.weapon.attack")
-        self.MISS_MESSAGE = ls("slime.weapon.miss")
+        self.ATTACK_MESSAGE = ls("deluxe.slime.weapon.attack")
+        self.MISS_MESSAGE = ls("deluxe.slime.weapon.miss")
 
     async def func(self, source: Slime, target: Entity):
         damage = await super().func(source, target)
@@ -133,4 +133,4 @@ class SlimeAttack(MeleeAttack):
         if target.energy == 0:
             source.max_energy += 1
             source.energy = source.max_energy
-            self.session.say(ls("slime.growth.text").format(source.name, source.max_energy), source_id=source.id, target_id=target.id)
+            self.session.say(ls("deluxe.slime.growth.text").format(source.name, source.max_energy), source_id=source.id, target_id=target.id)

@@ -16,7 +16,7 @@ from DeluxeMod.Skills.FinalBlow import FinalBlowAction
 
 
 class Elemental(NPC):
-    def __init__(self, session_id: str="0", name=ls("elemental.name")):
+    def __init__(self, session_id: str="0", name=ls("deluxe.elemental.name")):
         super().__init__(session_id, name=name)
 
         self.weapon = ElementalWeapon(self.session_id, self.id)
@@ -50,25 +50,25 @@ class Elemental(NPC):
             if self.child:
                 if self.hp-context.event.hp_loss <= 2:
                     self.anger = True
-                    session.say(ls("elemental.anger").format(self.name), source_id=self.id, target_id=self.id)
+                    session.say(ls("deluxe.elemental.anger").format(self.name), source_id=self.id, target_id=self.id)
                     context.event.canceled = True
                 return
 
             if self.hp-context.event.hp_loss < self.max_hp / 2:
                 self.hp = 0
-                session.say(ls("elemental.split"), source_id=self.id, target_id=self.id)
+                session.say(ls("deluxe.elemental.split"), source_id=self.id, target_id=self.id)
                 await self.spawn_children(session, math.floor(self.max_hp / 2))
                 self.birthed = True
                 context.event.canceled = True
 
     async def spawn_children(self, session: Session, hp: int):
         for _ in range(2):
-            elemental_name = ls("elemental.name_number").format(_+1) if not self.glitched else self.name
+            elemental_name = ls("deluxe.elemental.name_number").format(_+1) if not self.glitched else self.name
             elemental = Elemental(self.session_id, name=elemental_name)
             elemental.max_hp = hp
             elemental.hp = hp
             elemental.child = True
-            elemental.anger = self.anger
+            deluxe.elemental.anger = self.anger
             elemental.team = self.team
             session.attach_entity(elemental)
             for state in content.all_states:
@@ -108,7 +108,7 @@ class Elemental(NPC):
 @RegisterWeapon
 class ElementalWeapon(MeleeWeapon):
     id = 'elemental_weapon'
-    name = ls("elemental.weapon.name")
+    name = ls("deluxe.elemental.weapon.name")
 
     cubes = 0
     damage_bonus = 0
@@ -119,20 +119,20 @@ class ElementalWeapon(MeleeWeapon):
 @AttachedAction(Elemental)
 class WarpReality(DecisiveAction):
     id = 'warp_reality'
-    name = ls("elemental.warp_reality.name")
+    name = ls("deluxe.elemental.warp_reality.name")
     target_type = SelfOnly()
 
     async def func(self, source, target):
         self.source.inbound_accuracy_bonus = -5
-        self.session.say(ls("elemental.warp_reality.text").format(source.name), source_id=source.id, target_id=target.id)
+        self.session.say(ls("deluxe.elemental.warp_reality.text").format(source.name), source_id=source.id, target_id=target.id)
 
 
 @AttachedAction(Elemental)
 class Singularity(DecisiveAction):
     id = 'reload_singularity'
-    name = ls("elemental.reload_singularity.name")
+    name = ls("deluxe.elemental.reload_singularity.name")
     target_type = SelfOnly()
 
     async def func(self, source, target):
-        self.session.say(ls("elemental.reload_singularity.text").format(source.name, source.max_energy), source_id=source.id, target_id=target.id)
+        self.session.say(ls("deluxe.elemental.reload_singularity.text").format(source.name, source.max_energy), source_id=source.id, target_id=target.id)
         source.energy = source.max_energy

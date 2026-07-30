@@ -18,8 +18,8 @@ from VegansDeluxe.rebuild import Stun
 
 class FinalBlow(Skill):
     id = 'final_blow'
-    name = ls("skill.final_blow.name")
-    description = ls("skill.final_blow.description")
+    name = ls("deluxe.skill.final_blow.name")
+    description = ls("deluxe.skill.final_blow.description")
 
     def __init__(self):
         super().__init__()
@@ -47,7 +47,7 @@ async def register(root_context: StateContext[FinalBlow]):
 @AttachedAction(FinalBlow)
 class FinalBlowAction(DecisiveStateAction):
     id = 'final_blow'
-    name = ls("skill.final_blow_action.name")
+    name = ls("deluxe.skill.final_blow_action.name")
     priority = 0
     target_type = SelfOnly()
 
@@ -72,7 +72,7 @@ class FinalBlowAction(DecisiveStateAction):
         for target in targets:
             if isinstance(target, Entity) and target.hp > 0:
                 target.hp -= 1
-                self.session.say(ls("state.final_blow.hp.decrease").format(source.name, LocalizedList([t.name for t in targets])), source_id=source.id, target_id=target.id)
+                self.session.say(ls("deluxe.state.final_blow.hp.decrease").format(source.name, LocalizedList([t.name for t in targets])), source_id=source.id, target_id=target.id)
 
         stun_state = source.get_state(Stun)
         stun_state.stun += 3
@@ -80,7 +80,7 @@ class FinalBlowAction(DecisiveStateAction):
         @At(self.session.id, turn=self.session.turn + 1, event=PreActionsGameEvent)
         async def final_blow_death(context: EventContext[PreActionsGameEvent]):
             source.dead = True
-            self.session.say(ls("state.final_blow.death").format(source.name), source_id=source.id, target_id=source.id)
+            self.session.say(ls("deluxe.state.final_blow.death").format(source.name), source_id=source.id, target_id=source.id)
 
     def select_random_targets(self, source: Entity) -> list[Entity]:
         """Select two random enemies from the available enemies."""

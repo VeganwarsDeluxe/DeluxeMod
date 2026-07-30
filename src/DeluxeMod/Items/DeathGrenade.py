@@ -8,13 +8,13 @@ from VegansDeluxe.core.Translator.LocalizedString import ls
 @RegisterItem
 class DeathGrenade(Item):
     id = 'death_grenade'
-    name = ls("item.death_grenade_name")
+    name = ls("deluxe.item.death_grenade_name")
 
 
 @AttachedAction(DeathGrenade)
 class DeathGrenadeAction(DecisiveItem):
     id = 'death_grenade'
-    name = ls("item.death_grenade_name")
+    name = ls("deluxe.item.death_grenade_name")
     target_type = Enemies()
 
     priority = -1
@@ -24,7 +24,7 @@ class DeathGrenadeAction(DecisiveItem):
     async def func(self, source, target):
         source.energy = max(source.energy - 2, 0)
         target.hp = max(target.hp - 1, 0)
-        self.session.say(ls("item.death_grenade_text").format(source.name, target.name, target.hp), source_id=source.id, target_id=target.id)
+        self.session.say(ls("deluxe.item.death_grenade_text").format(source.name, target.name, target.hp), source_id=source.id, target_id=target.id)
 
     @property
     def blocked(self):

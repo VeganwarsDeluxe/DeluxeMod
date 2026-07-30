@@ -7,7 +7,7 @@ from DeluxeMod.Matches.BasicMatch import BasicMatch
 
 
 class SlimeMatch(BasicMatch):
-    name = ls("matches.slimes")
+    name = ls("deluxe.matches.slimes")
 
     def __init__(self, chat_id, engine):
         super().__init__(chat_id, engine)
@@ -21,6 +21,6 @@ class SlimeMatch(BasicMatch):
         #     return
         for _ in range(2):
             self.slimes += 1
-            slime = Slime(self.id, name=ls("slime.number").format(self.slimes))
+            slime = Slime(self.id, name=ls("deluxe.slime.number").format(self.slimes))
             self.session.attach_entity(slime)
             await self.engine.attach_states(slime, DeluxeMod.content.all_states)

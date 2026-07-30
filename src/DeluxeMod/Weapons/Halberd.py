@@ -7,8 +7,8 @@ from VegansDeluxe.core.Weapons.Weapon import MeleeWeapon
 @RegisterWeapon
 class Halberd(MeleeWeapon):
     id = 'halberd'
-    name = ls("weapon.halberd.name")
-    description = ls("weapon.halberd.description")
+    name = ls("deluxe.weapon.halberd.name")
+    description = ls("deluxe.weapon.halberd.description")
 
     cubes = 3
     accuracy_bonus = 2
@@ -28,7 +28,7 @@ class HalberdAttack(MeleeAttack):
         if self.attack_count % 3 == 0:
             if percentage_chance(99):
                 self.weapon.damage *= 2
-                self.session.say(ls("weapon.halberd.attack.critical").format(source.name, target.name,
+                self.session.say(ls("deluxe.weapon.halberd.attack.critical").format(source.name, target.name,
                                                                              self.weapon.damage), source_id=source.id, target_id=target.id)
 
         await super().func(source, target)

@@ -8,7 +8,7 @@ from DeluxeMod.Matches.BasicMatch import BasicMatch
 
 
 class BeastDungeon(BasicMatch):
-    name = ls("matches.beast")
+    name = ls("deluxe.matches.beast")
 
     def __init__(self, chat_id, engine):
         super().__init__(chat_id, engine)

@@ -8,8 +8,8 @@ from VegansDeluxe.core.Weapons.Weapon import MeleeWeapon
 @RegisterWeapon
 class Hook(MeleeWeapon):
     id = 'hook'
-    name = ls("weapon.hook.name")
-    description = ls("weapon.hook.description")
+    name = ls("deluxe.weapon.hook.name")
+    description = ls("deluxe.weapon.hook.description")
 
     cubes = 3
     accuracy_bonus = 2
@@ -29,7 +29,7 @@ class HookAttack(MeleeAttack):
 @AttachedAction(Hook)
 class HookAttract(RangedAttack):
     id = 'hook_attract'
-    name = ls("weapon.hook.attract.name")
+    name = ls("deluxe.weapon.hook.attract.name")
     target_type = Enemies()
 
     def __init__(self, session: Session, source: Entity, weapon: Hook):
@@ -69,12 +69,12 @@ class HookAttract(RangedAttack):
 
         if not total_damage:
             self.session.say(
-                ls("weapon.hook.attract.miss")
+                ls("deluxe.weapon.hook.attract.miss")
                 .format(source.name, target.name)
             , source_id=source.id, target_id=target.id)
         else:
             self.session.say(
-                ls("weapon.hook.attract.text").format(source.name, target.name, total_damage)
+                ls("deluxe.weapon.hook.attract.text").format(source.name, target.name, total_damage)
             , source_id=source.id, target_id=target.id)
 
         self.weapon.damage_bonus = 0

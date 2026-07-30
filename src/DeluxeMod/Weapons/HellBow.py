@@ -12,8 +12,8 @@ from VegansDeluxe.core.Weapons.Weapon import RangedWeapon
 @RegisterWeapon
 class HellBow(RangedWeapon):
     id = 'hell_bow'
-    name = ls("weapon.hell.bow_name")
-    description = ls("weapon.hell.bow_description")
+    name = ls("deluxe.weapon.hell.bow_name")
+    description = ls("deluxe.weapon.hell.bow_description")
 
     cubes = 3
     accuracy_bonus = 1
@@ -33,7 +33,7 @@ class HellBowAttack(RangedAttack):
 @AttachedAction(HellBow)
 class ExplosionArrow(RangedAttack):
     id = 'explosion_arrow'
-    name = ls("weapon.hell.bow_explosion_arrow_name")
+    name = ls("deluxe.weapon.hell.bow_explosion_arrow_name")
     target_type = Enemies()
 
     def __init__(self, session: Session, source: Entity, weapon: HellBow):
@@ -79,19 +79,19 @@ class ExplosionArrow(RangedAttack):
 
         if primary_damage == 0 and secondary_damage == 0:
             self.session.say(
-                ls("weapon.hell.bow_explosion_arrow_text_miss")
+                ls("deluxe.weapon.hell.bow_explosion_arrow_text_miss")
                 .format(source.name, target.name)
             , source_id=source.id, target_id=target.id)
         else:
             if len(secondary_targets) == 0:
                 self.session.say(
-                    ls("weapon.hell.bow_explosion_arrow_single_target_text")
+                    ls("deluxe.weapon.hell.bow_explosion_arrow_single_target_text")
                     .format(source.name, target.name, primary_damage)
                 , source_id=source.id, target_id=target.id)
             else:
                 secondary_targets_names = ', '.join([t.name for t in secondary_targets])
                 self.session.say(
-                    ls("weapon.hell.bow_explosion_arrow_multiple_targets_text")
+                    ls("deluxe.weapon.hell.bow_explosion_arrow_multiple_targets_text")
                     .format(
                         source.name,
                         target.name,

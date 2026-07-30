@@ -11,7 +11,7 @@ from VegansDeluxe.matchmakery.Entities.NPC import NPC
 
 
 class Beast(NPC):
-    def __init__(self, session_id: str, name=ls("beast.name")):
+    def __init__(self, session_id: str, name=ls("deluxe.beast.name")):
         super().__init__(session_id, name)
 
         self.weapon = BeastWeapon(session_id, self.id)
@@ -86,7 +86,7 @@ class Beast(NPC):
 @AttachedAction(Beast)
 class BeastApproach(DecisiveAction):
     id = 'beast_approach'
-    name = ls("beast.approach.name")
+    name = ls("deluxe.beast.approach.name")
     target_type = SelfOnly()
 
     async def func(self, source, target):
@@ -94,45 +94,45 @@ class BeastApproach(DecisiveAction):
         for entity in source.nearby_entities:
             if source not in entity.nearby_entities:
                 entity.nearby_entities.append(source)
-        self.session.say(ls("beast.approach.text").format(source.name), source_id=source.id, target_id=target.id)
+        self.session.say(ls("deluxe.beast.approach.text").format(source.name), source_id=source.id, target_id=target.id)
 
 
 @AttachedAction(Beast)
 class BeastReload(DecisiveAction):
     id = 'beast_reload'
-    name = ls("beast.reload.name")
+    name = ls("deluxe.beast.reload.name")
     target_type = SelfOnly()
 
     async def func(self, source, target):
-        self.session.say(ls("beast.reload.text").format(source.name, source.max_energy), source_id=source.id, target_id=target.id)
+        self.session.say(ls("deluxe.beast.reload.text").format(source.name, source.max_energy), source_id=source.id, target_id=target.id)
         source.energy = source.max_energy
 
 
 @AttachedAction(Beast)
 class BeastEvade(DecisiveAction):
     id = 'beast_evade'
-    name = ls("beast.evade.name")
+    name = ls("deluxe.beast.evade.name")
     target_type = SelfOnly()
 
     async def func(self, source, target):
         self.source.inbound_accuracy_bonus = -6
-        self.session.say(ls("beast.evade.text").format(source.name), source_id=source.id, target_id=target.id)
+        self.session.say(ls("deluxe.beast.evade.text").format(source.name), source_id=source.id, target_id=target.id)
 
 
 @AttachedAction(Beast)
 class BeastGrowl(DecisiveAction):
     id = 'beast_growl'
-    name = ls("beast.growl.name")
+    name = ls("deluxe.beast.growl.name")
     target_type = SelfOnly()
 
     async def func(self, source, target):
-        self.session.say(ls("beast.growl.text").format(source.name), source_id=source.id, target_id=target.id)
+        self.session.say(ls("deluxe.beast.growl.text").format(source.name), source_id=source.id, target_id=target.id)
 
 
 @RegisterWeapon
 class BeastWeapon(MeleeWeapon):
     id = 'beast_weapon'
-    name = ls("beast.weapon.name")
+    name = ls("deluxe.beast.weapon.name")
 
     cubes = 3
     damage_bonus = 0
@@ -143,14 +143,14 @@ class BeastWeapon(MeleeWeapon):
 @AttachedAction(BeastWeapon)
 class BeastAttack(MeleeAttack):
     id = 'beast_attack'
-    name = ls("beast.attack.name")
+    name = ls("deluxe.beast.attack.name")
     target_type = Enemies()
 
 
 @AttachedAction(BeastWeapon)
 class BeastAttackTwo(MeleeAttack):
     id = 'Beast_attack_Two'
-    name = ls("beast.AttackTwo.name")
+    name = ls("deluxe.beast.AttackTwo.name")
     target_type = Enemies()
 
     async def func(self, source, target):
@@ -162,7 +162,7 @@ class BeastAttackTwo(MeleeAttack):
         target.inbound_dmg.add(source, post_damage, self.session.turn)
         source.outbound_dmg.add(target, post_damage, self.session.turn)
 
-        self.session.say(ls("beast.AttackTwo.text").format(source.name, target.name, final_damage), source_id=source.id, target_id=target.id)
+        self.session.say(ls("deluxe.beast.AttackTwo.text").format(source.name, target.name, final_damage), source_id=source.id, target_id=target.id)
         self.weapon.damage_bonus = 0
 
     async def publish_post_damage_event(self, source: Entity, target: Entity, damage: int) -> int:
@@ -174,8 +174,8 @@ class BeastAttackTwo(MeleeAttack):
 @AttachedAction(BeastWeapon)
 class BeastBite(MeleeAttack):
     id = 'beast_bite'
-    name = ls("beast.bite.name")
+    name = ls("deluxe.beast.bite.name")
 
     async def func(self, source, target):
         target.hp = max(0, target.hp - 1)
-        self.session.say(ls("beast.bite.text").format(source.name, target.name), source_id=source.id, target_id=target.id)
+        self.session.say(ls("deluxe.beast.bite.text").format(source.name, target.name), source_id=source.id, target_id=target.id)

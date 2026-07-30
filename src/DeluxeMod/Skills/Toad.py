@@ -10,8 +10,8 @@ from VegansDeluxe.rebuild.States.Dodge import DodgeGameEvent
 
 class Toad(Skill):
     id = 'toad'
-    name = ls("skill.toad.name")
-    description = ls("skill.toad.description")
+    name = ls("deluxe.skill.toad.name")
+    description = ls("deluxe.skill.toad.description")
 
 
 @RegisterState(Toad)

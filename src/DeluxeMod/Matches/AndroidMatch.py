@@ -7,7 +7,7 @@ from DeluxeMod.Matches.BasicMatch import BasicMatch
 
 
 class AndroidMatch(BasicMatch):
-    name = ls("matches.android")
+    name = ls("deluxe.matches.android")
 
     def __init__(self, chat_id, engine):
         super().__init__(chat_id, engine)

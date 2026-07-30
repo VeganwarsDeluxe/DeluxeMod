@@ -22,7 +22,7 @@ from DeluxeMod.Matches.BasicMatch import BasicMatch
 
 
 class MegaDungeon(Dungeon):
-    name = ls("matches.mega_dungeon")
+    name = ls("deluxe.matches.mega_dungeon")
 
     async def create_first_match(self):
         return MegaRatMatch(self.id, self.engine)
@@ -81,10 +81,10 @@ class MegaMatch(BasicMatch):
             for entity in session.alive_entities:
                 if isinstance(entity, Rat) and percentage_chance(2):
                     entity.metadata["mega_armored_turn"] = session.turn
-                    session.say(ls("mega.rat.armor").format(entity.name), source_id=entity.id, target_id=entity.id)
+                    session.say(ls("deluxe.mega.rat.armor").format(entity.name), source_id=entity.id, target_id=entity.id)
                 if isinstance(entity, MegaRhino) and percentage_chance(60):
                     entity.metadata["mega_armored_turn"] = session.turn
-                    session.say(ls("mega.rhino.armor").format(entity.name), source_id=entity.id, target_id=entity.id)
+                    session.say(ls("deluxe.mega.rhino.armor").format(entity.name), source_id=entity.id, target_id=entity.id)
 
         @RegisterEvent(self.session.id, event=PostDamageGameEvent, priority=-100)
         async def apply_turn_armor(context: EventContext[PostDamageGameEvent]):
@@ -116,11 +116,11 @@ class MegaMatch(BasicMatch):
                         entity.hp = max(1, floor(entity.max_hp / 2))
                         entity.energy = 0
                         entity.get_state(Stun).stun = 1
-                        session.say(ls("mega.skeleton.resurrect").format(entity.name), source_id=entity.id, target_id=entity.id)
+                        session.say(ls("deluxe.mega.skeleton.resurrect").format(entity.name), source_id=entity.id, target_id=entity.id)
 
 
 class MegaRatMatch(MegaMatch):
-    name = ls("matches.mega_dungeon.rats")
+    name = ls("deluxe.matches.mega_dungeon.rats")
 
     def __init__(self, chat_id, engine):
         super().__init__(chat_id, engine)
@@ -129,13 +129,13 @@ class MegaRatMatch(MegaMatch):
     async def join_session(self, user_id, user_name):
         player = await super().join_session(user_id, user_name)
         self.rats += 1
-        rat = Rat(self.id, name=ls("mega.rat.number").format(self.rats))
+        rat = Rat(self.id, name=ls("deluxe.mega.rat.number").format(self.rats))
         await self.attach_monster(rat)
         return player
 
 
 class MegaRatSkeletonMatch(MegaMatch):
-    name = ls("matches.mega_dungeon.rats_and_skeletons")
+    name = ls("deluxe.matches.mega_dungeon.rats_and_skeletons")
 
     def __init__(self, chat_id, engine):
         super().__init__(chat_id, engine)
@@ -147,17 +147,17 @@ class MegaRatSkeletonMatch(MegaMatch):
         player = await super().join_session(user_id, user_name)
 
         self.rats += 1
-        rat = Rat(self.id, name=ls("mega.rat.number").format(self.rats))
+        rat = Rat(self.id, name=ls("deluxe.mega.rat.number").format(self.rats))
         await self.attach_monster(rat)
 
         self.skeletons += 1
-        skeleton = Skeleton(self.id, name=ls("mega.skeleton.number").format(self.skeletons))
+        skeleton = Skeleton(self.id, name=ls("deluxe.mega.skeleton.number").format(self.skeletons))
         await self.attach_monster(skeleton)
         return player
 
 
 class MegaRhinoMatch(MegaMatch):
-    name = ls("matches.mega_dungeon.mega_rhinos")
+    name = ls("deluxe.matches.mega_dungeon.mega_rhinos")
 
     def __init__(self, chat_id, engine):
         super().__init__(chat_id, engine)
@@ -173,7 +173,7 @@ class MegaRhinoMatch(MegaMatch):
                 rhino = MegaRhino(
                     self.id,
                     party_size,
-                    name=ls("mega.rhino.number").format(index),
+                    name=ls("deluxe.mega.rhino.number").format(index),
                 )
                 await self.attach_monster(rhino)
                 rhino.get_state(DamageThreshold).threshold = 9

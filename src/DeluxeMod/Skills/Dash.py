@@ -12,8 +12,8 @@ from VegansDeluxe.core.Translator.LocalizedString import ls
 
 class Dash(Skill):
     id = 'dash'
-    name = ls("skill.dash_name")
-    description = ls("skill.dash_description")
+    name = ls("deluxe.skill.dash_name")
+    description = ls("deluxe.skill.dash_description")
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -29,7 +29,7 @@ async def register(root_context: StateContext[Dash]):
 @AttachedAction(Dash)
 class DashAction(DecisiveStateAction):
     id = 'dash'
-    name = ls("skill.dash_action_name")
+    name = ls("deluxe.skill.dash_action_name")
     target_type = Enemies()
     priority = 0
 
@@ -53,9 +53,9 @@ class DashAction(DecisiveStateAction):
         damage = await attack_action.attack(source, target, bonus_damage=1, send_message=False)
 
         if damage.displayed:
-            self.session.say(ls("skill.dash.text").format(source.name, target.name, damage.displayed), source_id=source.id, target_id=target.id)
+            self.session.say(ls("deluxe.skill.dash.text").format(source.name, target.name, damage.displayed), source_id=source.id, target_id=target.id)
         else:
-            self.session.say(ls("skill.dash.text_miss").format(source.name, target.name), source_id=source.id, target_id=target.id)
+            self.session.say(ls("deluxe.skill.dash.text_miss").format(source.name, target.name), source_id=source.id, target_id=target.id)
             return
 
         if source not in target.nearby_entities:

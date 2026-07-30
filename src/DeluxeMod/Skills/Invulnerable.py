@@ -1,5 +1,5 @@
-from VegansDeluxe.core import SelfOnly
 from VegansDeluxe.core import RegisterState, AttachedAction
+from VegansDeluxe.core import SelfOnly
 from VegansDeluxe.core import StateContext, Session, percentage_chance
 from VegansDeluxe.core.Actions.StateAction import DecisiveStateAction
 from VegansDeluxe.core.Entities.Entity import Entity
@@ -10,8 +10,8 @@ from VegansDeluxe.core.Translator.LocalizedString import ls
 
 class Invulnerable(Skill):
     id = 'invulnerable'
-    name = ls("skill.invulnerable.name")
-    description = ls("skill.invulnerable.description")
+    name = ls("deluxe.skill.invulnerable.name")
+    description = ls("deluxe.skill.invulnerable.description")
 
 
 @RegisterState(Invulnerable)

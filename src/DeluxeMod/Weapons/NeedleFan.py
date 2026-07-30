@@ -10,8 +10,8 @@ from VegansDeluxe.core.Weapons.Weapon import RangedWeapon
 @RegisterWeapon
 class NeedleFan(RangedWeapon):
     id = 'needle_fan'
-    name = ls("weapon.needle_fan.name")
-    description = ls("weapon.needle_fan.description")
+    name = ls("deluxe.weapon.needle_fan.name")
+    description = ls("deluxe.weapon.needle_fan.description")
 
     cubes = 2
     accuracy_bonus = 2
@@ -32,7 +32,7 @@ class NeedleFan(RangedWeapon):
         async def pre_move(context: EventContext[PreMoveGameEvent]):
             source = context.session.get_entity(self.entity_id)
             source.notifications.append(
-                ls("weapon.needle_fan.notification").format(self.current_needles)
+                ls("deluxe.weapon.needle_fan.notification").format(self.current_needles)
             )
 
 

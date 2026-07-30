@@ -8,7 +8,7 @@ from DeluxeMod.Matches.BasicMatch import BasicMatch
 
 
 class GuardianDungeon(BasicMatch):
-    name = ls("matches.guardian")
+    name = ls("deluxe.matches.guardian")
 
     def __init__(self, chat_id, engine):
         super().__init__(chat_id, engine)

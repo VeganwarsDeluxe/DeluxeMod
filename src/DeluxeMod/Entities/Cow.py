@@ -12,7 +12,7 @@ from VegansDeluxe.matchmakery.Entities.NPC import NPC
 
 class Cow(NPC):
     def __init__(self, session_id: str):
-        super().__init__(session_id, name=ls("cow.name"))
+        super().__init__(session_id, name=ls("deluxe.cow.name"))
 
         self.weapon = CowWeapon(self.session_id, self.id)
 
@@ -45,49 +45,49 @@ class CowApproach(ApproachAction):
         source.nearby_entities = list(filter(lambda t: t != source, self.session.entities))
         for entity in source.nearby_entities:
             entity.nearby_entities.append(source) if source not in entity.nearby_entities else None
-        self.session.say(ls("cow.approach.text").format(source.name), source_id=source.id, target_id=target.id)
+        self.session.say(ls("deluxe.cow.approach.text").format(source.name), source_id=source.id, target_id=target.id)
 
 
 
 @AttachedAction(Cow)
 class Run(DecisiveAction):
     id = 'cow_dodge'
-    name = ls("cow.dodge.name")
+    name = ls("deluxe.cow.dodge.name")
     target_type = SelfOnly()
 
     async def func(self, source, target):
         self.source.inbound_accuracy_bonus = -5
-        self.session.say(ls("cow.dodge.text").format(source.name), source_id=source.id, target_id=target.id)
+        self.session.say(ls("deluxe.cow.dodge.text").format(source.name), source_id=source.id, target_id=target.id)
 
 
 @AttachedAction(Cow)
 class WalkAway(DecisiveAction):
     id = 'cow_walk_away'
-    name = ls("cow.walk_away.name")
+    name = ls("deluxe.cow.walk_away.name")
     target_type = SelfOnly()
 
     async def func(self, source, target):
         for entity in source.nearby_entities:
             entity.nearby_entities.remove(source) if source in entity.nearby_entities else None
         source.nearby_entities = []
-        self.session.say(ls("cow.walk_away.text").format(source.name), source_id=source.id, target_id=target.id)
+        self.session.say(ls("deluxe.cow.walk_away.text").format(source.name), source_id=source.id, target_id=target.id)
 
 
 @AttachedAction(Cow)
 class EatGrassReload(DecisiveAction):
     id = 'eat_grass'
-    name = ls("cow.eat_grass.name")
+    name = ls("deluxe.cow.eat_grass.name")
     target_type = SelfOnly()
 
     async def func(self, source, target):
         source.energy = source.max_energy
-        self.session.say(ls("cow.eat_grass.text").format(source.name, source.max_energy), source_id=source.id, target_id=target.id)
+        self.session.say(ls("deluxe.cow.eat_grass.text").format(source.name, source.max_energy), source_id=source.id, target_id=target.id)
 
 
 @RegisterWeapon
 class CowWeapon(MeleeWeapon):
     id = 'cow_weapon'
-    name = ls("cow.weapon.name")
+    name = ls("deluxe.cow.weapon.name")
 
     cubes = 0
     damage_bonus = 0
@@ -97,7 +97,7 @@ class CowWeapon(MeleeWeapon):
 @AttachedAction(CowWeapon)
 class Silence(DecisiveWeaponAction):
     id = 'cow_silence'
-    name = ls("cow.silence.name")
+    name = ls("deluxe.cow.silence.name")
     target_type = SelfOnly()
 
     def __init__(self, session, source, weapon):
@@ -110,15 +110,15 @@ class Silence(DecisiveWeaponAction):
 
 class MilkItem(Item):
     id = 'milk'
-    name = ls("cow.item.milk")
+    name = ls("deluxe.cow.item.milk")
 
 
 @AttachedAction(MilkItem)
 class Milk(FreeItem):
     id = 'milk'
-    name = ls("cow.item.milk")
+    name = ls("deluxe.cow.item.milk")
     target_type = SelfOnly()
 
     async def func(self, source, target):
         target.energy = target.max_energy
-        self.session.say(ls("cow.item.milk.text").format(source.name), source_id=source.id, target_id=target.id)
+        self.session.say(ls("deluxe.cow.item.milk.text").format(source.name), source_id=source.id, target_id=target.id)

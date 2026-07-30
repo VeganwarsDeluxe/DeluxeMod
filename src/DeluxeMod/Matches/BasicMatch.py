@@ -5,7 +5,7 @@ import DeluxeMod.content
 from VegansDeluxe.core import ls
 
 class BasicMatch(Match):
-    name = ls("matches.match")
+    name = ls("deluxe.matches.match")
 
     def __init__(self, chat_id, engine):
         super().__init__(chat_id, engine)

@@ -5,7 +5,7 @@ from VegansDeluxe.matchmakery import Dungeon
 class Room57(Dungeon):
     """A three-room run: slimes, Androids, then the Elemental."""
 
-    name = ls("matches.room_57")
+    name = ls("deluxe.matches.room_57")
 
     async def create_first_match(self):
         from DeluxeMod.Matches.SlimeMatch import SlimeMatch

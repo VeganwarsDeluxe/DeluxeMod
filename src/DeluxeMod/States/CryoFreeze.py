@@ -71,7 +71,7 @@ async def register(root_context: StateContext[CryoFreeze]):
 
         context.event.damage = math.floor(context.event.damage * state.damage_multiplier(session))
         state.clear()
-        session.say(ls("state.cryo_freeze.break").format(source.name), source_id=source.id, target_id=source.id)
+        session.say(ls("deluxe.state.cryo_freeze.break").format(source.name), source_id=source.id, target_id=source.id)
 
     @RegisterEvent(session.id, event=FireAttackGameEvent)
     async def melt_by_fire(context: EventContext[FireAttackGameEvent]):
@@ -85,7 +85,7 @@ async def register(root_context: StateContext[CryoFreeze]):
             aflame.timer = 0
             aflame.extinguished = False
         state.clear()
-        session.say(ls("state.cryo_freeze.melt").format(source.name), source_id=source.id, target_id=source.id)
+        session.say(ls("deluxe.state.cryo_freeze.melt").format(source.name), source_id=source.id, target_id=source.id)
 
     @RegisterEvent(session.id, event=PostDamagesGameEvent)
     async def expire(context: EventContext[PostDamagesGameEvent]):
@@ -94,7 +94,7 @@ async def register(root_context: StateContext[CryoFreeze]):
 
         if state.freeze == 1:
             state.clear()
-            session.say(ls("state.cryo_freeze.recovery").format(source.name), source_id=source.id, target_id=source.id)
+            session.say(ls("deluxe.state.cryo_freeze.recovery").format(source.name), source_id=source.id, target_id=source.id)
             return
 
         state.freeze -= 1

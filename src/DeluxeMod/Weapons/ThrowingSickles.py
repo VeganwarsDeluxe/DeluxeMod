@@ -18,8 +18,8 @@ from VegansDeluxe.core import RangedAttack
 @RegisterWeapon
 class ThrowingSickles(RangedWeapon):
     id = 'throwing_sickles'
-    name = ls("weapon.throwing_sickles.name")
-    description = ls("weapon.throwing_sickles.description")
+    name = ls("deluxe.weapon.throwing_sickles.name")
+    description = ls("deluxe.weapon.throwing_sickles.description")
 
     ranged = False
     cubes = 3
@@ -44,13 +44,13 @@ class ThrowingSickles(RangedWeapon):
             if not source:
                 return
             source.notifications.append(
-                ls("weapon.throwing_sickles.notification").format(self.held_sickles, self.dropped_sickles)
+                ls("deluxe.weapon.throwing_sickles.notification").format(self.held_sickles, self.dropped_sickles)
             )
 
 
 @AttachedAction(ThrowingSickles)
 class ThrowingSicklesMeleeAttack(MeleeAttack):
-    name = ls("weapon.throwing_sickles.melee.name")
+    name = ls("deluxe.weapon.throwing_sickles.melee.name")
 
     async def func(self, source: Entity, target: Entity):
         original_cubes = self.weapon.cubes
@@ -74,7 +74,7 @@ class ThrowingSicklesMeleeAttack(MeleeAttack):
                 source.energy = throw_energy
                 second_damage = await self.attack(source, target, pay_energy=False)
                 source.energy = paid_energy
-                self.session.say(ls("weapon.throwing_sickles.double_melee_text").format(source.name, target.name), source_id=source.id, target_id=target.id)
+                self.session.say(ls("deluxe.weapon.throwing_sickles.double_melee_text").format(source.name, target.name), source_id=source.id, target_id=target.id)
                 return second_damage if second_damage.dealt else first_damage
 
             return await self.attack(source, target)
@@ -87,7 +87,7 @@ class ThrowingSicklesMeleeAttack(MeleeAttack):
 @AttachedAction(ThrowingSickles)
 class ThrowSickle(RangedAttack):
     id = 'throw_sickle'
-    name = ls("weapon.throwing_sickles.throw.name")
+    name = ls("deluxe.weapon.throwing_sickles.throw.name")
 
     @property
     def hidden(self) -> bool:
@@ -112,7 +112,7 @@ class ThrowSickle(RangedAttack):
 
         if damage.calculated:
             self.weapon.dropped_sickles += 1
-            self.session.say(ls("weapon.throwing_sickles.dropped_text").format(source.name), source_id=source.id, target_id=target.id)
+            self.session.say(ls("deluxe.weapon.throwing_sickles.dropped_text").format(source.name), source_id=source.id, target_id=target.id)
             return damage
 
         @At(self.session.id, turn=self.session.turn + 1, event=PreMoveGameEvent)
@@ -121,7 +121,7 @@ class ThrowSickle(RangedAttack):
             if not owner or not isinstance(owner.weapon, ThrowingSickles):
                 return
             self.weapon.held_sickles = min(self.weapon.held_sickles + 1, self.weapon.max_sickles)
-            context.session.say(ls("weapon.throwing_sickles.return_text").format(owner.name), source_id=owner.id, target_id=owner.id)
+            context.session.say(ls("deluxe.weapon.throwing_sickles.return_text").format(owner.name), source_id=owner.id, target_id=owner.id)
 
         return damage
 
@@ -129,7 +129,7 @@ class ThrowSickle(RangedAttack):
 @AttachedAction(ThrowingSickles)
 class PickUpSickle(DecisiveWeaponAction):
     id = 'pick_up_sickle'
-    name = ls("weapon.throwing_sickles.pickup.name")
+    name = ls("deluxe.weapon.throwing_sickles.pickup.name")
     target_type = SelfOnly()
 
     @property
@@ -139,4 +139,4 @@ class PickUpSickle(DecisiveWeaponAction):
     async def func(self, source: Entity, target: Entity):
         self.weapon.dropped_sickles -= 1
         self.weapon.held_sickles = min(self.weapon.held_sickles + 1, self.weapon.max_sickles)
-        self.session.say(ls("weapon.throwing_sickles.pickup.text").format(source.name), source_id=source.id, target_id=target.id)
+        self.session.say(ls("deluxe.weapon.throwing_sickles.pickup.text").format(source.name), source_id=source.id, target_id=target.id)

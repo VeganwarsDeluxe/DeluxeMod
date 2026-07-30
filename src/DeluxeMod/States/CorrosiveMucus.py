@@ -30,9 +30,9 @@ async def register(root_context: StateContext[CorrosiveMucus]):
                 # Randomly select an item from the items list
                 item_to_remove = random.choice(source.items)
                 source.items.remove(item_to_remove)
-                session.say(ls("state.corrosive_mucus.item.loss").format(source.name, item_to_remove.name), source_id=source.id, target_id=source.id)
+                session.say(ls("deluxe.state.corrosive_mucus.item.loss").format(source.name, item_to_remove.name), source_id=source.id, target_id=source.id)
             else:
-                session.say(ls("state.corrosive_mucus.no_item").format(source.name), source_id=source.id, target_id=source.id)
+                session.say(ls("deluxe.state.corrosive_mucus.no_item").format(source.name), source_id=source.id, target_id=source.id)
 
             # Reset the effect
             state.active = False
@@ -40,5 +40,5 @@ async def register(root_context: StateContext[CorrosiveMucus]):
             return
 
         # Notify about the countdown
-        session.say(ls("state.corrosive_mucus.timer").format(source.name, max(state.corrosive_mucus, 0)), source_id=source.id, target_id=source.id)
+        session.say(ls("deluxe.state.corrosive_mucus.timer").format(source.name, max(state.corrosive_mucus, 0)), source_id=source.id, target_id=source.id)
         state.corrosive_mucus -= 1

@@ -8,8 +8,8 @@ from VegansDeluxe.core.Translator.LocalizedString import ls
 
 class Echo(Skill):
     id = 'echo'
-    name = ls("skill.echo_name")
-    description = ls("skill.echo_description")
+    name = ls("deluxe.skill.echo_name")
+    description = ls("deluxe.skill.echo_description")
 
     def __init__(self):
         super().__init__()

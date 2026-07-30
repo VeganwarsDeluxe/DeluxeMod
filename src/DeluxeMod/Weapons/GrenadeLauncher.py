@@ -13,8 +13,8 @@ from VegansDeluxe.rebuild import Aflame
 @RegisterWeapon
 class GrenadeLauncher(RangedWeapon):
     id = 'grenade_launcher'
-    name = ls("weapon.grenade_launcher.name")
-    description = ls("weapon.grenade_launcher.description")
+    name = ls("deluxe.weapon.grenade_launcher.name")
+    description = ls("deluxe.weapon.grenade_launcher.description")
 
     cubes = 4
     accuracy_bonus = 1
@@ -49,9 +49,9 @@ class GrenadeLauncherAttack(RangedAttack):
             source.outbound_dmg.add(target, post_damage, self.session.turn)
 
         if not base_damage:
-            self.session.say(ls("weapon.grenade_launcher.grenade.text_miss").format(source.name, target.name), source_id=source.id, target_id=target.id)
+            self.session.say(ls("deluxe.weapon.grenade_launcher.grenade.text_miss").format(source.name, target.name), source_id=source.id, target_id=target.id)
         else:
-            self.session.say(ls("weapon.grenade_launcher.grenade.text").format(source.name, base_damage,
+            self.session.say(ls("deluxe.weapon.grenade_launcher.grenade.text").format(source.name, base_damage,
                                                                         LocalizedList([t.name for t in targets])), source_id=source.id, target_id=target.id)
 
     async def perform_molotov_attack(self, source, target):
@@ -74,10 +74,10 @@ class GrenadeLauncherAttack(RangedAttack):
             source.outbound_dmg.add(source, post_damage, self.session.turn)
 
         if base_damage:
-            self.session.say(ls("weapon.grenade_launcher.molotov.text")
+            self.session.say(ls("deluxe.weapon.grenade_launcher.molotov.text")
                              .format(source.name, LocalizedList([t.name for t in targets])), source_id=source.id, target_id=target.id)
         else:
-            self.session.say(ls("weapon.grenade_launcher.molotov.text_miss")
+            self.session.say(ls("deluxe.weapon.grenade_launcher.molotov.text_miss")
                              .format(source.name, target.name), source_id=source.id, target_id=target.id)
 
     def form_target_list(self, source, target) -> list[Entity]:
@@ -105,8 +105,8 @@ class SwitchGrenadeLauncher(FreeWeaponAction):
 
     @property
     def name(self):
-        return ls("weapon.grenade_launcher.switch_to_grenade") if self.weapon.is_molotov else \
-            ls("weapon.grenade_launcher.switch_to_molotov")
+        return ls("deluxe.weapon.grenade_launcher.switch_to_grenade") if self.weapon.is_molotov else \
+            ls("deluxe.weapon.grenade_launcher.switch_to_molotov")
 
     async def func(self, source, target):
         self.weapon.is_molotov = not self.weapon.is_molotov

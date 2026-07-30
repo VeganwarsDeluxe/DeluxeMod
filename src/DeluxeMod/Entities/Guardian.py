@@ -13,7 +13,7 @@ from VegansDeluxe.matchmakery.Entities.NPC import NPC
 
 
 class Guardian(NPC):
-    def __init__(self, session_id: str, name=ls("guardian.name")):
+    def __init__(self, session_id: str, name=ls("deluxe.guardian.name")):
         super().__init__(session_id, name)
 
         self.weapon = GuardianWeapon(session_id, self.id)
@@ -54,7 +54,7 @@ class Guardian(NPC):
 @RegisterWeapon
 class GuardianWeapon(RangedWeapon):
     id = 'Guardian_weapon'
-    name = ls("guardian.weapon.name")
+    name = ls("deluxe.guardian.weapon.name")
 
     cubes = 3
     damage_bonus = 0
@@ -65,11 +65,11 @@ class GuardianWeapon(RangedWeapon):
 @AttachedAction(GuardianWeapon)
 class GuardianRedHeart(RangedAttack):
     id = 'guardian.red_heart'
-    name = ls("guardian.red_heart.name")
+    name = ls("deluxe.guardian.red_heart.name")
     target_type = Enemies()
 
     async def func(self, source, target):
-        self.session.say(ls("guardian.red_heart.text").format(), source_id=source.id, target_id=target.id)
+        self.session.say(ls("deluxe.guardian.red_heart.text").format(), source_id=source.id, target_id=target.id)
         final_damage = self.calculate_damage(source, target)
 
         source.energy = max(source.energy - self.weapon.energy_cost, 0) #расход энергии
@@ -79,9 +79,9 @@ class GuardianRedHeart(RangedAttack):
         source.outbound_dmg.add(target, post_damage, self.session.turn)
 
         if final_damage > 0:
-            self.session.say(ls("guardian.red_heart.attack.text").format(source.name, target.name, final_damage), source_id=source.id, target_id=target.id)
+            self.session.say(ls("deluxe.guardian.red_heart.attack.text").format(source.name, target.name, final_damage), source_id=source.id, target_id=target.id)
         else:
-            self.session.say(ls("guardian.red_heart.attack.text.miss").format(source.name, target.name), source_id=source.id, target_id=target.id)
+            self.session.say(ls("deluxe.guardian.red_heart.attack.text.miss").format(source.name, target.name), source_id=source.id, target_id=target.id)
 
     async def publish_post_damage_event(self, source: Entity, target: Entity, damage: int) -> int:
         message = PostDamageGameEvent(self.session.id, self.session.turn, source, target, damage)
@@ -92,11 +92,11 @@ class GuardianRedHeart(RangedAttack):
 @AttachedAction(GuardianWeapon)
 class GuardianCyanHeart(RangedAttack):
     id = 'guardian.cyan_heart'
-    name = ls("guardian.cyan_heart.name")
+    name = ls("deluxe.guardian.cyan_heart.name")
     target_type = Enemies()
 
     async def func(self, source, target):
-        self.session.say(ls("guardian.cyan_heart.text").format(), source_id=source.id, target_id=target.id)
+        self.session.say(ls("deluxe.guardian.cyan_heart.text").format(), source_id=source.id, target_id=target.id)
         self.weapon.cubes = 2
 
         source.energy = max(source.energy - self.weapon.energy_cost, 0) #расход энергии
@@ -107,14 +107,14 @@ class GuardianCyanHeart(RangedAttack):
         source.outbound_dmg.add(target, post_damage, self.session.turn)
 
         if final_damage:
-            self.session.say(ls("guardian.cyan_heart.attack.text").format(source.name, target.name, final_damage), source_id=source.id, target_id=target.id)
+            self.session.say(ls("deluxe.guardian.cyan_heart.attack.text").format(source.name, target.name, final_damage), source_id=source.id, target_id=target.id)
 
             if percentage_chance(30):
                 stun_state = target.get_state(Stun)
                 stun_state.stun += 2
-                self.session.say(ls("stun").format(target.name), source_id=source.id, target_id=target.id)
+                self.session.say(ls("deluxe.stun").format(target.name), source_id=source.id, target_id=target.id)
         else:
-            self.session.say(ls("guardian.cyan_heart.text.miss").format(source.name, target.name), source_id=source.id, target_id=target.id)
+            self.session.say(ls("deluxe.guardian.cyan_heart.text.miss").format(source.name, target.name), source_id=source.id, target_id=target.id)
 
         return final_damage
 
@@ -127,7 +127,7 @@ class GuardianCyanHeart(RangedAttack):
 @AttachedAction(GuardianWeapon)
 class GuardianOrangeHeart(RangedAttack):
     id = 'guardian.orange_heart'
-    name = ls("guardian.orange_heart.name")
+    name = ls("deluxe.guardian.orange_heart.name")
     target_type = Enemies()
 
     def __init__(self, session: Session, source: Entity, weapon: GuardianWeapon):
@@ -135,7 +135,7 @@ class GuardianOrangeHeart(RangedAttack):
         self.targets_count = None
 
     async def func(self, source, target):
-        self.session.say(ls("guardian.orange_heart.text"), source_id=source.id, target_id=target.id)
+        self.session.say(ls("deluxe.guardian.orange_heart.text"), source_id=source.id, target_id=target.id)
         self.weapon.cubes = 2
         self.weapon.damage_bonus = 1
         self.targets_count = 2
@@ -154,9 +154,9 @@ class GuardianOrangeHeart(RangedAttack):
 
             # Report the outcome for each target separately
             if final_damage > 0:
-                self.session.say(ls("guardian.orange_heart.attack.text").format(source.name, target.name, final_damage), source_id=source.id, target_id=target.id)
+                self.session.say(ls("deluxe.guardian.orange_heart.attack.text").format(source.name, target.name, final_damage), source_id=source.id, target_id=target.id)
             else:
-                self.session.say(ls("guardian.orange_heart.text.miss").format(source.name, target.name), source_id=source.id, target_id=target.id)
+                self.session.say(ls("deluxe.guardian.orange_heart.text.miss").format(source.name, target.name), source_id=source.id, target_id=target.id)
 
         self.weapon.damage_bonus = 0
 
@@ -181,19 +181,19 @@ class GuardianOrangeHeart(RangedAttack):
 @AttachedAction(GuardianWeapon)
 class GuardianBlackHeart(RangedAttack):
     id = 'guardian.black_heart'
-    name = ls("guardian.black_heart.name")
+    name = ls("deluxe.guardian.black_heart.name")
     target_type = Enemies()
 
     async def func(self, source, target):
-        self.session.say(ls("guardian.black_heart.text").format(), source_id=source.id, target_id=target.id)
+        self.session.say(ls("deluxe.guardian.black_heart.text").format(), source_id=source.id, target_id=target.id)
         target.hp = max(0, target.hp - 999)
-        self.session.say(ls("guardian.black_heart.attack.text").format(source.name, target.name), source_id=source.id, target_id=target.id)
+        self.session.say(ls("deluxe.guardian.black_heart.attack.text").format(source.name, target.name), source_id=source.id, target_id=target.id)
 
 
 @AttachedAction(GuardianWeapon)
 class GuardianYellowHeart(RangedAttack):
-    id = 'guardian.yellow_heart'
-    name = ls("guardian.yellow_heart.name")
+    id = 'deluxe.guardian.yellow_heart'
+    name = ls("deluxe.guardian.yellow_heart.name")
     target_type = Enemies()
     priority = -1
 
@@ -202,7 +202,7 @@ class GuardianYellowHeart(RangedAttack):
         self.targets_count = None
 
     async def func(self, source, target):
-        self.session.say(ls("guardian.yellow_heart.text").format(), source_id=source.id, target_id=target.id)
+        self.session.say(ls("deluxe.guardian.yellow_heart.text").format(), source_id=source.id, target_id=target.id)
         self.weapon.cubes = 2
         self.weapon.damage_bonus = 1
         self.targets_count = 2
@@ -215,9 +215,9 @@ class GuardianYellowHeart(RangedAttack):
             target.inbound_dmg.add(source, post_damage, self.session.turn)
             source.outbound_dmg.add(target, post_damage, self.session.turn)
 
-            self.session.say(ls("guardian.yellow_heart.attack.text").format(source.name, target.name, final_damage), source_id=source.id, target_id=target.id)
+            self.session.say(ls("deluxe.guardian.yellow_heart.attack.text").format(source.name, target.name, final_damage), source_id=source.id, target_id=target.id)
         else:
-            self.session.say(ls("guardian.yellow_heart.text.miss").format(source.name, target.name), source_id=source.id, target_id=target.id)
+            self.session.say(ls("deluxe.guardian.yellow_heart.text.miss").format(source.name, target.name), source_id=source.id, target_id=target.id)
 
         self.weapon.damage_bonus = 0
 
@@ -242,7 +242,7 @@ class GuardianYellowHeart(RangedAttack):
 @AttachedAction(GuardianWeapon)
 class GuardianGreenHeart(RangedAttack):
     id = 'guardian.green_heart'
-    name = ls("guardian.green_heart.name")
+    name = ls("deluxe.guardian.green_heart.name")
     target_type = SelfOnly()
     priority = -2
 
@@ -252,18 +252,18 @@ class GuardianGreenHeart(RangedAttack):
         # ну ви звісно генії дофіга. будьте обережні з цим
         target.get_state(Armor).remove((2, 100))
         target.hp = min(target.hp + 1, target.max_hp)
-        self.session.say(ls("guardian.green_heart.text").format(source.name), source_id=source.id, target_id=target.id)
-        self.session.say(ls("guardian.green_heart.effect").format(source.name, source.hp), source_id=source.id, target_id=target.id)
+        self.session.say(ls("deluxe.guardian.green_heart.text").format(source.name), source_id=source.id, target_id=target.id)
+        self.session.say(ls("deluxe.guardian.green_heart.effect").format(source.name, source.hp), source_id=source.id, target_id=target.id)
 
 
 @AttachedAction(GuardianWeapon)
 class GuardianReload(DecisiveAction):
     id = 'guardian.reload'
-    name = ls("guardian.reload.name")
+    name = ls("deluxe.guardian.reload.name")
     target_type = SelfOnly()
     energy = 0
     priority = -1
 
     async def func(self, source, target):
-        self.session.say(ls("guardian.reload.text").format(source.name), source_id=source.id, target_id=target.id)
+        self.session.say(ls("deluxe.guardian.reload.text").format(source.name), source_id=source.id, target_id=target.id)
         source.energy = source.max_energy

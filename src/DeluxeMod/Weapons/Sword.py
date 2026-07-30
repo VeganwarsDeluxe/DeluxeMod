@@ -6,8 +6,8 @@ from VegansDeluxe.core.Weapons.Weapon import MeleeWeapon
 @RegisterWeapon
 class Sword(MeleeWeapon):
     id = "deluxe_sword"
-    name = ls("weapon.sword.name")
-    description = ls("weapon.sword.description")
+    name = ls("deluxe.weapon.sword.name")
+    description = ls("deluxe.weapon.sword.description")
 
     cubes = 3
     energy_cost = 2

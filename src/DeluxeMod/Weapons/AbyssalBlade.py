@@ -9,8 +9,8 @@ from DeluxeMod.States.Emptiness import Emptiness
 @RegisterWeapon
 class AbyssalBlade(MeleeWeapon):
     id = 'abyssal_blade'
-    name = ls("weapon.abyssal.blade_name")
-    description = ls("weapon.abyssal.blade_description")
+    name = ls("deluxe.weapon.abyssal.blade_name")
+    description = ls("deluxe.weapon.abyssal.blade_description")
 
     cubes = 3
     accuracy_bonus = 2
@@ -33,10 +33,10 @@ class AbyssalBladeAttack(MeleeAttack):
         if emptiness.active:
             emptiness.emptiness += 1
             emptiness.triggered = True  # Добавляем новый атрибут для отслеживания изменения
-            self.session.say(ls("weapon.abyssal.blade_increase"), source_id=source.id, target_id=target.id)
+            self.session.say(ls("deluxe.weapon.abyssal.blade_increase"), source_id=source.id, target_id=target.id)
         else:
             emptiness.active = True
             emptiness.triggered = True  # Добавляем новый атрибут для отслеживания активации
-            self.session.say(ls("weapon.abyssal.blade_effect").format(target.name), source_id=source.id, target_id=target.id)
+            self.session.say(ls("deluxe.weapon.abyssal.blade_effect").format(target.name), source_id=source.id, target_id=target.id)
 
         return damage

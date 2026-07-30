@@ -11,13 +11,13 @@ from DeluxeMod.States.CorrosiveMucus import CorrosiveMucus
 @RegisterItem
 class MucusInTheBottle(Item):
     id = 'mucus_in_the_bottle'
-    name = ls("item.mucus_in_the_bottle.name")
+    name = ls("deluxe.item.mucus_in_the_bottle.name")
 
 
 @AttachedAction(MucusInTheBottle)
 class MucusInTheBottleAction(DecisiveItem):
     id = 'mucus_in_the_bottle'
-    name = ls("item.mucus_in_the_bottle.name")
+    name = ls("deluxe.item.mucus_in_the_bottle.name")
     target_type = Enemies()
     priority = 0
 
@@ -28,7 +28,7 @@ class MucusInTheBottleAction(DecisiveItem):
         if self.source.energy >= 2:
             source.energy -= 2
         else:
-            self.session.say(ls("item.mucus_in_the_bottle.energy_insufficient").format(source.name), source_id=source.id, target_id=target.id)
+            self.session.say(ls("deluxe.item.mucus_in_the_bottle.energy_insufficient").format(source.name), source_id=source.id, target_id=target.id)
             return
 
         # Retrieve or initialize corrosive mucus state
@@ -39,7 +39,7 @@ class MucusInTheBottleAction(DecisiveItem):
         corrosive_mucus.active = True
 
         # Notify about the action
-        self.session.say(ls("item.mucus_in_the_bottle.text").format(source.name, target.name), source_id=source.id, target_id=target.id)
+        self.session.say(ls("deluxe.item.mucus_in_the_bottle.text").format(source.name, target.name), source_id=source.id, target_id=target.id)
 
     @property
     def blocked(self) -> bool:

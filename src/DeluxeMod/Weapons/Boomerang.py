@@ -10,8 +10,8 @@ from VegansDeluxe.rebuild import Fist
 @RegisterWeapon
 class Boomerang(RangedWeapon):
     id = 'boomerang'
-    name = ls("weapon.boomerang.name")
-    description = ls("weapon.boomerang.description")
+    name = ls("deluxe.weapon.boomerang.name")
+    description = ls("deluxe.weapon.boomerang.description")
 
     cubes = 3
     accuracy_bonus = 3
@@ -50,9 +50,9 @@ class BoomerangAttack(RangedAttack):
         source.outbound_dmg.add(target, post_damage, self.session.turn)
 
         if not total_damage:
-            self.session.say(ls("weapon.boomerang.attack_text_miss").format(source.name, target.name), source_id=source.id, target_id=target.id)
+            self.session.say(ls("deluxe.weapon.boomerang.attack_text_miss").format(source.name, target.name), source_id=source.id, target_id=target.id)
         else:
-            self.session.say(ls("weapon.boomerang.attack_text").format(source.name, target.name, total_damage), source_id=source.id, target_id=target.id)
+            self.session.say(ls("deluxe.weapon.boomerang.attack_text").format(source.name, target.name, total_damage), source_id=source.id, target_id=target.id)
 
         self.weapon.is_thrown = True
         self.weapon.return_turn = self.session.turn + self.weapon.turns_until_return
@@ -79,9 +79,9 @@ class BoomerangAttack(RangedAttack):
         source.outbound_dmg.add(target, post_damage, self.session.turn)
 
         if not total_damage:
-            self.session.say(ls("weapon.boomerang.return_text_miss").format(source.name, target.name), source_id=source.id, target_id=source.id)
+            self.session.say(ls("deluxe.weapon.boomerang.return_text_miss").format(source.name, target.name), source_id=source.id, target_id=source.id)
         else:
-            self.session.say(ls("weapon.boomerang.return_text").format(source.name, target.name, total_damage), source_id=source.id, target_id=source.id)
+            self.session.say(ls("deluxe.weapon.boomerang.return_text").format(source.name, target.name, total_damage), source_id=source.id, target_id=source.id)
 
         self.weapon.is_thrown = False
         self.weapon.throw_energy = 0

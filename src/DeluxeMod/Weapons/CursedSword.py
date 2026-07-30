@@ -9,8 +9,8 @@ from DeluxeMod.States.Weakness import Weakness
 @RegisterWeapon
 class CursedSword(MeleeWeapon):
     id = 'cursed_sword'
-    name = ls("weapon.cursed_sword.name")
-    description = ls("weapon.cursed_sword.description")
+    name = ls("deluxe.weapon.cursed_sword.name")
+    description = ls("deluxe.weapon.cursed_sword.description")
 
     accuracy_bonus = 2
     cubes = 3
@@ -27,7 +27,7 @@ class CursedSwordAttack(MeleeAttack):
         if percentage_chance(40):
             weakness = target.get_state(Weakness)
 
-            message_key = "weapon.cursed_sword.increase" if weakness.turns else "weapon.cursed_sword.effect"
+            message_key = "deluxe.weapon.cursed_sword.increase" if weakness.turns else "deluxe.weapon.cursed_sword.effect"
             weakness.apply(self.session)
             self.session.say(ls(message_key).format(target.name, weakness.turns), source_id=source.id, target_id=target.id)
 

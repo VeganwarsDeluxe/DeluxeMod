@@ -9,8 +9,8 @@ from DeluxeMod.States.Hunger import Hunger
 @RegisterWeapon
 class Emitter(RangedWeapon):
     id = 'emitter'
-    name = ls("weapon.emitter.name")
-    description = ls("weapon.emitter.description")
+    name = ls("deluxe.weapon.emitter.name")
+    description = ls("deluxe.weapon.emitter.description")
 
     cubes = 2
     accuracy_bonus = 2
@@ -28,5 +28,5 @@ class EmitterAttack(RangedAttack):
         if percentage_chance(20):
             hunger = target.get_state(Hunger)
             hunger.hunger += 1
-            self.session.say(ls("weapon.emitter.effect")
+            self.session.say(ls("deluxe.weapon.emitter.effect")
                              .format(target.name, hunger.hunger), source_id=source.id, target_id=target.id)

@@ -15,8 +15,8 @@ from VegansDeluxe.core.Weapons.Weapon import MeleeWeapon
 @RegisterWeapon
 class ButterflyKnife(MeleeWeapon):
     id = 'butterfly_knife'
-    name = ls("weapon.butterfly_knife.name")
-    description = ls("weapon.butterfly_knife.description")
+    name = ls("deluxe.weapon.butterfly_knife.name")
+    description = ls("deluxe.weapon.butterfly_knife.description")
 
     cubes = 3
     accuracy_bonus = 1
@@ -39,7 +39,7 @@ class ButterflyKnife(MeleeWeapon):
                 return
 
             target.energy = min(target.energy + 1, target.max_energy)
-            context.session.say(ls("weapon.butterfly_knife.miss_energy").format(target.name), source_id=source.id, target_id=target.id)
+            context.session.say(ls("deluxe.weapon.butterfly_knife.miss_energy").format(target.name), source_id=source.id, target_id=target.id)
 
 
 @AttachedAction(ButterflyKnife)
@@ -58,5 +58,5 @@ class ButterflyKnifeAttack(MeleeAttack):
         bonus_damage = self.weapon.target_action_bonus_damage
         damage = await self.attack(source, target, bonus_damage=bonus_damage)
         if bonus_damage and damage.calculated:
-            self.session.say(ls("weapon.butterfly_knife.bonus_damage").format(source.name, target.name), source_id=source.id, target_id=target.id)
+            self.session.say(ls("deluxe.weapon.butterfly_knife.bonus_damage").format(source.name, target.name), source_id=source.id, target_id=target.id)
         return damage

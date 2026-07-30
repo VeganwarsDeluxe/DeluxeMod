@@ -13,8 +13,8 @@ from VegansDeluxe.rebuild import Aflame
 @RegisterWeapon
 class Gunbai(MeleeWeapon):
     id = 'gunbai'
-    name = ls("weapon.gunbai.name")
-    description = ls("weapon.gunbai.description")
+    name = ls("deluxe.weapon.gunbai.name")
+    description = ls("deluxe.weapon.gunbai.description")
 
     cubes = 2
     accuracy_bonus = 2
@@ -49,11 +49,11 @@ class GunbaiAttack(MeleeAttack):
         if damage.calculated:
             self.weapon.signal_turn = self.session.turn
             self.weapon.signal_target_id = target.id
-            self.session.say(ls("weapon.gunbai.signal_text").format(source.name), source_id=source.id, target_id=target.id)
+            self.session.say(ls("deluxe.weapon.gunbai.signal_text").format(source.name), source_id=source.id, target_id=target.id)
 
             aflame = target.get_state(Aflame)
             if aflame and aflame.flame:
                 aflame.add_flame(self.session, target, source, 1, announce=False)
-                self.session.say(ls("weapon.gunbai.fire_text").format(source.name, target.name), source_id=source.id, target_id=target.id)
+                self.session.say(ls("deluxe.weapon.gunbai.fire_text").format(source.name, target.name), source_id=source.id, target_id=target.id)
 
         return damage

@@ -21,8 +21,8 @@ from VegansDeluxe.core.Weapons.Weapon import RangedWeapon
 @RegisterWeapon
 class MagicMirror(RangedWeapon):
     id = 'magic_mirror'
-    name = ls("weapon.magic_mirror.name")
-    description = ls("weapon.magic_mirror.description")
+    name = ls("deluxe.weapon.magic_mirror.name")
+    description = ls("deluxe.weapon.magic_mirror.description")
 
     cubes = 3
     accuracy_bonus = 2
@@ -45,7 +45,7 @@ class MagicMirrorAttack(RangedAttack):
 @AttachedAction(MagicMirror)
 class TakeForm(InstantWeaponAction):
     id = 'take_form'
-    name = ls("weapon.magic_mirror.take_form.name")
+    name = ls("deluxe.weapon.magic_mirror.take_form.name")
     target_type = SelfOnly()
     priority = -10
 
@@ -65,12 +65,12 @@ class TakeForm(InstantWeaponAction):
         source.energy = source.max_energy
 
         weapon_pool = self.form_weapon_pool(source)
-        form_question = Question(text=ls("weapon.magic_mirror.choice.text"))
+        form_question = Question(text=ls("deluxe.weapon.magic_mirror.choice.text"))
         for index, weapon_type in enumerate(weapon_pool):
             choice = Choice(
                 choice_id=str(index),
                 text=weapon_type.name,
-                result_text=ls("weapon.magic_mirror.choice.result_text").format(weapon_type.name),
+                result_text=ls("deluxe.weapon.magic_mirror.choice.result_text").format(weapon_type.name),
             )
             form_question.add_choice(choice)
 
@@ -105,10 +105,10 @@ class TakeForm(InstantWeaponAction):
     async def take_form(self, source: Entity, weapon_type):
         temporary_weapon = weapon_type(source.session_id, source.id)
         source.weapon = temporary_weapon
-        self.session.say(ls("weapon.magic_mirror.take_form.text").format(source.name, temporary_weapon.name),
+        self.session.say(ls("deluxe.weapon.magic_mirror.take_form.text").format(source.name, temporary_weapon.name),
                          at_next_event=PreActionsGameEvent, source_id=source.id, target_id=source.id)
 
         @At(self.session.id, turn=self.session.turn + 2, event=PostTickGameEvent)
         async def restore_mirror(context: EventContext[PostTickGameEvent]):
             source.weapon = self.weapon
-            context.session.say(ls("weapon.magic_mirror.restore.text").format(source.name), source_id=source.id, target_id=source.id)
+            context.session.say(ls("deluxe.weapon.magic_mirror.restore.text").format(source.name), source_id=source.id, target_id=source.id)

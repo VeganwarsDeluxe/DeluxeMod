@@ -29,7 +29,7 @@ async def register(root_context: StateContext[Hunger]):
         if not state.hunger:
             return
         source.notifications.append(
-            ls("state.hunger.notification").format(state.hunger)
+            ls("deluxe.state.hunger.notification").format(state.hunger)
         )
 
     @RegisterEvent(session.id, event=PreMoveGameEvent)
@@ -80,4 +80,4 @@ async def register(root_context: StateContext[Hunger]):
                     and not action.canceled and state.hunger > 0):
 
                     state.hunger = max(0, state.hunger-3)
-                    session.say(ls("state.hunger.reduced_by_item").format(source.name, action.item.name, state.hunger), source_id=source.id, target_id=source.id)
+                    session.say(ls("deluxe.state.hunger.reduced_by_item").format(source.name, action.item.name, state.hunger), source_id=source.id, target_id=source.id)

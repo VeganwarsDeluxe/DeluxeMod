@@ -9,8 +9,8 @@ from VegansDeluxe.core.Weapons.Weapon import RangedWeapon
 @RegisterWeapon
 class Shurikens(RangedWeapon):
     id = 'shurikens'
-    name = ls("weapon.shurikens.name")
-    description = ls("weapon.shurikens.description")
+    name = ls("deluxe.weapon.shurikens.name")
+    description = ls("deluxe.weapon.shurikens.description")
 
     cubes = 1
     accuracy_bonus = 2
@@ -26,7 +26,7 @@ class Shurikens(RangedWeapon):
         async def pre_move(context: EventContext[PreMoveGameEvent]):
             source = context.session.get_entity(self.entity_id)
             source.notifications.append(
-                ls("weapon.shurikens.notification").format(self.ammo, int(self.double_shuriken)+1)
+                ls("deluxe.weapon.shurikens.notification").format(self.ammo, int(self.double_shuriken)+1)
         )
 
 
@@ -44,7 +44,7 @@ class ShurikenAttack(RangedAttack):
             else:
                 await self.perform_single_shuriken_attack(source, target)
         else:
-            self.session.say(ls("weapon.shurikens.no_ammo_text").format(source.name), source_id=source.id, target_id=target.id)
+            self.session.say(ls("deluxe.weapon.shurikens.no_ammo_text").format(source.name), source_id=source.id, target_id=target.id)
 
     async def shuriken_attack(self, source, target):
         total_damage = self.calculate_damage(source, target)
@@ -84,23 +84,23 @@ class ShurikenAttack(RangedAttack):
 @AttachedAction(Shurikens)
 class SwitchShurikenMode(InstantWeaponAction):
     id = 'switch_shuriken_mode'
-    name = ls("weapon.shurikens.switch_shuriken_mode")
+    name = ls("deluxe.weapon.shurikens.switch_shuriken_mode")
     target_type = SelfOnly()
     priority = -10
 
     async def func(self, source, target):
         self.weapon.double_shuriken = not self.weapon.double_shuriken
         if self.weapon.double_shuriken:
-            self.session.say(ls("weapon.shurikens.switch_to_double_shuriken_text").format(source.name), source_id=source.id, target_id=target.id)
+            self.session.say(ls("deluxe.weapon.shurikens.switch_to_double_shuriken_text").format(source.name), source_id=source.id, target_id=target.id)
         else:
-            self.session.say(ls("weapon.shurikens.switch_to_single_shuriken_text").format(source.name), source_id=source.id, target_id=target.id)
+            self.session.say(ls("deluxe.weapon.shurikens.switch_to_single_shuriken_text").format(source.name), source_id=source.id, target_id=target.id)
 
 
 
 @AttachedAction(Shurikens)
 class PickUpShuriken(DecisiveWeaponAction):
     id = 'pick_up'
-    name = ls("weapon.shurikens.pickup.name")
+    name = ls("deluxe.weapon.shurikens.pickup.name")
     target_type = SelfOnly()
 
     def __init__(self, session: Session, source: Entity, weapon: Shurikens):
@@ -113,4 +113,4 @@ class PickUpShuriken(DecisiveWeaponAction):
 
     async def func(self, source: Entity, target: Entity):
         self.weapon.ammo = 4
-        self.session.say(ls("weapon.shurikens.shuriken_pickup_text").format(source.name), source_id=source.id, target_id=target.id)
+        self.session.say(ls("deluxe.weapon.shurikens.shuriken_pickup_text").format(source.name), source_id=source.id, target_id=target.id)

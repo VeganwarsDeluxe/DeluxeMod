@@ -9,7 +9,7 @@ from DeluxeMod.Matches.BasicMatch import BasicMatch
 
 
 class TestGameMatch(BasicMatch):
-    name = ls("matches.test_game")
+    name = ls("deluxe.matches.test_game")
 
     def __init__(self, chat_id, engine):
         super().__init__(chat_id, engine)

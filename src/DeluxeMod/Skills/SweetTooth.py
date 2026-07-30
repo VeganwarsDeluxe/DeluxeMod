@@ -11,8 +11,8 @@ from DeluxeMod.Items.SweetCandy import SweetCandy
 
 class SweetTooth(Skill):
     id = 'sweet_tooth'
-    name = ls("skill.sweet_tooth_name")
-    description = ls("skill.sweet_tooth_description")
+    name = ls("deluxe.skill.sweet_tooth_name")
+    description = ls("deluxe.skill.sweet_tooth_description")
 
 
 @RegisterState(SweetTooth)
