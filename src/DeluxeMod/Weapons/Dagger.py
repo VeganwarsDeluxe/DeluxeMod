@@ -35,9 +35,9 @@ class DaggerAttack(MeleeAttack):
         if mutilation.active:
             mutilation.mutilation += 1
             mutilation.triggered = True  # Set triggered to True when mutilation increases
-            self.session.say(ls("weapon.dagger.increase").format(target.name))
+            self.session.say(ls("weapon.dagger.increase").format(target.name), source_id=source.id, target_id=target.id)
         else:
             mutilation.active = True
             mutilation.triggered = True  # Set triggered to True when mutilation activates
-            self.session.say(ls("weapon.dagger.effect").format(target.name))
+            self.session.say(ls("weapon.dagger.effect").format(target.name), source_id=source.id, target_id=target.id)
         return damage

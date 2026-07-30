@@ -45,7 +45,7 @@ class CowApproach(ApproachAction):
         source.nearby_entities = list(filter(lambda t: t != source, self.session.entities))
         for entity in source.nearby_entities:
             entity.nearby_entities.append(source) if source not in entity.nearby_entities else None
-        self.session.say(ls("cow.approach.text").format(source.name))
+        self.session.say(ls("cow.approach.text").format(source.name), source_id=source.id, target_id=target.id)
 
 
 
@@ -57,7 +57,7 @@ class Run(DecisiveAction):
 
     async def func(self, source, target):
         self.source.inbound_accuracy_bonus = -5
-        self.session.say(ls("cow.dodge.text").format(source.name))
+        self.session.say(ls("cow.dodge.text").format(source.name), source_id=source.id, target_id=target.id)
 
 
 @AttachedAction(Cow)
@@ -70,7 +70,7 @@ class WalkAway(DecisiveAction):
         for entity in source.nearby_entities:
             entity.nearby_entities.remove(source) if source in entity.nearby_entities else None
         source.nearby_entities = []
-        self.session.say(ls("cow.walk_away.text").format(source.name))
+        self.session.say(ls("cow.walk_away.text").format(source.name), source_id=source.id, target_id=target.id)
 
 
 @AttachedAction(Cow)
@@ -81,7 +81,7 @@ class EatGrassReload(DecisiveAction):
 
     async def func(self, source, target):
         source.energy = source.max_energy
-        self.session.say(ls("cow.eat_grass.text").format(source.name, source.max_energy))
+        self.session.say(ls("cow.eat_grass.text").format(source.name, source.max_energy), source_id=source.id, target_id=target.id)
 
 
 @RegisterWeapon
@@ -121,4 +121,4 @@ class Milk(FreeItem):
 
     async def func(self, source, target):
         target.energy = target.max_energy
-        self.session.say(ls("cow.item.milk.text").format(source.name))
+        self.session.say(ls("cow.item.milk.text").format(source.name), source_id=source.id, target_id=target.id)

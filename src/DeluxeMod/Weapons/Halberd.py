@@ -29,7 +29,7 @@ class HalberdAttack(MeleeAttack):
             if percentage_chance(99):
                 self.weapon.damage *= 2
                 self.session.say(ls("weapon.halberd.attack.critical").format(source.name, target.name,
-                                                                             self.weapon.damage))
+                                                                             self.weapon.damage), source_id=source.id, target_id=target.id)
 
         await super().func(source, target)
 

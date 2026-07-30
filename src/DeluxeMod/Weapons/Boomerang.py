@@ -50,9 +50,9 @@ class BoomerangAttack(RangedAttack):
         source.outbound_dmg.add(target, post_damage, self.session.turn)
 
         if not total_damage:
-            self.session.say(ls("weapon.boomerang.attack_text_miss").format(source.name, target.name))
+            self.session.say(ls("weapon.boomerang.attack_text_miss").format(source.name, target.name), source_id=source.id, target_id=target.id)
         else:
-            self.session.say(ls("weapon.boomerang.attack_text").format(source.name, target.name, total_damage))
+            self.session.say(ls("weapon.boomerang.attack_text").format(source.name, target.name, total_damage), source_id=source.id, target_id=target.id)
 
         self.weapon.is_thrown = True
         self.weapon.return_turn = self.session.turn + self.weapon.turns_until_return
@@ -79,9 +79,9 @@ class BoomerangAttack(RangedAttack):
         source.outbound_dmg.add(target, post_damage, self.session.turn)
 
         if not total_damage:
-            self.session.say(ls("weapon.boomerang.return_text_miss").format(source.name, target.name))
+            self.session.say(ls("weapon.boomerang.return_text_miss").format(source.name, target.name), source_id=source.id, target_id=source.id)
         else:
-            self.session.say(ls("weapon.boomerang.return_text").format(source.name, target.name, total_damage))
+            self.session.say(ls("weapon.boomerang.return_text").format(source.name, target.name, total_damage), source_id=source.id, target_id=source.id)
 
         self.weapon.is_thrown = False
         self.weapon.throw_energy = 0

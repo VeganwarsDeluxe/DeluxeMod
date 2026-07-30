@@ -33,9 +33,9 @@ class VampiricWhipAttack(MeleeAttack):
         if dehydration.active:
             dehydration.dehydration += 1
             dehydration.triggered = True
-            self.session.say(ls("weapon.vampiric_whip_increase"))
+            self.session.say(ls("weapon.vampiric_whip_increase"), source_id=source.id, target_id=target.id)
         else:
             dehydration.active = True
             dehydration.triggered = True
             dehydration.target = target
-            self.session.say(ls("weapon.vampiric_whip_effect").format(target.name))
+            self.session.say(ls("weapon.vampiric_whip_effect").format(target.name), source_id=source.id, target_id=target.id)

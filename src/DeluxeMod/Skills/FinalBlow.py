@@ -72,7 +72,7 @@ class FinalBlowAction(DecisiveStateAction):
         for target in targets:
             if isinstance(target, Entity) and target.hp > 0:
                 target.hp -= 1
-                self.session.say(ls("state.final_blow.hp.decrease").format(source.name, LocalizedList([t.name for t in targets])))
+                self.session.say(ls("state.final_blow.hp.decrease").format(source.name, LocalizedList([t.name for t in targets])), source_id=source.id, target_id=target.id)
 
         stun_state = source.get_state(Stun)
         stun_state.stun += 3
@@ -80,7 +80,7 @@ class FinalBlowAction(DecisiveStateAction):
         @At(self.session.id, turn=self.session.turn + 1, event=PreActionsGameEvent)
         async def final_blow_death(context: EventContext[PreActionsGameEvent]):
             source.dead = True
-            self.session.say(ls("state.final_blow.death").format(source.name))
+            self.session.say(ls("state.final_blow.death").format(source.name), source_id=source.id, target_id=source.id)
 
     def select_random_targets(self, source: Entity) -> list[Entity]:
         """Select two random enemies from the available enemies."""

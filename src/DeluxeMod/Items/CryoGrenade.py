@@ -62,12 +62,12 @@ class CryoGrenadeAction(DecisiveItem):
             self.session.say(
                 ls("item.cryo.grenade_text")
                 .format(source.name, LocalizedList([t.name for t in frozen_targets]))
-            )
+            , source_id=source.id, target_id=target.id)
         if extinguished_targets:
             self.session.say(
                 ls("item.cryo.grenade_extinguish_text")
                 .format(LocalizedList([t.name for t in extinguished_targets]))
-            )
+            , source_id=source.id, target_id=target.id)
 
     @property
     def blocked(self):

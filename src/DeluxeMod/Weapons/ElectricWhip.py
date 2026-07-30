@@ -59,13 +59,13 @@ class ElectricWhipAttack(MeleeAttack):
             self.session.say(
                 ls("weapon.electric_whip.text_miss")
                 .format(source.name, target.name)
-            )
+            , source_id=source.id, target_id=target.id)
         else:
             if len(secondary_targets) == 0:
                 self.session.say(
                     ls("weapon.electric_whip.single_target_text")
                     .format(source.name, target.name, primary_damage)
-                )
+                , source_id=source.id, target_id=target.id)
             elif len(secondary_targets) == 1:
                 secondary_target_name = secondary_targets[0].name
                 self.session.say(
@@ -77,7 +77,7 @@ class ElectricWhipAttack(MeleeAttack):
                         secondary_target_name,
                         secondary_damage
                     )
-                )
+                , source_id=source.id, target_id=target.id)
             else:
                 secondary_targets_name = LocalizedList([t.name for t in secondary_targets[:-1]])
                 tertiary_target_name = secondary_targets[-1].name
@@ -92,7 +92,7 @@ class ElectricWhipAttack(MeleeAttack):
                         secondary_damage,
                         tertiary_damage
                     )
-                )
+                , source_id=source.id, target_id=target.id)
 
     async def publish_post_damage_event(self, source: Entity, target: Entity, damage: int) -> int:
         message = PostDamageGameEvent(self.session.id, self.session.turn, source, target, damage)

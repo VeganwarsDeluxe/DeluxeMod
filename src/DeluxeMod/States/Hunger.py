@@ -80,4 +80,4 @@ async def register(root_context: StateContext[Hunger]):
                     and not action.canceled and state.hunger > 0):
 
                     state.hunger = max(0, state.hunger-3)
-                    session.say(ls("state.hunger.reduced_by_item").format(source.name, action.item.name, state.hunger))
+                    session.say(ls("state.hunger.reduced_by_item").format(source.name, action.item.name, state.hunger), source_id=source.id, target_id=source.id)

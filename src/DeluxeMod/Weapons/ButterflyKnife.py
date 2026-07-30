@@ -1,11 +1,11 @@
 from VegansDeluxe.core import ActionTag
 from VegansDeluxe.core import AttachedAction
+from VegansDeluxe.core import AttackGameEvent
 from VegansDeluxe.core import DeliveryPackageEvent
 from VegansDeluxe.core import DeliveryRequestEvent
 from VegansDeluxe.core import EventContext
 from VegansDeluxe.core import MeleeAttack
 from VegansDeluxe.core import Next
-from VegansDeluxe.core import AttackGameEvent
 from VegansDeluxe.core import RegisterEvent
 from VegansDeluxe.core import RegisterWeapon
 from VegansDeluxe.core.Translator.LocalizedString import ls
@@ -39,7 +39,7 @@ class ButterflyKnife(MeleeWeapon):
                 return
 
             target.energy = min(target.energy + 1, target.max_energy)
-            context.session.say(ls("weapon.butterfly_knife.miss_energy").format(target.name))
+            context.session.say(ls("weapon.butterfly_knife.miss_energy").format(target.name), source_id=source.id, target_id=target.id)
 
 
 @AttachedAction(ButterflyKnife)
@@ -58,5 +58,5 @@ class ButterflyKnifeAttack(MeleeAttack):
         bonus_damage = self.weapon.target_action_bonus_damage
         damage = await self.attack(source, target, bonus_damage=bonus_damage)
         if bonus_damage and damage.calculated:
-            self.session.say(ls("weapon.butterfly_knife.bonus_damage").format(source.name, target.name))
+            self.session.say(ls("weapon.butterfly_knife.bonus_damage").format(source.name, target.name), source_id=source.id, target_id=target.id)
         return damage

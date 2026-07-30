@@ -24,7 +24,7 @@ class DeathGrenadeAction(DecisiveItem):
     async def func(self, source, target):
         source.energy = max(source.energy - 2, 0)
         target.hp = max(target.hp - 1, 0)
-        self.session.say(ls("item.death_grenade_text").format(source.name, target.name, target.hp))
+        self.session.say(ls("item.death_grenade_text").format(source.name, target.name, target.hp), source_id=source.id, target_id=target.id)
 
     @property
     def blocked(self):

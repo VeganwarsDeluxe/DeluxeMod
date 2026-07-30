@@ -3,16 +3,15 @@ import random
 
 from VegansDeluxe.core import AttachedAction, RegisterWeapon, MeleeWeapon, ls, HPLossGameEvent
 from VegansDeluxe.core import EventContext
-from VegansDeluxe.core import SelfOnly
 from VegansDeluxe.core import PreDeathGameEvent
 from VegansDeluxe.core import RegisterEvent
+from VegansDeluxe.core import SelfOnly
 from VegansDeluxe.core import Session
 from VegansDeluxe.core.Actions.Action import DecisiveAction
+from VegansDeluxe.matchmakery.Entities.NPC import NPC
 from VegansDeluxe.rebuild.Weapons.Revolver import ShootYourself
 
 import DeluxeMod.content as content
-from VegansDeluxe.matchmakery.Entities.NPC import NPC
-
 from DeluxeMod.Skills.FinalBlow import FinalBlowAction
 
 
@@ -51,13 +50,13 @@ class Elemental(NPC):
             if self.child:
                 if self.hp-context.event.hp_loss <= 2:
                     self.anger = True
-                    session.say(ls("elemental.anger").format(self.name))
+                    session.say(ls("elemental.anger").format(self.name), source_id=self.id, target_id=self.id)
                     context.event.canceled = True
                 return
 
             if self.hp-context.event.hp_loss < self.max_hp / 2:
                 self.hp = 0
-                session.say(ls("elemental.split"))
+                session.say(ls("elemental.split"), source_id=self.id, target_id=self.id)
                 await self.spawn_children(session, math.floor(self.max_hp / 2))
                 self.birthed = True
                 context.event.canceled = True
@@ -125,7 +124,7 @@ class WarpReality(DecisiveAction):
 
     async def func(self, source, target):
         self.source.inbound_accuracy_bonus = -5
-        self.session.say(ls("elemental.warp_reality.text").format(source.name))
+        self.session.say(ls("elemental.warp_reality.text").format(source.name), source_id=source.id, target_id=target.id)
 
 
 @AttachedAction(Elemental)
@@ -135,5 +134,5 @@ class Singularity(DecisiveAction):
     target_type = SelfOnly()
 
     async def func(self, source, target):
-        self.session.say(ls("elemental.reload_singularity.text").format(source.name, source.max_energy))
+        self.session.say(ls("elemental.reload_singularity.text").format(source.name, source.max_energy), source_id=source.id, target_id=target.id)
         source.energy = source.max_energy

@@ -42,7 +42,7 @@ async def register(root_context: StateContext[Weakness]):
 
         target.weapon.energy_cost += 1
         state.triggered_turn = session.turn
-        session.say(ls("state.weakness.energy_cost_increase").format(target.name, 1))
+        session.say(ls("state.weakness.energy_cost_increase").format(target.name, 1), source_id=target.id, target_id=target.id)
 
     @RegisterEvent(session.id, event=PostDamagesGameEvent)
     async def reset_energy_cost_increase(context: EventContext[PostDamagesGameEvent]):
@@ -55,5 +55,5 @@ async def register(root_context: StateContext[Weakness]):
         state.turns -= 1
         state.triggered_turn = 0
         if not state.turns:
-            session.say(ls("state.weakness.recovery").format(target.name))
+            session.say(ls("state.weakness.recovery").format(target.name), source_id=target.id, target_id=target.id)
 

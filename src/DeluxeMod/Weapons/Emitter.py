@@ -29,4 +29,4 @@ class EmitterAttack(RangedAttack):
             hunger = target.get_state(Hunger)
             hunger.hunger += 1
             self.session.say(ls("weapon.emitter.effect")
-                             .format(target.name, hunger.hunger))
+                             .format(target.name, hunger.hunger), source_id=source.id, target_id=target.id)

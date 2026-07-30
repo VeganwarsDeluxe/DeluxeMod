@@ -26,10 +26,10 @@ async def register(root_context: StateContext[Regeneration]):
         if state.regeneration <= 0:
             health_recovered = min(1, source.max_hp - source.hp)
             source.hp += health_recovered
-            session.say(ls("state.regeneration_hp_recovery").format(source.name, source.hp))
+            session.say(ls("state.regeneration_hp_recovery").format(source.name, source.hp), source_id=source.id, target_id=source.id)
             state.active = False
             state.regeneration = 3
         else:
-            session.say(ls("state.regeneration_timer").format(source.name, max(state.regeneration, 0)))
+            session.say(ls("state.regeneration_timer").format(source.name, max(state.regeneration, 0)), source_id=source.id, target_id=source.id)
             state.regeneration -= 1
 

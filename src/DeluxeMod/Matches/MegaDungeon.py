@@ -81,10 +81,10 @@ class MegaMatch(BasicMatch):
             for entity in session.alive_entities:
                 if isinstance(entity, Rat) and percentage_chance(2):
                     entity.metadata["mega_armored_turn"] = session.turn
-                    session.say(ls("mega.rat.armor").format(entity.name))
+                    session.say(ls("mega.rat.armor").format(entity.name), source_id=entity.id, target_id=entity.id)
                 if isinstance(entity, MegaRhino) and percentage_chance(60):
                     entity.metadata["mega_armored_turn"] = session.turn
-                    session.say(ls("mega.rhino.armor").format(entity.name))
+                    session.say(ls("mega.rhino.armor").format(entity.name), source_id=entity.id, target_id=entity.id)
 
         @RegisterEvent(self.session.id, event=PostDamageGameEvent, priority=-100)
         async def apply_turn_armor(context: EventContext[PostDamageGameEvent]):
@@ -116,7 +116,7 @@ class MegaMatch(BasicMatch):
                         entity.hp = max(1, floor(entity.max_hp / 2))
                         entity.energy = 0
                         entity.get_state(Stun).stun = 1
-                        session.say(ls("mega.skeleton.resurrect").format(entity.name))
+                        session.say(ls("mega.skeleton.resurrect").format(entity.name), source_id=entity.id, target_id=entity.id)
 
 
 class MegaRatMatch(MegaMatch):

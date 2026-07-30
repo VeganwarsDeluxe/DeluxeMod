@@ -30,4 +30,4 @@ class SweetCandyAction(FreeItem):
         regeneration.active = True
 
         # Notify the session about the effect
-        self.session.say(ls("item.sweet_candy.effect").format(source.name))
+        self.session.say(ls("item.sweet_candy.effect").format(source.name), source_id=source.id, target_id=target.id)

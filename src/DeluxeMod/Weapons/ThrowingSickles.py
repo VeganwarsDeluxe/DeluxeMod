@@ -74,7 +74,7 @@ class ThrowingSicklesMeleeAttack(MeleeAttack):
                 source.energy = throw_energy
                 second_damage = await self.attack(source, target, pay_energy=False)
                 source.energy = paid_energy
-                self.session.say(ls("weapon.throwing_sickles.double_melee_text").format(source.name, target.name))
+                self.session.say(ls("weapon.throwing_sickles.double_melee_text").format(source.name, target.name), source_id=source.id, target_id=target.id)
                 return second_damage if second_damage.dealt else first_damage
 
             return await self.attack(source, target)
@@ -112,7 +112,7 @@ class ThrowSickle(RangedAttack):
 
         if damage.calculated:
             self.weapon.dropped_sickles += 1
-            self.session.say(ls("weapon.throwing_sickles.dropped_text").format(source.name))
+            self.session.say(ls("weapon.throwing_sickles.dropped_text").format(source.name), source_id=source.id, target_id=target.id)
             return damage
 
         @At(self.session.id, turn=self.session.turn + 1, event=PreMoveGameEvent)
@@ -121,7 +121,7 @@ class ThrowSickle(RangedAttack):
             if not owner or not isinstance(owner.weapon, ThrowingSickles):
                 return
             self.weapon.held_sickles = min(self.weapon.held_sickles + 1, self.weapon.max_sickles)
-            context.session.say(ls("weapon.throwing_sickles.return_text").format(owner.name))
+            context.session.say(ls("weapon.throwing_sickles.return_text").format(owner.name), source_id=owner.id, target_id=owner.id)
 
         return damage
 
@@ -139,4 +139,4 @@ class PickUpSickle(DecisiveWeaponAction):
     async def func(self, source: Entity, target: Entity):
         self.weapon.dropped_sickles -= 1
         self.weapon.held_sickles = min(self.weapon.held_sickles + 1, self.weapon.max_sickles)
-        self.session.say(ls("weapon.throwing_sickles.pickup.text").format(source.name))
+        self.session.say(ls("weapon.throwing_sickles.pickup.text").format(source.name), source_id=source.id, target_id=target.id)

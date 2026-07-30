@@ -29,6 +29,6 @@ class CursedSwordAttack(MeleeAttack):
 
             message_key = "weapon.cursed_sword.increase" if weakness.turns else "weapon.cursed_sword.effect"
             weakness.apply(self.session)
-            self.session.say(ls(message_key).format(target.name, weakness.turns))
+            self.session.say(ls(message_key).format(target.name, weakness.turns), source_id=source.id, target_id=target.id)
 
         return damage

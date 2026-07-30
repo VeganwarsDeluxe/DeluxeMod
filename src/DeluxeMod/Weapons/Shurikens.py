@@ -44,7 +44,7 @@ class ShurikenAttack(RangedAttack):
             else:
                 await self.perform_single_shuriken_attack(source, target)
         else:
-            self.session.say(ls("weapon.shurikens.no_ammo_text").format(source.name))
+            self.session.say(ls("weapon.shurikens.no_ammo_text").format(source.name), source_id=source.id, target_id=target.id)
 
     async def shuriken_attack(self, source, target):
         total_damage = self.calculate_damage(source, target)
@@ -56,13 +56,13 @@ class ShurikenAttack(RangedAttack):
             self.session.say(
                 self.MISS_MESSAGE.format(source_name=source.name, attack_text=self.ATTACK_TEXT, target_name=target.name,
                                          weapon_name=self.weapon.name)
-            )
+            , source_id=source.id, target_id=target.id)
         else:
             self.session.say(
                 self.ATTACK_MESSAGE.format(attack_emoji=self.ATTACK_EMOJI, source_name=source.name,
                                            attack_text=self.ATTACK_TEXT, target_name=target.name,
                                            weapon_name=self.weapon.name, damage=post_damage)
-            )
+            , source_id=source.id, target_id=target.id)
 
     async def perform_single_shuriken_attack(self, source, target):
         if self.weapon.ammo > 0:
@@ -91,9 +91,9 @@ class SwitchShurikenMode(InstantWeaponAction):
     async def func(self, source, target):
         self.weapon.double_shuriken = not self.weapon.double_shuriken
         if self.weapon.double_shuriken:
-            self.session.say(ls("weapon.shurikens.switch_to_double_shuriken_text").format(source.name))
+            self.session.say(ls("weapon.shurikens.switch_to_double_shuriken_text").format(source.name), source_id=source.id, target_id=target.id)
         else:
-            self.session.say(ls("weapon.shurikens.switch_to_single_shuriken_text").format(source.name))
+            self.session.say(ls("weapon.shurikens.switch_to_single_shuriken_text").format(source.name), source_id=source.id, target_id=target.id)
 
 
 
@@ -113,4 +113,4 @@ class PickUpShuriken(DecisiveWeaponAction):
 
     async def func(self, source: Entity, target: Entity):
         self.weapon.ammo = 4
-        self.session.say(ls("weapon.shurikens.shuriken_pickup_text").format(source.name))
+        self.session.say(ls("weapon.shurikens.shuriken_pickup_text").format(source.name), source_id=source.id, target_id=target.id)

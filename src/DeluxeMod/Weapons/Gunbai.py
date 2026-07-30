@@ -1,5 +1,5 @@
-from VegansDeluxe.core import AttackGameEvent
 from VegansDeluxe.core import AttachedAction
+from VegansDeluxe.core import AttackGameEvent
 from VegansDeluxe.core import Entity
 from VegansDeluxe.core import EventContext
 from VegansDeluxe.core import MeleeAttack
@@ -49,13 +49,11 @@ class GunbaiAttack(MeleeAttack):
         if damage.calculated:
             self.weapon.signal_turn = self.session.turn
             self.weapon.signal_target_id = target.id
-            self.session.say(ls("weapon.gunbai.signal_text").format(source.name))
+            self.session.say(ls("weapon.gunbai.signal_text").format(source.name), source_id=source.id, target_id=target.id)
 
             aflame = target.get_state(Aflame)
             if aflame and aflame.flame:
-                aflame.flame += 1
-                aflame.dealer = source
-                aflame.extinguished = False
-                self.session.say(ls("weapon.gunbai.fire_text").format(source.name, target.name))
+                aflame.add_flame(self.session, target, source, 1, announce=False)
+                self.session.say(ls("weapon.gunbai.fire_text").format(source.name, target.name), source_id=source.id, target_id=target.id)
 
         return damage

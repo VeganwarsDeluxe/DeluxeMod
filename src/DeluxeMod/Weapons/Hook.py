@@ -71,11 +71,11 @@ class HookAttract(RangedAttack):
             self.session.say(
                 ls("weapon.hook.attract.miss")
                 .format(source.name, target.name)
-            )
+            , source_id=source.id, target_id=target.id)
         else:
             self.session.say(
                 ls("weapon.hook.attract.text").format(source.name, target.name, total_damage)
-            )
+            , source_id=source.id, target_id=target.id)
 
         self.weapon.damage_bonus = 0
 

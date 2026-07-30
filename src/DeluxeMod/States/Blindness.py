@@ -64,7 +64,7 @@ async def register(root_context: StateContext[Blindness]):
             return
 
         state.clear()
-        session.say(ls("state.blindness.fire_recovery").format(source.name))
+        session.say(ls("state.blindness.fire_recovery").format(source.name), source_id=source.id, target_id=source.id)
 
     @RegisterEvent(session.id, event=PostDamagesGameEvent)
     async def reset_blindness(context: EventContext[PostDamagesGameEvent]):
@@ -76,4 +76,4 @@ async def register(root_context: StateContext[Blindness]):
         state.stacks = [stack for stack in state.stacks if stack["turns"] > 0]
         state.triggered_turn = 0
         if not state.stacks:
-            session.say(ls("state.blindness.recovery").format(source.name))
+            session.say(ls("state.blindness.recovery").format(source.name), source_id=source.id, target_id=source.id)

@@ -58,9 +58,9 @@ class Explosion(DecisiveStateAction):
         return self.source.energy < 5
 
     async def func(self, source: Entity, target: Entity):
-        self.session.say(ls("skill.explosion.staff_text").format(source.name, target.name))
+        self.session.say(ls("skill.explosion.staff_text").format(source.name, target.name), source_id=source.id, target_id=target.id)
         random_text = random.choice(self.state.preparation_texts)
-        self.session.say(random_text.format(source.name))
+        self.session.say(random_text.format(source.name), source_id=source.id, target_id=target.id)
 
         stun_state = source.get_state(Stun)
         stun_state.stun += 3
@@ -73,14 +73,14 @@ class Explosion(DecisiveStateAction):
             displayed_damage = await self.publish_pre_damage_event(source, target, calculated_damage)
 
             source.energy = max(0, source.energy - 10)
-            self.session.say(ls("skill.explosion.stun_text").format(source.name))
+            self.session.say(ls("skill.explosion.stun_text").format(source.name), source_id=source.id, target_id=target.id)
 
             dealt_damage = await self.publish_post_damage_event(source, target, displayed_damage)
             aflame = target.get_state(Aflame)
             aflame.add_flame(self.session, target, source, 6)
-            self.session.say(ls("skill.explosion.text").format(source.name))
+            self.session.say(ls("skill.explosion.text").format(source.name), source_id=source.id, target_id=target.id)
             effect_text = ls("skill.explosion.effect_text" if dealt_damage else "skill.explosion.blocked_text")
-            self.session.say(effect_text.format(target.name, dealt_damage, source.name))
+            self.session.say(effect_text.format(target.name, dealt_damage, source.name), source_id=source.id, target_id=target.id)
 
             target.inbound_dmg.add(source, dealt_damage, self.session.turn)
             source.outbound_dmg.add(target, dealt_damage, self.session.turn)

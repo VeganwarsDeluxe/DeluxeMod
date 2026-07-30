@@ -81,13 +81,13 @@ class ExplosionArrow(RangedAttack):
             self.session.say(
                 ls("weapon.hell.bow_explosion_arrow_text_miss")
                 .format(source.name, target.name)
-            )
+            , source_id=source.id, target_id=target.id)
         else:
             if len(secondary_targets) == 0:
                 self.session.say(
                     ls("weapon.hell.bow_explosion_arrow_single_target_text")
                     .format(source.name, target.name, primary_damage)
-                )
+                , source_id=source.id, target_id=target.id)
             else:
                 secondary_targets_names = ', '.join([t.name for t in secondary_targets])
                 self.session.say(
@@ -99,7 +99,7 @@ class ExplosionArrow(RangedAttack):
                         secondary_targets_names,
                         secondary_damage
                     )
-                )
+                , source_id=source.id, target_id=target.id)
 
         self.weapon.damage_bonus = 0
 

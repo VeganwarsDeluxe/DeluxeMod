@@ -28,11 +28,11 @@ class StarBowAttack(RangedAttack):
 
         if percentage_chance(75):
             if target.get_state(Visor):
-                self.session.say(ls("weapon.star_bow.visor_fail").format(target.name))
+                self.session.say(ls("weapon.star_bow.visor_fail").format(target.name), source_id=source.id, target_id=target.id)
                 return damage
 
             blindness = target.get_state(Blindness)
             blindness.blind(self.session)
-            self.session.say(ls("weapon.star_bow.effect").format(target.name))
+            self.session.say(ls("weapon.star_bow.effect").format(target.name), source_id=source.id, target_id=target.id)
 
         return damage

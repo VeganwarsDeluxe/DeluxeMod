@@ -21,11 +21,11 @@ class SourCandyAction(FreeItem):
 
     async def func(self, source, target):
         target.max_energy += 1
-        self.session.say(ls("item.sour_candy.effect").format(target.name, target.max_energy))
+        self.session.say(ls("item.sour_candy.effect").format(target.name, target.max_energy), source_id=source.id, target_id=target.id)
 
         @At(self.session.id, turn=self.session.turn + 2, event=PostDamagesGameEvent)
         async def handle_at(context: EventContext[PostDamagesGameEvent]):
             target.max_energy = max(target.max_energy - 1, 0)
-            self.session.say(ls("item.sour_candy.wear_off").format(target.name, target.max_energy))
+            self.session.say(ls("item.sour_candy.wear_off").format(target.name, target.max_energy), source_id=source.id, target_id=target.id)
 
-        self.session.say(ls("item.sour_candy.use").format(source.name, target.name))
+        self.session.say(ls("item.sour_candy.use").format(source.name, target.name), source_id=source.id, target_id=target.id)

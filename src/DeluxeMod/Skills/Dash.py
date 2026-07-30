@@ -53,9 +53,9 @@ class DashAction(DecisiveStateAction):
         damage = await attack_action.attack(source, target, bonus_damage=1, send_message=False)
 
         if damage.displayed:
-            self.session.say(ls("skill.dash.text").format(source.name, target.name, damage.displayed))
+            self.session.say(ls("skill.dash.text").format(source.name, target.name, damage.displayed), source_id=source.id, target_id=target.id)
         else:
-            self.session.say(ls("skill.dash.text_miss").format(source.name, target.name))
+            self.session.say(ls("skill.dash.text_miss").format(source.name, target.name), source_id=source.id, target_id=target.id)
             return
 
         if source not in target.nearby_entities:

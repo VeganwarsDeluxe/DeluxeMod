@@ -94,7 +94,7 @@ class BeastApproach(DecisiveAction):
         for entity in source.nearby_entities:
             if source not in entity.nearby_entities:
                 entity.nearby_entities.append(source)
-        self.session.say(ls("beast.approach.text").format(source.name))
+        self.session.say(ls("beast.approach.text").format(source.name), source_id=source.id, target_id=target.id)
 
 
 @AttachedAction(Beast)
@@ -104,7 +104,7 @@ class BeastReload(DecisiveAction):
     target_type = SelfOnly()
 
     async def func(self, source, target):
-        self.session.say(ls("beast.reload.text").format(source.name, source.max_energy))
+        self.session.say(ls("beast.reload.text").format(source.name, source.max_energy), source_id=source.id, target_id=target.id)
         source.energy = source.max_energy
 
 
@@ -116,7 +116,7 @@ class BeastEvade(DecisiveAction):
 
     async def func(self, source, target):
         self.source.inbound_accuracy_bonus = -6
-        self.session.say(ls("beast.evade.text").format(source.name))
+        self.session.say(ls("beast.evade.text").format(source.name), source_id=source.id, target_id=target.id)
 
 
 @AttachedAction(Beast)
@@ -126,7 +126,7 @@ class BeastGrowl(DecisiveAction):
     target_type = SelfOnly()
 
     async def func(self, source, target):
-        self.session.say(ls("beast.growl.text").format(source.name))
+        self.session.say(ls("beast.growl.text").format(source.name), source_id=source.id, target_id=target.id)
 
 
 @RegisterWeapon
@@ -162,7 +162,7 @@ class BeastAttackTwo(MeleeAttack):
         target.inbound_dmg.add(source, post_damage, self.session.turn)
         source.outbound_dmg.add(target, post_damage, self.session.turn)
 
-        self.session.say(ls("beast.AttackTwo.text").format(source.name, target.name, final_damage))
+        self.session.say(ls("beast.AttackTwo.text").format(source.name, target.name, final_damage), source_id=source.id, target_id=target.id)
         self.weapon.damage_bonus = 0
 
     async def publish_post_damage_event(self, source: Entity, target: Entity, damage: int) -> int:
@@ -178,4 +178,4 @@ class BeastBite(MeleeAttack):
 
     async def func(self, source, target):
         target.hp = max(0, target.hp - 1)
-        self.session.say(ls("beast.bite.text").format(source.name, target.name))
+        self.session.say(ls("beast.bite.text").format(source.name, target.name), source_id=source.id, target_id=target.id)

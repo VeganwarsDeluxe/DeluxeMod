@@ -50,7 +50,7 @@ class HeroismAction(DecisiveStateAction):
 
         # Deduct 1 HP from the user (source)
         source.hp -= 1
-        self.session.say(ls("state.heroism.hp.lost").format(source.name, source.hp))
+        self.session.say(ls("state.heroism.hp.lost").format(source.name, source.hp), source_id=source.id, target_id=target.id)
 
         # Heal 1 HP for all allies
         allies = self.get_allies(source)
@@ -58,4 +58,4 @@ class HeroismAction(DecisiveStateAction):
             if ally.hp < ally.max_hp:
                 health_recovered = min(1, ally.max_hp - ally.hp)
                 ally.hp += health_recovered
-                self.session.say(ls("state.heroism.hp.recovery").format(ally.name, ally.hp))
+                self.session.say(ls("state.heroism.hp.recovery").format(ally.name, ally.hp), source_id=source.id, target_id=target.id)

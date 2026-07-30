@@ -45,7 +45,7 @@ class EnergyGrenadeAction(DecisiveItem):
         self.session.say(
             ls("item.energy_grenade_text")
             .format(source.name, damage, target.name)
-        )
+        , source_id=source.id, target_id=target.id)
 
     async def publish_post_damage_event(self, source, target, damage):
         message = PostDamageGameEvent(self.session.id, self.session.turn, source, target, damage)

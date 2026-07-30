@@ -92,7 +92,7 @@ class SlimeReload(DecisiveAction):
     target_type = SelfOnly()
 
     async def func(self, source, target):
-        self.session.say(ls("slime.reload.text").format(source.name, source.max_energy))
+        self.session.say(ls("slime.reload.text").format(source.name, source.max_energy), source_id=source.id, target_id=target.id)
         source.energy = source.max_energy
 
 
@@ -106,4 +106,4 @@ class SlimeApproach(DecisiveAction):
         source.nearby_entities = list(filter(lambda t: t != source, self.session.entities))
         for entity in source.nearby_entities:
             entity.nearby_entities.append(source) if source not in entity.nearby_entities else None
-        self.session.say(ls("slime.approach.text").format(source.name))
+        self.session.say(ls("slime.approach.text").format(source.name), source_id=source.id, target_id=target.id)

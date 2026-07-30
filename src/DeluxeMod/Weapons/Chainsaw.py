@@ -42,7 +42,7 @@ class ChainsawAttack(MeleeAttack):
 
     async def func(self, source: Entity, target: Entity):
         if percentage_chance(5):
-            self.session.say(ls("weapon.chainsaw.jammed").format(source.name))
+            self.session.say(ls("weapon.chainsaw.jammed").format(source.name), source_id=source.id, target_id=target.id)
             self.weapon.wound_up = False
             self.weapon.reset_stats()
             return
@@ -67,13 +67,13 @@ class ChainsawAttack(MeleeAttack):
             self.session.say(
                 self.MISS_MESSAGE.format(source_name=source.name, attack_text=self.ATTACK_TEXT, target_name=target.name,
                                          weapon_name=self.weapon.name)
-            )
+            , source_id=source.id, target_id=target.id)
         else:
             self.session.say(
                 self.ATTACK_MESSAGE.format(attack_emoji=self.ATTACK_EMOJI, source_name=source.name,
                                            attack_text=self.ATTACK_TEXT,
                                            target_name=target.name, weapon_name=self.weapon.name, damage=total_damage)
-            )
+            , source_id=source.id, target_id=target.id)
 
     async def publish_post_damage_event(self, source: Entity, target: Entity, damage: int) -> int:
         message = PostDamageGameEvent(self.session.id, self.session.turn, source, target, damage)
@@ -99,10 +99,10 @@ class WoundUpChainsaw(DecisiveWeaponAction):
         self.weapon.wound_up = True
         self.weapon.cooldown_turn = self.session.turn + 4
 
-        self.session.say(ls("weapon.chainsaw.switch_text").format(source.name))
+        self.session.say(ls("weapon.chainsaw.switch_text").format(source.name), source_id=source.id, target_id=target.id)
 
         @At(self.session.id, turn=self.weapon.cooldown_turn, event=PostTickGameEvent)
         async def disable_chainsaw(context: EventContext[PostTickGameEvent]):
             self.weapon.wound_up = False
             self.weapon.reset_stats()
-            context.session.say(ls("weapon.chainsaw.disable_text").format(source.name))
+            context.session.say(ls("weapon.chainsaw.disable_text").format(source.name), source_id=source.id, target_id=source.id)

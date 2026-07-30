@@ -17,7 +17,7 @@ class GrenadeLauncher(RangedWeapon):
     description = ls("weapon.grenade_launcher.description")
 
     cubes = 4
-    accuracy_bonus = 2
+    accuracy_bonus = 1
     energy_cost = 3
 
     def __init__(self, *args, **kwargs):
@@ -49,10 +49,10 @@ class GrenadeLauncherAttack(RangedAttack):
             source.outbound_dmg.add(target, post_damage, self.session.turn)
 
         if not base_damage:
-            self.session.say(ls("weapon.grenade_launcher.grenade.text_miss").format(source.name, target.name))
+            self.session.say(ls("weapon.grenade_launcher.grenade.text_miss").format(source.name, target.name), source_id=source.id, target_id=target.id)
         else:
             self.session.say(ls("weapon.grenade_launcher.grenade.text").format(source.name, base_damage,
-                                                                        LocalizedList([t.name for t in targets])))
+                                                                        LocalizedList([t.name for t in targets])), source_id=source.id, target_id=target.id)
 
     async def perform_molotov_attack(self, source, target):
         # Пропоную так перевіряти попадання. calculate_damage використовує звичайні стати зброї, і поверне 0 в разі
@@ -75,10 +75,10 @@ class GrenadeLauncherAttack(RangedAttack):
 
         if base_damage:
             self.session.say(ls("weapon.grenade_launcher.molotov.text")
-                             .format(source.name, LocalizedList([t.name for t in targets])))
+                             .format(source.name, LocalizedList([t.name for t in targets])), source_id=source.id, target_id=target.id)
         else:
             self.session.say(ls("weapon.grenade_launcher.molotov.text_miss")
-                             .format(source.name, target.name))
+                             .format(source.name, target.name), source_id=source.id, target_id=target.id)
 
     def form_target_list(self, source, target) -> list[Entity]:
         targets = [target]

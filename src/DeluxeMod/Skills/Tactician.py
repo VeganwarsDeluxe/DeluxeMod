@@ -26,5 +26,5 @@ async def register(root_context: StateContext[Tactician]):
             return
 
         if percentage_chance(25):
-            session.say(ls("skill.tactician_effect_text").format(source.name))
+            session.say(ls("skill.tactician_effect_text").format(source.name), source_id=source.id, target_id=source.id)
             context.event.energy_payment = 0
