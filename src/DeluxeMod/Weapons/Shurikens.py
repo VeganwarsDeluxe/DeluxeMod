@@ -1,3 +1,5 @@
+from typing import Optional
+
 from VegansDeluxe.core import PostDamageGameEvent, RegisterEvent, PreMoveGameEvent, EventContext, DecisiveWeaponAction
 from VegansDeluxe.core import RangedAttack, RegisterWeapon, Entity, AttachedAction, SelfOnly, FreeWeaponAction
 from VegansDeluxe.core.Actions.WeaponAction import InstantWeaponAction
@@ -12,7 +14,7 @@ class Shurikens(RangedWeapon):
     name = ls("deluxe.weapon.shurikens.name")
     description = ls("deluxe.weapon.shurikens.description")
 
-    cubes = 1
+    cubes = 3
     accuracy_bonus = 2
     energy_cost = 2
     damage_bonus = 1
@@ -36,8 +38,6 @@ class ShurikenAttack(RangedAttack):
         super().__init__(session, source, weapon)
 
     async def func(self, source, target):
-        source.energy = max(source.energy - self.weapon.energy_cost, 0)
-
         if self.weapon.ammo > 0:
             if self.weapon.double_shuriken and self.weapon.ammo >= 2:
                 await self.perform_double_shuriken_attack(source, target)
@@ -46,7 +46,17 @@ class ShurikenAttack(RangedAttack):
         else:
             self.session.say(ls("deluxe.weapon.shurikens.no_ammo_text").format(source.name), source_id=source.id, target_id=target.id)
 
-    async def shuriken_attack(self, source, target):
+    def calculate_damage(self, source, target, energy: Optional[int] = None):
+        damage = super().calculate_damage(source, target, energy)
+        if not damage:
+            return damage
+        return 2
+
+    async def shuriken_attack(self, source, target, energy_cost: Optional[int] = None):
+        if energy_cost is None:
+            energy_cost = self.weapon.energy_cost
+        source.energy = max(source.energy - energy_cost, 0)
+
         total_damage = self.calculate_damage(source, target)
         post_damage = await self.publish_post_damage_event(source, target, total_damage)
         target.inbound_dmg.add(source, post_damage, self.session.turn)
@@ -72,7 +82,7 @@ class ShurikenAttack(RangedAttack):
     async def perform_double_shuriken_attack(self, source, target):
         if self.weapon.ammo >= 2:
             await self.shuriken_attack(source, target)
-            await self.shuriken_attack(source, target)
+            await self.shuriken_attack(source, target, 1)
             self.weapon.ammo -= 2
 
     async def publish_post_damage_event(self, source: Entity, target: Entity, damage: int) -> int:
