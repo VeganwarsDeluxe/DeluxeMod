@@ -68,7 +68,7 @@ class Elemental(NPC):
             elemental.max_hp = hp
             elemental.hp = hp
             elemental.child = True
-            deluxe.elemental.anger = self.anger
+            elemental.anger = self.anger
             elemental.team = self.team
             session.attach_entity(elemental)
             for state in content.all_states:

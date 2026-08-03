@@ -5,6 +5,7 @@ from VegansDeluxe.core import RangedAttack, RegisterWeapon, Entity, Enemies, Att
 from VegansDeluxe.core.Actions.Action import filter_targets
 from VegansDeluxe.core.Events import PostDamageGameEvent
 from VegansDeluxe.core.Session import Session
+from VegansDeluxe.core.Translator.LocalizedList import LocalizedList
 from VegansDeluxe.core.Translator.LocalizedString import ls
 from VegansDeluxe.core.Weapons.Weapon import RangedWeapon
 
@@ -89,7 +90,7 @@ class ExplosionArrow(RangedAttack):
                     .format(source.name, target.name, primary_damage)
                 , source_id=source.id, target_id=target.id)
             else:
-                secondary_targets_names = ', '.join([t.name for t in secondary_targets])
+                secondary_targets_names = LocalizedList([t.name for t in secondary_targets])
                 self.session.say(
                     ls("deluxe.weapon.hell.bow_explosion_arrow_multiple_targets_text")
                     .format(
