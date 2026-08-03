@@ -1,9 +1,8 @@
+from VegansDeluxe.core import ls
 from VegansDeluxe.matchmakery.Matches.Match import Match
 
 import DeluxeMod.content
 from DeluxeMod.Entities.Guardian import Guardian
-from VegansDeluxe.core import ls
-
 from DeluxeMod.Matches.BasicMatch import BasicMatch
 
 
@@ -23,3 +22,4 @@ class GuardianDungeon(BasicMatch):
             guardian = Guardian(self.id)
             self.session.attach_entity(guardian)
             await self.engine.attach_states(guardian, DeluxeMod.content.all_states)
+        return player

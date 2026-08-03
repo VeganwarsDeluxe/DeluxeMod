@@ -24,3 +24,4 @@ class SlimeMatch(BasicMatch):
             slime = Slime(self.id, name=ls("deluxe.slime.number").format(self.slimes))
             self.session.attach_entity(slime)
             await self.engine.attach_states(slime, DeluxeMod.content.all_states)
+        return player

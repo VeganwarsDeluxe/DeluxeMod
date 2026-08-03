@@ -1,9 +1,8 @@
+from VegansDeluxe.core import ls
 from VegansDeluxe.matchmakery.Matches.Match import Match
 
 import DeluxeMod.content
 from DeluxeMod.Entities.Beast import Beast
-from VegansDeluxe.core import ls
-
 from DeluxeMod.Matches.BasicMatch import BasicMatch
 
 
@@ -23,3 +22,4 @@ class BeastDungeon(BasicMatch):
             beast = Beast(self.id)
             self.session.attach_entity(beast)
             await self.engine.attach_states(beast, DeluxeMod.content.all_states)
+        return player

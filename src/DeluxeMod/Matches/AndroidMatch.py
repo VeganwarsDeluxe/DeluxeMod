@@ -1,8 +1,8 @@
+from VegansDeluxe.core import ls
 from VegansDeluxe.matchmakery.Matches.Match import Match
+
 import DeluxeMod.content
 from DeluxeMod.Entities.Android import Android
-from VegansDeluxe.core import ls
-
 from DeluxeMod.Matches.BasicMatch import BasicMatch
 
 
@@ -23,3 +23,4 @@ class AndroidMatch(BasicMatch):
         self.session.attach_entity(android)
         await self.engine.attach_states(android, DeluxeMod.content.all_states)
         await self.engine.attach_states(android, android.choose_skills())
+        return player

@@ -19,13 +19,14 @@ class ElementalMatch(BasicMatch):
         player.team = 'players'
 
         if self.elemental:
-            return
+            return player
 
         elemental = Elemental(self.id)
         self.elemental = elemental
         self.session.attach_entity(elemental)
         await self.engine.attach_states(elemental, DeluxeMod.content.all_states)
         await self.engine.attach_states(elemental, elemental.skill_pool)
+        return player
 
     async def start_game(self):
         self.elemental.hp = 4 + 4*(len(self.session.entities)-1)

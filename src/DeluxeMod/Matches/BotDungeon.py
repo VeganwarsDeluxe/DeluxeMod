@@ -1,3 +1,4 @@
+from VegansDeluxe.core import ls
 from VegansDeluxe.matchmakery.Matches.Match import Match
 
 import DeluxeMod.content
@@ -5,8 +6,6 @@ from DeluxeMod.Entities.Beast import Beast
 from DeluxeMod.Entities.Elemental import Elemental
 from DeluxeMod.Entities.Guardian import Guardian
 from DeluxeMod.Entities.Slime import Slime
-from VegansDeluxe.core import ls
-
 from DeluxeMod.Matches.BasicMatch import BasicMatch
 
 
@@ -42,4 +41,4 @@ class BotDungeon(BasicMatch):
     async def join_session(self, user_id, user_name):
         player = await super().join_session(user_id, user_name)
         player.team = 'players'
-
+        return player
