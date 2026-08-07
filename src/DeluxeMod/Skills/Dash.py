@@ -58,16 +58,10 @@ class DashAction(DecisiveStateAction):
             self.session.say(ls("deluxe.skill.dash.text_miss").format(source.name, target.name), source_id=source.id, target_id=target.id)
             return
 
-        if source not in target.nearby_entities:
-            target.nearby_entities.append(source)
-        if target not in source.nearby_entities:
-            source.nearby_entities.append(target)
-
+        source.nearby_entities = [entity for entity in self.session.entities if entity != source]
         for entity in source.nearby_entities:
-            if entity != target and target not in entity.nearby_entities:
-                entity.nearby_entities.append(target)
-            if entity != target and entity not in target.nearby_entities:
-                target.nearby_entities.append(entity)
+            if source not in entity.nearby_entities:
+                entity.nearby_entities.append(source)
 
     async def publish_post_damage_event(self, source: Entity, target: Entity, damage: int) -> int:
         message = PostDamageGameEvent(self.session.id, self.session.turn, source, target, damage)

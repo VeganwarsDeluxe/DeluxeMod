@@ -6,6 +6,7 @@ from VegansDeluxe.core import Session
 from VegansDeluxe.core import State
 from VegansDeluxe.core import StateContext, EventContext
 from VegansDeluxe.core.Translator.LocalizedString import ls
+from VegansDeluxe.rebuild.States.Armor import Armor
 
 
 class CorrosiveMucus(State):
@@ -15,6 +16,7 @@ class CorrosiveMucus(State):
         super().__init__()
         self.corrosive_mucus = 3
         self.active = False
+        self.removed_armor: list[tuple[int, int]] = []
 
 
 @RegisterState(CorrosiveMucus)
@@ -31,6 +33,9 @@ async def register(root_context: StateContext[CorrosiveMucus]):
                 item_to_remove = random.choice(source.items)
                 source.items.remove(item_to_remove)
                 session.say(ls("deluxe.state.corrosive_mucus.item.loss").format(source.name, item_to_remove.name), source_id=source.id, target_id=source.id)
+                if state.removed_armor:
+                    armor, chance = state.removed_armor.pop()
+                    source.get_state(Armor).add(armor, chance)
             else:
                 session.say(ls("deluxe.state.corrosive_mucus.no_item").format(source.name), source_id=source.id, target_id=source.id)
 
