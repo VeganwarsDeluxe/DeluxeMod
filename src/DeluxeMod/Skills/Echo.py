@@ -30,7 +30,7 @@ async def register(root_context: StateContext[Echo]):
 
         current_turn = session.turn
 
-        if context.event.damage == 0:
+        if not context.event.damage:
             state.last_damage = 0
             state.last_attack_turn = None
             return
