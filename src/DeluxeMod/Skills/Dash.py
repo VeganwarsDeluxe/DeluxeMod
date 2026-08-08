@@ -56,7 +56,6 @@ class DashAction(DecisiveStateAction):
             self.session.say(ls("deluxe.skill.dash.text").format(source.name, target.name, damage.displayed), source_id=source.id, target_id=target.id)
         else:
             self.session.say(ls("deluxe.skill.dash.text_miss").format(source.name, target.name), source_id=source.id, target_id=target.id)
-            return
 
         source.nearby_entities = [entity for entity in self.session.entities if entity != source]
         for entity in source.nearby_entities:
