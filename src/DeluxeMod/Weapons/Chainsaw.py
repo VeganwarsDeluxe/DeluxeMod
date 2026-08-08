@@ -1,6 +1,6 @@
 from VegansDeluxe.core import AttachedAction, RegisterWeapon, At, percentage_chance, RegisterEvent, PreMoveGameEvent, \
     DecisiveWeaponAction
-from VegansDeluxe.core import MeleeAttack, PostTickGameEvent, Entity, PostDamageGameEvent
+from VegansDeluxe.core import MeleeAttack, PostTickGameEvent, Entity, AttackGameEvent
 from VegansDeluxe.core import SelfOnly, EventContext
 from VegansDeluxe.core.Session import Session
 from VegansDeluxe.core.Translator.LocalizedString import ls
@@ -59,9 +59,11 @@ class ChainsawAttack(MeleeAttack):
 
         total_damage = self.calculate_damage(source, target)
 
-        post_damage = await self.publish_post_damage_event(source, target, total_damage)
-        target.inbound_dmg.add(source, post_damage, self.session.turn)
-        source.outbound_dmg.add(target, post_damage, self.session.turn)
+        attack_event = AttackGameEvent(self.session.id, self.session.turn, source, target, total_damage)
+        await self.event_manager.publish(attack_event)
+        total_damage = attack_event.damage
+        target.inbound_dmg.add(source, total_damage, self.session.turn)
+        source.outbound_dmg.add(target, total_damage, self.session.turn)
 
         if not total_damage:
             self.session.say(
@@ -74,11 +76,6 @@ class ChainsawAttack(MeleeAttack):
                                            attack_text=self.ATTACK_TEXT,
                                            target_name=target.name, weapon_name=self.weapon.name, damage=total_damage)
             , source_id=source.id, target_id=target.id)
-
-    async def publish_post_damage_event(self, source: Entity, target: Entity, damage: int) -> int:
-        message = PostDamageGameEvent(self.session.id, self.session.turn, source, target, damage)
-        await self.event_manager.publish(message)
-        return message.damage
 
 
 @AttachedAction(Chainsaw)
