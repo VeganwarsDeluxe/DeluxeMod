@@ -1,6 +1,8 @@
 from VegansDeluxe.core import ls
 from VegansDeluxe.matchmakery import Dungeon
 
+from DeluxeMod.Weapons.Akuruka import Akuruka
+
 
 class Room57(Dungeon):
     """A three-room run: slimes, Androids, then the Elemental."""
@@ -23,6 +25,8 @@ class Room57(Dungeon):
         return None
 
     async def initialize_match(self, previous, current):
+        if Akuruka not in current.weapon_pool:
+            current.weapon_pool.append(Akuruka)
         if previous is None:
             return
 

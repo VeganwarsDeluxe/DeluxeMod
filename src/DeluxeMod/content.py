@@ -10,6 +10,7 @@ from DeluxeMod.Items.EnergyGrenade import EnergyGrenade
 from DeluxeMod.Items.MucusInTheBottle import MucusInTheBottle
 from DeluxeMod.Items.SourCandy import SourCandy
 from DeluxeMod.Items.SweetCandy import SweetCandy
+from DeluxeMod.Matches.AkurukaMatch import AkurukaMatch
 from DeluxeMod.Matches.AndroidMatch import AndroidMatch
 from DeluxeMod.Matches.BasicMatch import BasicMatch
 from DeluxeMod.Matches.BeastDungeon import BeastDungeon
@@ -38,6 +39,7 @@ from DeluxeMod.States.Mutilation import Mutilation
 from DeluxeMod.States.Regeneration import Regeneration
 from DeluxeMod.States.Weakness import Weakness
 from DeluxeMod.Weapons.AbyssalBlade import AbyssalBlade
+from DeluxeMod.Weapons.Akuruka import Akuruka
 from DeluxeMod.Weapons.Boomerang import Boomerang
 from DeluxeMod.Weapons.ButterflyKnife import ButterflyKnife
 from DeluxeMod.Weapons.Chainsaw import Chainsaw
@@ -68,6 +70,7 @@ all_weapons = (
         [CursedSword, GrenadeLauncher, Boomerang, Shurikens, NeedleFan, Emitter, Chainsaw, VampiricWhip, Dagger] +
         [StarBow, MagicMirror, ButterflyKnife, ThrowingSickles, Gunbai]
 )
+room_57_weapons = [Akuruka]
 MagicMirror.form_pool = [weapon for weapon in all_weapons if weapon is not MagicMirror]
 all_skills = (rebuild.all_skills + deluxe.all_skills + [ExplosionMagic, SweetTooth, Echo, Tactician, Dash, Heroism] +
               [FinalBlow, Toad] + [Weaponsmith]
@@ -77,6 +80,6 @@ all_skills = (rebuild.all_skills + deluxe.all_skills + [ExplosionMagic, SweetToo
 game_items_pool = rebuild.game_items_pool + [MucusInTheBottle]
 
 all_matches = [AndroidMatch, BasicMatch, BeastDungeon, BotDungeon, ElementalMatch, GuardianDungeon,
-               Room57, SlimeMatch, TestGameMatch, TournierMatch]
+               Room57, SlimeMatch, TestGameMatch, TournierMatch, AkurukaMatch]
 
 Stockpile.item_pool = Stockpile.item_pool + [CryoGrenade, EnergyGrenade, DeathGrenade]

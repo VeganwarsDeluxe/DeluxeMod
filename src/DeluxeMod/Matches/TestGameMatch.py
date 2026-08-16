@@ -1,11 +1,10 @@
+from VegansDeluxe.core import ls, Entity
 from VegansDeluxe.matchmakery.Events.MatchEvents import DisplayItemChoiceEvent
-from VegansDeluxe.matchmakery.Matches.Match import Match
 
 import DeluxeMod.content
 from DeluxeMod.Entities.Cow import Cow
-from VegansDeluxe.core import ls, Entity
-
 from DeluxeMod.Matches.BasicMatch import BasicMatch
+from DeluxeMod.Weapons.Akuruka import Akuruka
 
 
 class TestGameMatch(BasicMatch):
@@ -14,10 +13,10 @@ class TestGameMatch(BasicMatch):
     def __init__(self, chat_id, engine):
         super().__init__(chat_id, engine)
 
-        self.weapon_pool = DeluxeMod.content.all_weapons
+        self.weapon_pool = DeluxeMod.content.all_weapons + [Akuruka]
 
         self.skill_choice_window = len(DeluxeMod.content.all_skills)
-        self.weapon_choice_window = len(DeluxeMod.content.all_weapons)
+        self.weapon_choice_window = len(self.weapon_pool)
 
     async def init_async(self):
         await super().init_async()
