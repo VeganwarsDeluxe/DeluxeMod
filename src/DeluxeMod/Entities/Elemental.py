@@ -3,7 +3,6 @@ import random
 
 from VegansDeluxe.core import AttachedAction, RegisterWeapon, MeleeWeapon, ls, HPLossGameEvent
 from VegansDeluxe.core import EventContext
-from VegansDeluxe.core import PreDeathGameEvent
 from VegansDeluxe.core import RegisterEvent
 from VegansDeluxe.core import SelfOnly
 from VegansDeluxe.core import Session
@@ -48,6 +47,8 @@ class Elemental(NPC):
             if self.birthed:
                 return
             if self.child:
+                if self.anger:
+                    return
                 if self.hp-context.event.hp_loss <= 2:
                     self.anger = True
                     session.say(ls("deluxe.elemental.anger").format(self.name), source_id=self.id, target_id=self.id)
