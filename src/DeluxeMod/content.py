@@ -17,6 +17,7 @@ from DeluxeMod.Matches.BeastDungeon import BeastDungeon
 from DeluxeMod.Matches.BotDungeon import BotDungeon
 from DeluxeMod.Matches.ElementalMatch import ElementalMatch
 from DeluxeMod.Matches.GuardianDungeon import GuardianDungeon
+from DeluxeMod.Matches.RandomMatch import RandomMatch
 from DeluxeMod.Matches.Room57 import Room57
 from DeluxeMod.Matches.SlimeMatch import SlimeMatch
 from DeluxeMod.Matches.TestGameMatch import TestGameMatch
@@ -79,7 +80,7 @@ all_skills = (rebuild.all_skills + deluxe.all_skills + [ExplosionMagic, SweetToo
 
 game_items_pool = rebuild.game_items_pool + [MucusInTheBottle]
 
-all_matches = [AndroidMatch, BasicMatch, BeastDungeon, BotDungeon, ElementalMatch, GuardianDungeon,
+all_matches = [AndroidMatch, BasicMatch, RandomMatch, BeastDungeon, BotDungeon, ElementalMatch, GuardianDungeon,
                Room57, SlimeMatch, TestGameMatch, TournierMatch, AkurukaMatch]
 
 Stockpile.item_pool = Stockpile.item_pool + [CryoGrenade, EnergyGrenade, DeathGrenade]
