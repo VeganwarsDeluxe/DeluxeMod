@@ -55,9 +55,9 @@ class ChainsawAttack(MeleeAttack):
             self.weapon.accuracy_bonus = 2
             self.weapon.energy_cost = 2
 
-        source.energy = max(source.energy - self.weapon.energy_cost, 0)
-
         total_damage = self.calculate_damage(source, target)
+
+        source.energy = max(source.energy - self.weapon.energy_cost, 0)
 
         attack_event = AttackGameEvent(self.session.id, self.session.turn, source, target, total_damage)
         await self.event_manager.publish(attack_event)

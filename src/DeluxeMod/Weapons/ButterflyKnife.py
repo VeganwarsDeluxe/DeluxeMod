@@ -19,7 +19,7 @@ class ButterflyKnife(MeleeWeapon):
     description = ls("deluxe.weapon.butterfly_knife.description")
 
     cubes = 3
-    accuracy_bonus = 1
+    accuracy_bonus = 2
     energy_cost = 2
     damage_bonus = 0
 
