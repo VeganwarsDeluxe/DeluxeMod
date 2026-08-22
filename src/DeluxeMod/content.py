@@ -31,7 +31,6 @@ from DeluxeMod.Skills.SweetTooth import SweetTooth
 from DeluxeMod.Skills.Tactician import Tactician
 from DeluxeMod.Skills.Toad import Toad
 from DeluxeMod.States.Blindness import Blindness
-from DeluxeMod.States.Cauterization import Cauterization
 from DeluxeMod.States.CorrosiveMucus import CorrosiveMucus
 from DeluxeMod.States.CryoFreeze import CryoFreeze
 from DeluxeMod.States.Dehydration import Dehydration
@@ -60,9 +59,10 @@ from DeluxeMod.Weapons.StarBow import StarBow
 from DeluxeMod.Weapons.ThrowingSickles import ThrowingSickles
 from DeluxeMod.Weapons.Tomahawk import Tomahawk
 from DeluxeMod.Weapons.VampiricWhip import VampiricWhip
+from MothVision import content as moth_vision
 
-all_states = (rebuild.all_states + deluxe.all_states + [Emptiness] + [Weakness, Hunger, Dehydration, Mutilation] +
-              [Blindness, Cauterization] +
+all_states = (rebuild.all_states + deluxe.all_states + moth_vision.all_states + [Emptiness] +
+              [Weakness, Hunger, Dehydration, Mutilation] + [Blindness] +
               [CorrosiveMucus, CryoFreeze, Regeneration])
 all_items = (rebuild.all_items + [CryoGrenade, CaffeineCandy, SourCandy, SweetCandy, DeathGrenade, EnergyGrenade] +
              [MucusInTheBottle]

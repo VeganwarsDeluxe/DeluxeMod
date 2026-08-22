@@ -27,5 +27,5 @@ async def register(root_context: StateContext[Cauterization]):
     async def func(context: EventContext[PreDamagesGameEvent]):
         bleeding.active = False
         bleeding.bleeding = 3
-        session.say(ls("deluxe.state.aflame.cauterize").format(source.name), source_id=source.id,
+        session.say(ls("moth_vision.state.aflame.cauterize").format(source.name), source_id=source.id,
                     target_id=source.id)
