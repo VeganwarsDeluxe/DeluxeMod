@@ -19,6 +19,7 @@ from DeluxeMod.Matches.BeastDungeon import BeastDungeon
 from DeluxeMod.Matches.BotDungeon import BotDungeon
 from DeluxeMod.Matches.ElementalMatch import ElementalMatch
 from DeluxeMod.Matches.GuardianDungeon import GuardianDungeon
+from DeluxeMod.Matches.RandomMatch import RandomMatch
 from DeluxeMod.Matches.Room57 import Room57
 from DeluxeMod.Matches.SlimeMatch import SlimeMatch
 from DeluxeMod.Matches.TestGameMatch import TestGameMatch
@@ -72,10 +73,11 @@ from DeluxeMod.Weapons.Tomahawk import Tomahawk
 from DeluxeMod.Weapons.TurboGloves import TurboGloves
 from DeluxeMod.Weapons.WoodenLog import WoodenLog
 from DeluxeMod.Weapons.VampiricWhip import VampiricWhip
+from MothVision import content as moth_vision
 
-all_states = (rebuild.all_states + deluxe.all_states + [Emptiness] + [Weakness, Hunger, Dehydration, Mutilation] +
-              [Blindness] +
-              [CorrosiveMucus, CryoFreeze, Regeneration, Combo])
+all_states = (rebuild.all_states + deluxe.all_states + moth_vision.all_states + [Emptiness] +
+              [Weakness, Hunger, Dehydration, Mutilation] + [Blindness] +
+              [CorrosiveMucus, CryoFreeze, Regeneration])
 all_items = (rebuild.all_items + [CryoGrenade, CaffeineCandy, SourCandy, SweetCandy, DeathGrenade, EnergyGrenade] +
              [MucusInTheBottle, Needle, Flare]
              )
@@ -94,7 +96,7 @@ all_skills = (rebuild.all_skills + deluxe.all_skills + [ExplosionMagic, SweetToo
 
 game_items_pool = rebuild.game_items_pool + [MucusInTheBottle, Flare]
 
-all_matches = [AndroidMatch, BasicMatch, BeastDungeon, BotDungeon, ElementalMatch, GuardianDungeon,
+all_matches = [AndroidMatch, BasicMatch, RandomMatch, BeastDungeon, BotDungeon, ElementalMatch, GuardianDungeon,
                Room57, SlimeMatch, TestGameMatch, TournierMatch, AkurukaMatch]
 
 Stockpile.item_pool = Stockpile.item_pool + [CryoGrenade, EnergyGrenade, DeathGrenade]
