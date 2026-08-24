@@ -1,7 +1,7 @@
-from VegansDeluxe.core import ActionTag, Allies, At, AttachedAction, DecisiveWeaponAction, Entity, EventContext, \
-    MeleeAttack, PostAttackGameEvent, PostDamageGameEvent, PostDamagesGameEvent, PostTickGameEvent, \
-    PreActionsGameEvent, PreDamagesGameEvent, PreMoveGameEvent, RegisterEvent, RegisterWeapon, Session, \
-    per_cubes, percentage_chance
+from VegansDeluxe.core import ActionTag, Allies, At, AttachedAction, DecisiveWeaponAction, Enemies, Entity, \
+    EventContext, MeleeAttack, PostAttackGameEvent, PostDamageGameEvent, PostDamagesGameEvent, PostTickGameEvent, \
+    PostUpdateActionsGameEvent, PreActionsGameEvent, PreDamagesGameEvent, PreMoveGameEvent, RegisterEvent, \
+    RegisterWeapon, Session, per_cubes, percentage_chance
 from VegansDeluxe.core.Translator.LocalizedString import ls
 from VegansDeluxe.core.Weapons.Weapon import MeleeWeapon
 from VegansDeluxe.rebuild import Stun
@@ -14,6 +14,7 @@ UPPERCUT_ENERGY = 1
 BARRAGE_ENERGY = 1
 STUN_CHANCE_PER_STACK = 10
 BLOCK_ENERGY_REWARD = 2
+CHARGE_COOLDOWN = 4
 
 
 def delayed_stun(session: Session, entity: Entity, turns: int):
@@ -42,6 +43,7 @@ class TurboGloves(MeleeWeapon):
 
         self.uppercut_cooldown_turn = 0
         self.barrage_cooldown_turn = 0
+        self.charge_cooldown_turn = 0
 
         @RegisterEvent(session_id, event=PreActionsGameEvent)
         async def apply_combo_bonus(context: EventContext[PreActionsGameEvent]):
@@ -90,6 +92,17 @@ class TurboGloves(MeleeWeapon):
             entity = context.session.get_entity(entity_id)
             if entity and not entity.dead:
                 self.trigger_combo(context.session, entity)
+
+        @RegisterEvent(session_id, event=PostUpdateActionsGameEvent)
+        async def hide_approach(context: EventContext[PostUpdateActionsGameEvent]):
+            if context.event.entity_id != entity_id:
+                return
+            entity = context.session.get_entity(entity_id)
+            if not entity or entity.weapon is not self:
+                return
+            entity_actions = context.action_manager.actions.get((context.session, entity))
+            if entity_actions:
+                entity_actions[:] = [action for action in entity_actions if action.id != 'approach']
 
     def trigger_combo(self, session: Session, source: Entity):
         was_active = self.combo_duration > 0
@@ -265,3 +278,34 @@ class Block(DecisiveWeaponAction):
             self.weapon.combo_duration = 0
             self.session.say(ls("deluxe.weapon.turbo_gloves.block.vain").format(source.name),
                              source_id=source.id, target_id=target.id)
+
+
+@AttachedAction(TurboGloves)
+class Charge(MeleeAttack):
+    id = 'charge'
+    name = ls("deluxe.weapon.turbo_gloves.charge.name")
+    target_type = Enemies()
+
+    def __init__(self, session: Session, source: Entity, weapon: TurboGloves):
+        super().__init__(session, source, weapon)
+        self.weapon: TurboGloves = weapon
+
+    @property
+    def hidden(self) -> bool:
+        return self.session.turn < self.weapon.charge_cooldown_turn
+
+    async def func(self, source, target):
+        self.weapon.charge_cooldown_turn = self.session.turn + CHARGE_COOLDOWN
+        self.weapon.last_target = target
+
+        if target not in source.nearby_entities:
+            source.nearby_entities = list(set(source.nearby_entities + [target]))
+            target.nearby_entities = list(set(target.nearby_entities + [source]))
+
+        self.session.say(ls("deluxe.weapon.turbo_gloves.charge.text").format(source.name, target.name),
+                         source_id=source.id, target_id=target.id)
+
+        damage = (await self.attack(source, target)).dealt
+        if damage:
+            self.weapon.trigger_combo(self.session, source)
+        return damage

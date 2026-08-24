@@ -1,6 +1,7 @@
 from VegansDeluxe.core import Enemies, DecisiveItem
 from VegansDeluxe.core import Entity
 from VegansDeluxe.core import Item, AttachedAction, ActionTag
+from VegansDeluxe.core import PostDamageGameEvent
 from VegansDeluxe.core import RegisterItem
 from VegansDeluxe.core.Translator.LocalizedString import ls
 from VegansDeluxe.rebuild.States.Armor import Armor
@@ -34,6 +35,11 @@ class MucusInTheBottleAction(DecisiveItem):
 
         if isinstance(target, Slime):
             self.session.say(ls("deluxe.item.mucus_in_the_bottle.slime_immune").format(target.name), source_id=source.id, target_id=target.id)
+            return
+
+        post_damage_event = PostDamageGameEvent(self.session.id, self.session.turn, source, target, 1)
+        await self.event_manager.publish(post_damage_event)
+        if not post_damage_event.damage:
             return
 
         removed_armor = target.get_state(Armor).remove_one()

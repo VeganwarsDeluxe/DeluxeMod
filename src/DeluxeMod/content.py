@@ -49,6 +49,7 @@ from DeluxeMod.States.Regeneration import Regeneration
 from DeluxeMod.States.Weakness import Weakness
 from DeluxeMod.Weapons.AbyssalBlade import AbyssalBlade
 from DeluxeMod.Weapons.Akuruka import Akuruka
+from DeluxeMod.Weapons.AluminiumBat import AluminiumBat
 from DeluxeMod.Weapons.Boomerang import Boomerang
 from DeluxeMod.Weapons.ButterflyKnife import ButterflyKnife
 from DeluxeMod.Weapons.Chainsaw import Chainsaw
@@ -66,6 +67,7 @@ from DeluxeMod.Weapons.Hook import Hook
 from DeluxeMod.Weapons.MagicMirror import MagicMirror
 from DeluxeMod.Weapons.Mimicry import Mimicry
 from DeluxeMod.Weapons.NeedleFan import NeedleFan
+from DeluxeMod.Weapons.Pen import Pen
 from DeluxeMod.Weapons.Shurikens import Shurikens
 from DeluxeMod.Weapons.StarBow import StarBow
 from DeluxeMod.Weapons.ThrowingSickles import ThrowingSickles
@@ -85,7 +87,7 @@ all_weapons = (
         rebuild.all_weapons + deluxe.all_weapons + [AbyssalBlade, Hook, HellBow, ElectricWhip, Tomahawk] +
         [CursedSword, GrenadeLauncher, Boomerang, Shurikens, NeedleFan, Emitter, Chainsaw, VampiricWhip, Dagger] +
         [StarBow, MagicMirror, ButterflyKnife, ThrowingSickles, Gunbai, HandBandage, Mimicry, TurboGloves, WoodenLog] +
-        [ChainedDagger] + [Guitar]
+        [ChainedDagger] + [Guitar] + [Pen] + [AluminiumBat]
 )
 room_57_weapons = [Akuruka]
 MagicMirror.form_pool = [weapon for weapon in all_weapons if weapon is not MagicMirror]
