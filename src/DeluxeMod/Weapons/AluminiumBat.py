@@ -1,44 +1,37 @@
 import random
 
-from VegansDeluxe.core import At, Enemies, Entity, EventContext, ExecuteActionEvent, MeleeAttack, \
-    PostDamageGameEvent, PostTickGameEvent, PostUpdateActionsGameEvent, RegisterEvent, RegisterWeapon, SelfOnly, \
-    Session, AttachedAction
+from VegansDeluxe.core import Enemies, Entity, EventContext, ExecuteActionEvent, MeleeAttack, PostTickGameEvent, \
+    PostUpdateActionsGameEvent, RegisterEvent, RegisterWeapon, SelfOnly, Session, AttachedAction
 from VegansDeluxe.core.Actions.Action import filter_targets
 from VegansDeluxe.core.Translator.LocalizedString import ls
 from VegansDeluxe.core.Weapons.Weapon import MeleeWeapon
 from VegansDeluxe.rebuild.States.Aflame import Aflame
-from VegansDeluxe.rebuild.States.Armor import Armor
 
-from DeluxeMod.Entities.Slime import Slime
-from DeluxeMod.States.CorrosiveMucus import CorrosiveMucus
-
-BLOCK_ENERGY_COST = 2
+STEAL_ENERGY_COST = 2
 BLOCKED_GRENADE_IDS = {'grenade', 'mucus_in_the_bottle'}
-SELF_CAST_GRENADE_IDS = {'grenade', 'molotov', 'mucus_in_the_bottle', 'cryo_grenade', 'energy_grenade',
-                         'death_grenade'}
-SELF_CAST_ENERGY_REFUND = 1
+QUICK_THROW_GRENADE_IDS = {'grenade', 'molotov', 'mucus_in_the_bottle', 'cryo_grenade', 'energy_grenade',
+                           'death_grenade'}
+QUICK_THROW_ENERGY_COST = 3
 
 MOLOTOV_BUFF_DURATION = 2
 MOLOTOV_BUFF_DAMAGE = 1
 MOLOTOV_BURN_STACKS = 1
 
-_self_cast_variant_cache = {}
+_quick_throw_variant_cache = {}
 
 
-def get_self_cast_variant(action_type):
+def get_quick_throw_variant(action_type):
     """
-    Builds (and caches) a self-targetable, instant duplicate of a grenade item's action class.
-
-    Instant actions (cost == -1) execute immediately on selection and never publish
-    ExecuteActionEvent, so AluminiumBat's block+redirect watcher can't see them coming --
-    this variant registers the block itself, right before running the item's real func().
+    Builds (and caches) a self-targetable, instant duplicate of a grenade item's action
+    class -- pressing it either lobs the item at a random enemy for a flat energy cost,
+    or (Molotov specifically) consumes it to directly charge up the bat's own buff.
     """
-    variant = _self_cast_variant_cache.get(action_type)
+    variant = _quick_throw_variant_cache.get(action_type)
     if variant is None:
-        blockable = action_type.id in BLOCKED_GRENADE_IDS
+        is_molotov = action_type.id == 'molotov'
 
-        class SelfCastVariant(action_type):
-            id = 'self_' + action_type.id
+        class QuickThrowVariant(action_type):
+            id = 'quick_throw_' + action_type.id
             target_type = SelfOnly()
 
             @property
@@ -47,14 +40,23 @@ def get_self_cast_variant(action_type):
 
             async def func(self, source, target):
                 weapon = source.weapon
-                if blockable and isinstance(weapon, AluminiumBat):
-                    weapon.register_block(self.session, source, source, action_type.id)
-                result = await super().func(source, target)
-                source.energy = min(source.energy + SELF_CAST_ENERGY_REFUND, source.max_energy)
+                if is_molotov:
+                    if isinstance(weapon, AluminiumBat):
+                        weapon.apply_molotov_buff(self.session, source)
+                    return None
+
+                enemies = filter_targets(source, Enemies(), self.session.entities)
+                if not enemies:
+                    return None
+                random_target = random.choice(enemies)
+
+                energy_before = source.energy
+                result = await super().func(source, random_target)
+                source.energy = min(max(energy_before - QUICK_THROW_ENERGY_COST, 0), source.max_energy)
                 return result
 
-        variant = SelfCastVariant
-        _self_cast_variant_cache[action_type] = variant
+        variant = QuickThrowVariant
+        _quick_throw_variant_cache[action_type] = variant
     return variant
 
 
@@ -75,14 +77,18 @@ class AluminiumBat(MeleeWeapon):
         self.molotov_buff_expires_turn = 0
 
         @RegisterEvent(session_id, event=ExecuteActionEvent, priority=-10)
-        async def watch_grenades(context: EventContext[ExecuteActionEvent]):
+        async def steal_grenades(context: EventContext[ExecuteActionEvent]):
             entity = context.session.get_entity(entity_id)
-            if not entity or entity.weapon is not self:
+            if not entity or entity.dead or entity.weapon is not self:
                 return
 
             action = context.event.action
             item = getattr(action, 'item', None)
             if item is None:
+                return
+
+            thrower = action.source
+            if thrower == entity:
                 return
 
             # NOTE: Molotov's own func() re-rolls random targets from the thrower's enemy
@@ -92,18 +98,30 @@ class AluminiumBat(MeleeWeapon):
             if item.id == 'molotov':
                 if action.target != entity:
                     return
-                self.molotov_buff_expires_turn = context.session.turn + MOLOTOV_BUFF_DURATION
-                if not self.molotov_buff_active:
-                    self.molotov_buff_active = True
-                    self.damage_bonus += MOLOTOV_BUFF_DAMAGE
-                context.session.say(ls("deluxe.weapon.aluminium_bat.molotov_buff").format(entity.name),
-                                    source_id=entity_id, target_id=entity_id)
+                self.apply_molotov_buff(context.session, entity)
                 return
 
-            if item.id not in BLOCKED_GRENADE_IDS:
+            if item.id not in BLOCKED_GRENADE_IDS or entity.is_ally(thrower):
                 return
 
-            self.register_block(context.session, action.source, entity, item.id)
+            # Steal it outright, before it resolves: no original text, no damage to anyone.
+            action.canceled = True
+            energy_before = entity.energy
+            entity.energy = max(entity.energy - STEAL_ENERGY_COST, 0)
+            context.session.say(
+                ls("deluxe.weapon.aluminium_bat.steal").format(entity.name, thrower.name),
+                source_id=entity_id, target_id=thrower.id)
+
+            resolved = context.action_manager.get_action_from_all_actions(item.id)
+            if not resolved:
+                return
+            _, action_type = resolved
+            retaliation = action_type(context.session, entity, item)
+            retaliation.target = thrower
+            await retaliation.execute()
+            # Whatever the retaliation charged internally is folded back in -- the only
+            # net cost for the whole steal+retaliate is the flat STEAL_ENERGY_COST above.
+            entity.energy = min(max(energy_before - STEAL_ENERGY_COST, 0), entity.max_energy)
 
         @RegisterEvent(session_id, event=PostTickGameEvent)
         async def molotov_buff_tick(context: EventContext[PostTickGameEvent]):
@@ -117,7 +135,7 @@ class AluminiumBat(MeleeWeapon):
                                     source_id=entity_id, target_id=entity_id)
 
         @RegisterEvent(session_id, event=PostUpdateActionsGameEvent)
-        async def add_self_cast_actions(context: EventContext[PostUpdateActionsGameEvent]):
+        async def add_quick_throw_actions(context: EventContext[PostUpdateActionsGameEvent]):
             if context.event.entity_id != entity_id:
                 return
             entity = context.session.get_entity(entity_id)
@@ -127,56 +145,22 @@ class AluminiumBat(MeleeWeapon):
             if entity_actions is None:
                 return
             for item in entity.items:
-                if item.id not in SELF_CAST_GRENADE_IDS:
+                if item.id not in QUICK_THROW_GRENADE_IDS:
                     continue
                 resolved = context.action_manager.get_action_from_all_actions(item.id)
                 if not resolved:
                     continue
                 _, action_type = resolved
-                variant = get_self_cast_variant(action_type)
+                variant = get_quick_throw_variant(action_type)
                 entity_actions.append(variant(context.session, entity, item))
 
-    def register_block(self, session: Session, thrower: Entity, wielder: Entity, item_id: str):
-        """
-        Reactively intercepts the next PostDamageGameEvent from `thrower` landing on
-        `wielder` this turn, zeroing it and applying the same effect to a random enemy
-        of the wielder instead. Used for both enemy throws and self-casts (where
-        thrower is wielder).
-        """
-        already_blocked = False
-
-        @At(session.id, turn=session.turn, event=PostDamageGameEvent,
-            filters=[lambda event: event.source == thrower and event.target == wielder])
-        async def block_hit(context: EventContext[PostDamageGameEvent]):
-            nonlocal already_blocked
-            if already_blocked or not context.event.damage:
-                return
-            already_blocked = True
-
-            blocked_amount = context.event.damage
-            context.event.damage = 0
-
-            enemies = filter_targets(wielder, Enemies(), context.session.entities)
-            if not enemies:
-                return
-
-            wielder.energy = max(wielder.energy - BLOCK_ENERGY_COST, 0)
-            redirect_target = random.choice(enemies)
-
-            if item_id == 'mucus_in_the_bottle':
-                if not isinstance(redirect_target, Slime):
-                    removed_armor = redirect_target.get_state(Armor).remove_one()
-                    corrosive_mucus = redirect_target.get_state(CorrosiveMucus)
-                    if removed_armor:
-                        corrosive_mucus.removed_armor.append(removed_armor)
-                    corrosive_mucus.corrosive_mucus -= 1
-                    corrosive_mucus.active = True
-            else:
-                redirect_target.inbound_dmg.add(wielder, blocked_amount, context.session.turn)
-
-            context.session.say(
-                ls("deluxe.weapon.aluminium_bat.block_redirect").format(wielder.name, redirect_target.name),
-                source_id=wielder.id, target_id=redirect_target.id)
+    def apply_molotov_buff(self, session: Session, entity: Entity):
+        self.molotov_buff_expires_turn = session.turn + MOLOTOV_BUFF_DURATION
+        if not self.molotov_buff_active:
+            self.molotov_buff_active = True
+            self.damage_bonus += MOLOTOV_BUFF_DAMAGE
+        session.say(ls("deluxe.weapon.aluminium_bat.molotov_buff").format(entity.name),
+                    source_id=entity.id, target_id=entity.id)
 
 
 @AttachedAction(AluminiumBat)
