@@ -1,35 +1,36 @@
 from VegansDeluxe.core import ls, Entity
 from VegansDeluxe.matchmakery.Events.MatchEvents import DisplayItemChoiceEvent
+from VegansDeluxe.rebuild.Matches.BasicMatch import BasicMatch
 
 import DeluxeMod.content
 from DeluxeMod.Entities.Cow import Cow
-from DeluxeMod.Matches.BasicMatch import BasicMatch
 from DeluxeMod.Weapons.Akuruka import Akuruka
 
 
 class TestGameMatch(BasicMatch):
     name = ls("deluxe.matches.test_game")
+    description = ls("deluxe.matches.test_game.description")
 
     def __init__(self, chat_id, engine):
         super().__init__(chat_id, engine)
 
-        self.weapon_pool = DeluxeMod.content.all_weapons + [Akuruka]
+        self.weapon_pool = DeluxeMod.content.deluxe_mod.weapons + [Akuruka]
 
-        self.skill_choice_window = len(DeluxeMod.content.all_skills)
+        self.skill_choice_window = len(DeluxeMod.content.deluxe_mod.skills)
         self.weapon_choice_window = len(self.weapon_pool)
 
     async def init_async(self):
         await super().init_async()
         cow = Cow(self.id)
         self.session.attach_entity(cow)
-        await self.engine.attach_states(cow, DeluxeMod.content.all_states)
+        await self.engine.attach_states(cow, DeluxeMod.content.deluxe_mod.states)
 
     def player_skill_pool(self, player: Entity):
         return self.skill_pool
 
     async def distribute_starting_items(self):
         for player in self.session.entities:
-            for item_type in DeluxeMod.content.all_items:
+            for item_type in DeluxeMod.content.deluxe_mod.items:
                 item = item_type()
                 for _ in range(100):
                     player.items.append(item)

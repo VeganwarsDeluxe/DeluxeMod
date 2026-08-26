@@ -1,13 +1,13 @@
 from VegansDeluxe.core import ls
-from VegansDeluxe.matchmakery.Matches.Match import Match
+from VegansDeluxe.rebuild.Matches.BasicMatch import BasicMatch
 
 import DeluxeMod.content
 from DeluxeMod.Entities.Android import Android
-from DeluxeMod.Matches.BasicMatch import BasicMatch
 
 
 class AndroidMatch(BasicMatch):
     name = ls("deluxe.matches.android")
+    description = ls("deluxe.matches.android.description")
 
     def __init__(self, chat_id, engine):
         super().__init__(chat_id, engine)

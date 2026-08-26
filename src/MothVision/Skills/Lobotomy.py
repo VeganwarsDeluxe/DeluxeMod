@@ -4,13 +4,13 @@ from VegansDeluxe.core import StateContext
 from VegansDeluxe.core.Skills.Skill import Skill
 from VegansDeluxe.core.Translator.LocalizedString import ls
 
-from DeluxeMod.Items.Needle import Needle
+from MothVision.Items.Needle import Needle
 
 
 class Lobotomy(Skill):
     id = 'lobotomy'
-    name = ls("deluxe.skill.lobotomy.name")
-    description = ls("deluxe.skill.lobotomy.description")
+    name = ls("moth_vision.skill.lobotomy.name")
+    description = ls("moth_vision.skill.lobotomy.description")
 
 
 @RegisterState(Lobotomy)

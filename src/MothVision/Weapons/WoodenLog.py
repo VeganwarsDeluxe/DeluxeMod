@@ -11,8 +11,8 @@ KNOCK_SELF_ON_MISS_CHANCE = 50
 @RegisterWeapon
 class WoodenLog(MeleeWeapon):
     id = 'wooden_log'
-    name = ls("deluxe.weapon.wooden_log.name")
-    description = ls("deluxe.weapon.wooden_log.description")
+    name = ls("moth_vision.weapon.wooden_log.name")
+    description = ls("moth_vision.weapon.wooden_log.description")
 
     cubes = 4
     accuracy_bonus = 0
@@ -28,12 +28,12 @@ class WoodenLogAttack(MeleeAttack):
         if damage:
             if percentage_chance(KNOCK_TARGET_CHANCE):
                 target.get_state(Knockdown).active = True
-                self.session.say(ls("deluxe.weapon.wooden_log.knockdown").format(source.name, target.name),
+                self.session.say(ls("moth_vision.weapon.wooden_log.knockdown").format(source.name, target.name),
                                  source_id=source.id, target_id=target.id)
         else:
             if percentage_chance(KNOCK_SELF_ON_MISS_CHANCE):
                 source.get_state(Knockdown).active = True
-                self.session.say(ls("deluxe.weapon.wooden_log.stumble").format(source.name),
+                self.session.say(ls("moth_vision.weapon.wooden_log.stumble").format(source.name),
                                  source_id=source.id, target_id=source.id)
 
         return damage

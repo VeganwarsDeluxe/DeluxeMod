@@ -14,8 +14,8 @@ MAX_STUN = 10
 
 class ClockODestiny(Skill):
     id = 'clock_o_destiny'
-    name = ls("deluxe.skill.clock_o_destiny.name")
-    description = ls("deluxe.skill.clock_o_destiny.description")
+    name = ls("moth_vision.skill.clock_o_destiny.name")
+    description = ls("moth_vision.skill.clock_o_destiny.description")
 
     def __init__(self):
         super().__init__()
@@ -30,7 +30,7 @@ async def register(root_context: StateContext[ClockODestiny]):
 @AttachedAction(ClockODestiny)
 class ClockODestinyAction(DecisiveAction):
     id = 'clock_o_destiny'
-    name = ls("deluxe.skill.clock_o_destiny.action.name")
+    name = ls("moth_vision.skill.clock_o_destiny.action.name")
     target_type = SelfOnly()
 
     def __init__(self, session: Session, source, state: ClockODestiny):
@@ -48,5 +48,5 @@ class ClockODestinyAction(DecisiveAction):
         for entity in self.session.alive_entities:
             entity.get_state(Stun).stun += duration
 
-        self.session.say(ls("deluxe.skill.clock_o_destiny.text").format(source.name, duration),
+        self.session.say(ls("moth_vision.skill.clock_o_destiny.text").format(source.name, duration),
                          source_id=source.id, target_id=source.id)

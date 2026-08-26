@@ -17,8 +17,8 @@ EGO_ARMOR = 2
 @RegisterWeapon
 class Mimicry(MeleeWeapon):
     id = 'mimicry'
-    name = ls("deluxe.weapon.mimicry.name")
-    description = ls("deluxe.weapon.mimicry.description")
+    name = ls("moth_vision.weapon.mimicry.name")
+    description = ls("moth_vision.weapon.mimicry.description")
 
     cubes = 2
     accuracy_bonus = 2
@@ -54,7 +54,7 @@ class Mimicry(MeleeWeapon):
                 self.ego_expires_turn = 0
                 self.ego_armor = None
                 if entity:
-                    context.session.say(ls("deluxe.weapon.mimicry.ego_end").format(entity.name),
+                    context.session.say(ls("moth_vision.weapon.mimicry.ego_end").format(entity.name),
                                         source_id=entity_id, target_id=entity_id)
 
         @RegisterEvent(session_id, event=HPLossGameEvent)
@@ -83,7 +83,7 @@ class Mimicry(MeleeWeapon):
         self.hit_count += 1
         if self.hit_count % 3 == 0:
             target.get_state(Knockdown).active = True
-            session.say(ls("deluxe.weapon.mimicry.knockdown").format(source.name, target.name, self.hit_count),
+            session.say(ls("moth_vision.weapon.mimicry.knockdown").format(source.name, target.name, self.hit_count),
                         source_id=source.id, target_id=target.id)
             if percentage_chance(25):
                 target.get_state(Bleeding).active = True
@@ -111,7 +111,7 @@ def self_stun(session: Session, source: Entity, turns: int):
 @AttachedAction(Mimicry)
 class Onrush(Attack):
     id = 'onrush'
-    name = ls("deluxe.weapon.mimicry.onrush.name")
+    name = ls("moth_vision.weapon.mimicry.onrush.name")
     target_type = Enemies()
 
     def __init__(self, session: Session, source: Entity, weapon: Mimicry):
@@ -137,9 +137,9 @@ class Onrush(Attack):
     def send_attack_message(self, source: Entity, target: Entity, damage: int):
         target_name = self.SELF_TARGET_NAME if source == target else target.name
         if damage:
-            message = ls("deluxe.weapon.mimicry.onrush.hit").format(source.name, target_name, damage)
+            message = ls("moth_vision.weapon.mimicry.onrush.hit").format(source.name, target_name, damage)
         else:
-            message = ls("deluxe.weapon.mimicry.onrush.miss").format(source.name, target_name)
+            message = ls("moth_vision.weapon.mimicry.onrush.miss").format(source.name, target_name)
         self.session.say(message, source_id=source.id, target_id=target.id)
 
     async def func(self, source: Entity, target: Entity):
@@ -161,7 +161,7 @@ class Onrush(Attack):
 @AttachedAction(Mimicry)
 class GreatSplitVertical(MeleeAttack):
     id = 'great_split_vertical'
-    name = ls("deluxe.weapon.mimicry.vertical.name")
+    name = ls("moth_vision.weapon.mimicry.vertical.name")
 
     def __init__(self, session: Session, source: Entity, weapon: Mimicry):
         super().__init__(session, source, weapon)
@@ -186,7 +186,7 @@ class GreatSplitVertical(MeleeAttack):
     async def func(self, source: Entity, target: Entity):
         self.weapon.vertical_cooldown_turn = self.session.turn + 5
 
-        self.session.say(ls("deluxe.weapon.mimicry.vertical.charge").format(source.name, target.name),
+        self.session.say(ls("moth_vision.weapon.mimicry.vertical.charge").format(source.name, target.name),
                          source_id=source.id, target_id=target.id)
         self_stun(self.session, source, 1)
 
@@ -207,7 +207,7 @@ class GreatSplitVertical(MeleeAttack):
 @AttachedAction(Mimicry)
 class EGO(DecisiveAction):
     id = 'ego'
-    name = ls("deluxe.weapon.mimicry.ego.name")
+    name = ls("moth_vision.weapon.mimicry.ego.name")
     target_type = SelfOnly()
 
     def __init__(self, session: Session, source: Entity, weapon: Mimicry):
@@ -231,14 +231,14 @@ class EGO(DecisiveAction):
         armor_state.add(*self.weapon.ego_armor)
         self.weapon.ego_expires_turn = self.session.turn + EGO_DURATION
 
-        self.session.say(ls("deluxe.weapon.mimicry.ego.text").format(source.name),
+        self.session.say(ls("moth_vision.weapon.mimicry.ego.text").format(source.name),
                          source_id=source.id, target_id=source.id)
 
 
 @AttachedAction(Mimicry)
 class GreatSplitHorizontal(MeleeAttack):
     id = 'great_split_horizontal'
-    name = ls("deluxe.weapon.mimicry.horizontal.name")
+    name = ls("moth_vision.weapon.mimicry.horizontal.name")
 
     def __init__(self, session: Session, source: Entity, weapon: Mimicry):
         super().__init__(session, source, weapon)
@@ -272,11 +272,11 @@ class GreatSplitHorizontal(MeleeAttack):
         else:
             targets = random.sample(pool, min(2, len(pool))) if pool else []
 
-        self.session.say(ls("deluxe.weapon.mimicry.horizontal.charge").format(source.name),
+        self.session.say(ls("moth_vision.weapon.mimicry.horizontal.charge").format(source.name),
                          source_id=source.id, target_id=target.id)
         if targets:
             self.session.say(
-                ls("deluxe.weapon.mimicry.horizontal.warning").format(LocalizedList([t.name for t in targets])),
+                ls("moth_vision.weapon.mimicry.horizontal.warning").format(LocalizedList([t.name for t in targets])),
                 source_id=source.id, target_id=target.id)
         self_stun(self.session, source, 1)
 

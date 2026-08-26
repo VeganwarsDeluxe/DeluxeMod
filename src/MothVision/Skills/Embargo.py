@@ -7,8 +7,8 @@ from VegansDeluxe.core.Translator.LocalizedString import ls
 
 class Embargo(Skill):
     id = 'embargo'
-    name = ls("deluxe.skill.embargo.name")
-    description = ls("deluxe.skill.embargo.description")
+    name = ls("moth_vision.skill.embargo.name")
+    description = ls("moth_vision.skill.embargo.description")
 
     def __init__(self):
         super().__init__()
@@ -28,7 +28,7 @@ async def register(root_context: StateContext[Embargo]):
         action = context.event.action
         if action.source == source and ActionTag.ITEM in action.tags:
             state.used_item = True
-            session.say(ls("deluxe.skill.embargo.lifted").format(source.name),
+            session.say(ls("moth_vision.skill.embargo.lifted").format(source.name),
                         source_id=source.id, target_id=source.id)
 
     @RegisterEvent(session.id, event=PostUpdateActionsGameEvent)

@@ -11,8 +11,8 @@ STUN_DURATION = 5
 
 class Barbeque(Skill):
     id = 'barbeque'
-    name = ls("deluxe.skill.barbeque.name")
-    description = ls("deluxe.skill.barbeque.description")
+    name = ls("moth_vision.skill.barbeque.name")
+    description = ls("moth_vision.skill.barbeque.description")
 
     def __init__(self):
         super().__init__()
@@ -27,7 +27,7 @@ async def register(root_context):
 @AttachedAction(Barbeque)
 class BarbequeAction(DecisiveAction):
     id = 'barbeque'
-    name = ls("deluxe.skill.barbeque.action.name")
+    name = ls("moth_vision.skill.barbeque.action.name")
     target_type = Enemies()
 
     def __init__(self, session: Session, source: Entity, skill: Barbeque):
@@ -44,7 +44,7 @@ class BarbequeAction(DecisiveAction):
         source.get_state(Stun).stun += STUN_DURATION
         target.get_state(Stun).stun += STUN_DURATION
 
-        self.session.say(ls("deluxe.skill.barbeque.text").format(source.name, target.name),
+        self.session.say(ls("moth_vision.skill.barbeque.text").format(source.name, target.name),
                          source_id=source.id, target_id=target.id)
 
         for offset in range(1, STUN_DURATION + 1):
@@ -55,5 +55,5 @@ class BarbequeAction(DecisiveAction):
                         continue
                     entity.hp = min(entity.hp + 1, entity.max_hp)
                     entity.energy = min(entity.energy + 1, entity.max_energy)
-                    self.session.say(ls("deluxe.skill.barbeque.tick").format(entity.name),
+                    self.session.say(ls("moth_vision.skill.barbeque.tick").format(entity.name),
                                      source_id=entity.id, target_id=entity.id)

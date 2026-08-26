@@ -136,7 +136,7 @@ class AkurukaItems(InstantWeaponAction):
             return
         self.state.items_turn = self.session.turn
         self.state.timer = max(0, self.state.timer - 1)
-        items = [random.choice(DeluxeMod.content.all_items)() for _ in range(random.randint(1, 3))]
+        items = [random.choice(DeluxeMod.content.deluxe_mod.items)() for _ in range(random.randint(1, 3))]
         source.items.extend(items)
         self.session.say(ls('deluxe.weapon.akuruka.items.text').format(
             source.name, LocalizedList([item.name for item in items])), source_id=source.id, target_id=source.id)
@@ -161,7 +161,7 @@ class AkurukaWeapon(InstantWeaponAction):
         if self.hidden:
             return
         self.state.weapon_turn = self.session.turn
-        pool = [weapon for weapon in DeluxeMod.content.all_weapons if weapon is not Akuruka]
+        pool = [weapon for weapon in DeluxeMod.content.deluxe_mod.weapons if weapon is not Akuruka]
         new_weapon = random.choice(pool)(source.session_id, source.id)
         source.weapon = new_weapon
         self.session.say(ls('deluxe.weapon.akuruka.weapon.text').format(source.name, new_weapon.name),
@@ -186,7 +186,7 @@ class AkurukaPower(InstantWeaponAction):
     async def func(self, source: Entity, target: Entity):
         if self.hidden:
             return
-        skill_pool = [skill for skill in DeluxeMod.content.all_skills
+        skill_pool = [skill for skill in DeluxeMod.content.deluxe_mod.skills
                       if not any(state.id == skill.id for state in source.states)]
         if not skill_pool:
             return

@@ -1,11 +1,12 @@
 from VegansDeluxe.core import ls
+from VegansDeluxe.rebuild.Matches.BasicMatch import BasicMatch
 
-from DeluxeMod.Matches.BasicMatch import BasicMatch
 from DeluxeMod.Weapons.Akuruka import Akuruka
 
 
 class AkurukaMatch(BasicMatch):
     name = ls('deluxe.matches.akuruka')
+    description = ls('deluxe.matches.akuruka.description')
 
     def __init__(self, chat_id, engine):
         super().__init__(chat_id, engine)

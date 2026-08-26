@@ -3,14 +3,14 @@ from VegansDeluxe.core import MeleeAttack
 from VegansDeluxe.core.Translator.LocalizedString import ls
 from VegansDeluxe.core.Weapons.Weapon import MeleeWeapon
 
-from DeluxeMod.States.Combo import Combo
+from MothVision.States.Combo import Combo
 
 
 @RegisterWeapon
 class HandBandage(MeleeWeapon):
     id = 'hand_bandage'
-    name = ls("deluxe.weapon.hand_bandage.name")
-    description = ls("deluxe.weapon.hand_bandage.description")
+    name = ls("moth_vision.weapon.hand_bandage.name")
+    description = ls("moth_vision.weapon.hand_bandage.description")
 
     cubes = 3
     accuracy_bonus = 2
