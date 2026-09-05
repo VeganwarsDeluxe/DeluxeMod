@@ -1,13 +1,13 @@
 from VegansDeluxe.core import ls
-from VegansDeluxe.matchmakery.Matches.Match import Match
+from VegansDeluxe.rebuild.Matches.BasicMatch import BasicMatch
 
 import DeluxeMod.content
 from DeluxeMod.Entities.Elemental import Elemental
-from DeluxeMod.Matches.BasicMatch import BasicMatch
 
 
 class ElementalMatch(BasicMatch):
     name = ls("deluxe.matches.elemental")
+    description = ls("deluxe.matches.elemental.description")
 
     def __init__(self, chat_id, engine):
         super().__init__(chat_id, engine)
@@ -24,7 +24,7 @@ class ElementalMatch(BasicMatch):
         elemental = Elemental(self.id)
         self.elemental = elemental
         self.session.attach_entity(elemental)
-        await self.engine.attach_states(elemental, DeluxeMod.content.all_states)
+        await self.engine.attach_states(elemental, DeluxeMod.content.deluxe_module.states)
         await self.engine.attach_states(elemental, elemental.skill_pool)
         return player
 

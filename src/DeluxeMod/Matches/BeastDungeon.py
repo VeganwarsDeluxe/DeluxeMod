@@ -1,13 +1,13 @@
 from VegansDeluxe.core import ls
-from VegansDeluxe.matchmakery.Matches.Match import Match
+from VegansDeluxe.rebuild.Matches.BasicMatch import BasicMatch
 
 import DeluxeMod.content
 from DeluxeMod.Entities.Beast import Beast
-from DeluxeMod.Matches.BasicMatch import BasicMatch
 
 
 class BeastDungeon(BasicMatch):
     name = ls("deluxe.matches.beast")
+    description = ls("deluxe.matches.beast.description")
 
     def __init__(self, chat_id, engine):
         super().__init__(chat_id, engine)
@@ -21,5 +21,5 @@ class BeastDungeon(BasicMatch):
             self.beast_created = True
             beast = Beast(self.id)
             self.session.attach_entity(beast)
-            await self.engine.attach_states(beast, DeluxeMod.content.all_states)
+            await self.engine.attach_states(beast, DeluxeMod.content.deluxe_module.states)
         return player

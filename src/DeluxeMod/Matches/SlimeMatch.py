@@ -1,13 +1,13 @@
 from VegansDeluxe.core import ls
-from VegansDeluxe.matchmakery.Matches.Match import Match
+from VegansDeluxe.rebuild.Matches.BasicMatch import BasicMatch
 
 import DeluxeMod.content
 from DeluxeMod.Entities.Slime import Slime
-from DeluxeMod.Matches.BasicMatch import BasicMatch
 
 
 class SlimeMatch(BasicMatch):
     name = ls("deluxe.matches.slimes")
+    description = ls("deluxe.matches.slimes.description")
 
     def __init__(self, chat_id, engine):
         super().__init__(chat_id, engine)
@@ -23,5 +23,5 @@ class SlimeMatch(BasicMatch):
             self.slimes += 1
             slime = Slime(self.id, name=ls("deluxe.slime.number").format(self.slimes))
             self.session.attach_entity(slime)
-            await self.engine.attach_states(slime, DeluxeMod.content.all_states)
+            await self.engine.attach_states(slime, DeluxeMod.content.deluxe_module.states)
         return player

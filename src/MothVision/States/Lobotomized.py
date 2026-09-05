@@ -1,9 +1,9 @@
 import random
 
 from VegansDeluxe.core import Enemies
+from VegansDeluxe.core import Entity, Session
 from VegansDeluxe.core import ExecuteActionEvent, PostUpdateActionsGameEvent
 from VegansDeluxe.core import RegisterEvent, RegisterState
-from VegansDeluxe.core import Entity, Session
 from VegansDeluxe.core import State
 from VegansDeluxe.core import StateContext, EventContext
 from VegansDeluxe.core.Actions.Action import filter_targets

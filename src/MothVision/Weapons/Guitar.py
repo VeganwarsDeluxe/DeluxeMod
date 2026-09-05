@@ -11,8 +11,8 @@ FEEDBACK_COOLDOWN = 5
 @RegisterWeapon
 class Guitar(MeleeWeapon):
     id = 'guitar'
-    name = ls("deluxe.weapon.guitar.name")
-    description = ls("deluxe.weapon.guitar.description")
+    name = ls("moth_vision.weapon.guitar.name")
+    description = ls("moth_vision.weapon.guitar.description")
 
     cubes = 4
     accuracy_bonus = 2
@@ -32,7 +32,7 @@ class GuitarAttack(MeleeAttack):
 @AttachedAction(Guitar)
 class Feedback(DecisiveWeaponAction):
     id = 'feedback'
-    name = ls("deluxe.weapon.guitar.feedback.name")
+    name = ls("moth_vision.weapon.guitar.feedback.name")
     target_type = Enemies()
     priority = -4
 
@@ -53,7 +53,7 @@ class Feedback(DecisiveWeaponAction):
 
         source.energy = max(source.energy - FEEDBACK_ENERGY, 0)
 
-        self.session.say(ls("deluxe.weapon.guitar.feedback.text").format(source.name, target.name),
+        self.session.say(ls("moth_vision.weapon.guitar.feedback.text").format(source.name, target.name),
                          source_id=source.id, target_id=target.id)
 
         countered = False
@@ -81,8 +81,8 @@ class Feedback(DecisiveWeaponAction):
             context.event.damage = 0
 
             has_reflect = reflect_action_id and not target.dead
-            message_key = "deluxe.weapon.guitar.feedback.effect_reflect" if has_reflect \
-                else "deluxe.weapon.guitar.feedback.effect"
+            message_key = "moth_vision.weapon.guitar.feedback.effect_reflect" if has_reflect \
+                else "moth_vision.weapon.guitar.feedback.effect"
             self.session.say(ls(message_key).format(source.name, target.name),
                              source_id=source.id, target_id=target.id)
 

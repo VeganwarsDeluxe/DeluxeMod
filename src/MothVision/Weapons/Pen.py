@@ -6,8 +6,8 @@ from VegansDeluxe.core.Weapons.Weapon import MeleeWeapon
 @RegisterWeapon
 class Pen(MeleeWeapon):
     id = 'pen'
-    name = ls("deluxe.weapon.pen.name")
-    description = ls("deluxe.weapon.pen.description")
+    name = ls("moth_vision.weapon.pen.name")
+    description = ls("moth_vision.weapon.pen.description")
 
     cubes = 3
     accuracy_bonus = 2
@@ -36,7 +36,7 @@ class Pen(MeleeWeapon):
                     source.inbound_dmg.cancel(target)
                     source.energy = min(source.energy + self.energy_cost, source.max_energy)
                     self.proc_count += 1
-                    session.say(ls("deluxe.weapon.pen.text").format(source.name, target.name),
+                    session.say(ls("moth_vision.weapon.pen.text").format(source.name, target.name),
                                 source_id=source.id, target_id=target.id)
 
 

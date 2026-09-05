@@ -12,8 +12,8 @@ COOLDOWN = 5
 
 class FightOrFlight(Skill):
     id = 'fight_or_flight'
-    name = ls("deluxe.skill.fight_or_flight.name")
-    description = ls("deluxe.skill.fight_or_flight.description")
+    name = ls("moth_vision.skill.fight_or_flight.name")
+    description = ls("moth_vision.skill.fight_or_flight.description")
 
     def __init__(self):
         super().__init__()
@@ -28,7 +28,7 @@ async def register(root_context):
 @AttachedAction(FightOrFlight)
 class FightOrFlightAction(DecisiveAction):
     id = 'fight_or_flight'
-    name = ls("deluxe.skill.fight_or_flight.action.name")
+    name = ls("moth_vision.skill.fight_or_flight.action.name")
     target_type = Enemies()
     priority = -6
 
@@ -47,7 +47,7 @@ class FightOrFlightAction(DecisiveAction):
     async def func(self, source: Entity, target: Entity):
         self.skill.cooldown_turn = self.session.turn + COOLDOWN
         source.energy = max(source.energy - 1, 0)
-        self.session.say(ls("deluxe.skill.fight_or_flight.text").format(source.name, target.name),
+        self.session.say(ls("moth_vision.skill.fight_or_flight.text").format(source.name, target.name),
                          source_id=source.id, target_id=target.id)
 
         @At(self.session.id, turn=self.session.turn, event=ExecuteActionEvent, priority=-10)
@@ -69,7 +69,7 @@ class FightOrFlightAction(DecisiveAction):
                 else:
                     source.energy = max(source.energy - WEAK_ROLL_ENERGY, 0)
                     source.inbound_accuracy_bonus -= WEAK_ROLL_ACCURACY_PENALTY
-                    self.session.say(ls("deluxe.skill.fight_or_flight.weak_roll").format(source.name),
+                    self.session.say(ls("moth_vision.skill.fight_or_flight.weak_roll").format(source.name),
                                      source_id=source.id, target_id=source.id)
             else:
                 @Next(self.session.id, event=PostActionsGameEvent)

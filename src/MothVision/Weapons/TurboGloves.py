@@ -1,7 +1,7 @@
-from VegansDeluxe.core import ActionTag, Allies, At, AttachedAction, DecisiveWeaponAction, Entity, EventContext, \
-    MeleeAttack, PostAttackGameEvent, PostDamageGameEvent, PostDamagesGameEvent, PostTickGameEvent, \
-    PreActionsGameEvent, PreDamagesGameEvent, PreMoveGameEvent, RegisterEvent, RegisterWeapon, Session, \
-    per_cubes, percentage_chance
+from VegansDeluxe.core import ActionTag, Allies, At, AttachedAction, DecisiveWeaponAction, Enemies, Entity, \
+    EventContext, MeleeAttack, PostAttackGameEvent, PostDamageGameEvent, PostDamagesGameEvent, PostTickGameEvent, \
+    PostUpdateActionsGameEvent, PreActionsGameEvent, PreDamagesGameEvent, PreMoveGameEvent, RegisterEvent, \
+    RegisterWeapon, Session, per_cubes, percentage_chance
 from VegansDeluxe.core.Translator.LocalizedString import ls
 from VegansDeluxe.core.Weapons.Weapon import MeleeWeapon
 from VegansDeluxe.rebuild import Stun
@@ -14,6 +14,7 @@ UPPERCUT_ENERGY = 1
 BARRAGE_ENERGY = 1
 STUN_CHANCE_PER_STACK = 10
 BLOCK_ENERGY_REWARD = 2
+CHARGE_COOLDOWN = 4
 
 
 def delayed_stun(session: Session, entity: Entity, turns: int):
@@ -25,8 +26,8 @@ def delayed_stun(session: Session, entity: Entity, turns: int):
 @RegisterWeapon
 class TurboGloves(MeleeWeapon):
     id = 'turbo_gloves'
-    name = ls("deluxe.weapon.turbo_gloves.name")
-    description = ls("deluxe.weapon.turbo_gloves.description")
+    name = ls("moth_vision.weapon.turbo_gloves.name")
+    description = ls("moth_vision.weapon.turbo_gloves.description")
 
     cubes = BASE_CUBES
     accuracy_bonus = 2
@@ -42,6 +43,7 @@ class TurboGloves(MeleeWeapon):
 
         self.uppercut_cooldown_turn = 0
         self.barrage_cooldown_turn = 0
+        self.charge_cooldown_turn = 0
 
         @RegisterEvent(session_id, event=PreActionsGameEvent)
         async def apply_combo_bonus(context: EventContext[PreActionsGameEvent]):
@@ -74,7 +76,7 @@ class TurboGloves(MeleeWeapon):
                     self.applied_bonus = 0
                     self.boosted_weapon = None
                 context.session.say(
-                    ls("deluxe.weapon.turbo_gloves.combo_end").format(entity.name, self.combo_stacks),
+                    ls("moth_vision.weapon.turbo_gloves.combo_end").format(entity.name, self.combo_stacks),
                     source_id=entity_id, target_id=entity_id)
                 self.combo_stacks = 0
 
@@ -91,16 +93,27 @@ class TurboGloves(MeleeWeapon):
             if entity and not entity.dead:
                 self.trigger_combo(context.session, entity)
 
+        @RegisterEvent(session_id, event=PostUpdateActionsGameEvent)
+        async def hide_approach(context: EventContext[PostUpdateActionsGameEvent]):
+            if context.event.entity_id != entity_id:
+                return
+            entity = context.session.get_entity(entity_id)
+            if not entity or entity.weapon is not self:
+                return
+            entity_actions = context.action_manager.actions.get((context.session, entity))
+            if entity_actions:
+                entity_actions[:] = [action for action in entity_actions if action.id != 'approach']
+
     def trigger_combo(self, session: Session, source: Entity):
         was_active = self.combo_duration > 0
         self.combo_stacks += 1
         self.combo_duration = COMBO_DURATION
 
         if was_active:
-            session.say(ls("deluxe.weapon.turbo_gloves.combo_continue").format(source.name, self.combo_stacks),
+            session.say(ls("moth_vision.weapon.turbo_gloves.combo_continue").format(source.name, self.combo_stacks),
                         source_id=source.id, target_id=source.id)
         else:
-            session.say(ls("deluxe.weapon.turbo_gloves.combo_start").format(source.name),
+            session.say(ls("moth_vision.weapon.turbo_gloves.combo_start").format(source.name),
                         source_id=source.id, target_id=source.id)
 
 
@@ -123,7 +136,7 @@ class TurboGlovesAttack(MeleeAttack):
             async def check_reload(context: EventContext[PreDamagesGameEvent]):
                 for action in context.action_manager.get_queued_entity_actions(self.session, target):
                     if ActionTag.RELOAD in action.tags:
-                        self.session.say(ls("deluxe.weapon.turbo_gloves.reload_punish").format(target.name),
+                        self.session.say(ls("moth_vision.weapon.turbo_gloves.reload_punish").format(target.name),
                                          source_id=source.id, target_id=target.id)
                         target.energy = max(target.energy - RELOAD_ENERGY_DRAIN, 0)
                         break
@@ -134,7 +147,7 @@ class TurboGlovesAttack(MeleeAttack):
 @AttachedAction(TurboGloves)
 class Uppercut(MeleeAttack):
     id = 'uppercut'
-    name = ls("deluxe.weapon.turbo_gloves.uppercut.name")
+    name = ls("moth_vision.weapon.turbo_gloves.uppercut.name")
 
     def __init__(self, session: Session, source: Entity, weapon: TurboGloves):
         super().__init__(session, source, weapon)
@@ -166,7 +179,7 @@ class Uppercut(MeleeAttack):
         damage = (await self.attack(source, target, energy_cost=UPPERCUT_ENERGY)).dealt
         if damage and stacks and percentage_chance(min(100, STUN_CHANCE_PER_STACK * stacks)):
             delayed_stun(self.session, target, 1)
-            self.session.say(ls("deluxe.weapon.turbo_gloves.uppercut.stun").format(source.name, target.name),
+            self.session.say(ls("moth_vision.weapon.turbo_gloves.uppercut.stun").format(source.name, target.name),
                              source_id=source.id, target_id=target.id)
 
         return damage
@@ -175,7 +188,7 @@ class Uppercut(MeleeAttack):
 @AttachedAction(TurboGloves)
 class PunchBarrage(MeleeAttack):
     id = 'punch_barrage'
-    name = ls("deluxe.weapon.turbo_gloves.barrage.name")
+    name = ls("moth_vision.weapon.turbo_gloves.barrage.name")
 
     def __init__(self, session: Session, source: Entity, weapon: TurboGloves):
         super().__init__(session, source, weapon)
@@ -206,7 +219,7 @@ class PunchBarrage(MeleeAttack):
         payment = await self.publish_energy_payment_event(source, BARRAGE_ENERGY)
         source.energy = max(source.energy - payment.energy_payment, 0)
 
-        self.session.say(ls("deluxe.weapon.turbo_gloves.barrage.text").format(source.name, target.name, punches),
+        self.session.say(ls("moth_vision.weapon.turbo_gloves.barrage.text").format(source.name, target.name, punches),
                          source_id=source.id, target_id=target.id)
 
         total = 0
@@ -222,7 +235,7 @@ class PunchBarrage(MeleeAttack):
 @AttachedAction(TurboGloves)
 class Block(DecisiveWeaponAction):
     id = 'block'
-    name = ls("deluxe.weapon.turbo_gloves.block.name")
+    name = ls("moth_vision.weapon.turbo_gloves.block.name")
     target_type = Allies()
     priority = -4
 
@@ -236,10 +249,10 @@ class Block(DecisiveWeaponAction):
 
     async def func(self, source, target):
         if target == source:
-            self.session.say(ls("deluxe.weapon.turbo_gloves.block.text").format(source.name),
+            self.session.say(ls("moth_vision.weapon.turbo_gloves.block.text").format(source.name),
                              source_id=source.id, target_id=target.id)
         else:
-            self.session.say(ls("deluxe.weapon.turbo_gloves.block.text_targeted").format(source.name, target.name),
+            self.session.say(ls("moth_vision.weapon.turbo_gloves.block.text_targeted").format(source.name, target.name),
                              source_id=source.id, target_id=target.id)
 
         blocked = False
@@ -252,7 +265,7 @@ class Block(DecisiveWeaponAction):
                 return
             blocked = True
             context.event.damage = 0
-            self.session.say(ls("deluxe.weapon.turbo_gloves.block.effect").format(target.name),
+            self.session.say(ls("moth_vision.weapon.turbo_gloves.block.effect").format(target.name),
                              source_id=source.id, target_id=target.id)
             self.weapon.trigger_combo(self.session, source)
             target.energy = min(target.energy + BLOCK_ENERGY_REWARD, target.max_energy)
@@ -263,5 +276,36 @@ class Block(DecisiveWeaponAction):
                 return
             self.weapon.combo_stacks = 0
             self.weapon.combo_duration = 0
-            self.session.say(ls("deluxe.weapon.turbo_gloves.block.vain").format(source.name),
+            self.session.say(ls("moth_vision.weapon.turbo_gloves.block.vain").format(source.name),
                              source_id=source.id, target_id=target.id)
+
+
+@AttachedAction(TurboGloves)
+class Charge(MeleeAttack):
+    id = 'charge'
+    name = ls("deluxe.weapon.turbo_gloves.charge.name")
+    target_type = Enemies()
+
+    def __init__(self, session: Session, source: Entity, weapon: TurboGloves):
+        super().__init__(session, source, weapon)
+        self.weapon: TurboGloves = weapon
+
+    @property
+    def hidden(self) -> bool:
+        return self.session.turn < self.weapon.charge_cooldown_turn
+
+    async def func(self, source, target):
+        self.weapon.charge_cooldown_turn = self.session.turn + CHARGE_COOLDOWN
+        self.weapon.last_target = target
+
+        if target not in source.nearby_entities:
+            source.nearby_entities = list(set(source.nearby_entities + [target]))
+            target.nearby_entities = list(set(target.nearby_entities + [source]))
+
+        self.session.say(ls("deluxe.weapon.turbo_gloves.charge.text").format(source.name, target.name),
+                         source_id=source.id, target_id=target.id)
+
+        damage = (await self.attack(source, target)).dealt
+        if damage:
+            self.weapon.trigger_combo(self.session, source)
+        return damage

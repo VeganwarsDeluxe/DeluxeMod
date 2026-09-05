@@ -25,8 +25,8 @@ class Elemental(NPC):
         self.energy = 7
         self.max_energy = 7
 
-        self.items = [item() for item in content.all_items]
-        self.skill_pool = content.all_skills.copy()
+        self.items = [item() for item in content.deluxe_module.items]
+        self.skill_pool = list(content.deluxe_module.skills)
         self.skill_pool.remove(content.Weaponsmith)
         #TODO: Gotta fix it.
 
@@ -72,7 +72,7 @@ class Elemental(NPC):
             elemental.anger = self.anger
             elemental.team = self.team
             session.attach_entity(elemental)
-            for state in content.all_states:
+            for state in content.deluxe_module.states:
                 state_instance = state()
                 await elemental.attach_state(state_instance, session.event_manager)
                 elemental.states.append(state_instance)
@@ -83,7 +83,7 @@ class Elemental(NPC):
 
     async def choose_act(self, session, action_manager):
         await super().choose_act(session, action_manager)
-        self.weapon = random.choice(content.all_weapons)(session.id, self.id)
+        self.weapon = random.choice(content.deluxe_module.weapons)(session.id, self.id)
         await action_manager.update_entity_actions(session, self)
 
         cost = False

@@ -9,8 +9,8 @@ COOLDOWN = 3
 @RegisterWeapon
 class ChainedDagger(MeleeWeapon):
     id = 'chained_dagger'
-    name = ls("deluxe.weapon.chained_dagger.name")
-    description = ls("deluxe.weapon.chained_dagger.description")
+    name = ls("moth_vision.weapon.chained_dagger.name")
+    description = ls("moth_vision.weapon.chained_dagger.description")
 
     cubes = 3
     accuracy_bonus = 2
@@ -30,7 +30,7 @@ class ChainedDaggerAttack(MeleeAttack):
 @AttachedAction(ChainedDagger)
 class SwapWeapon(Attack):
     id = 'swap_weapon'
-    name = ls("deluxe.weapon.chained_dagger.action.name")
+    name = ls("moth_vision.weapon.chained_dagger.action.name")
     priority = -1
     target_type = Enemies()
 
@@ -46,7 +46,7 @@ class SwapWeapon(Attack):
             self.weapon.cooldown_turn = self.session.turn + COOLDOWN
             damage = await self.attack(source, target)
             if not damage.calculated:
-                self.session.say(ls("deluxe.weapon.chained_dagger.action_miss").format(source.name, target.name),
+                self.session.say(ls("moth_vision.weapon.chained_dagger.action_miss").format(source.name, target.name),
                                  source_id=source.id, target_id=target.id)
                 return
 
@@ -56,13 +56,13 @@ class SwapWeapon(Attack):
                     target_reloading = True
 
             if target_reloading or percentage_chance(passive_chance(target)):
-                self.session.say(ls("deluxe.weapon.chained_dagger.action.text").format(source.name, target.name),
+                self.session.say(ls("moth_vision.weapon.chained_dagger.action.text").format(source.name, target.name),
                                  source_id=source.id, target_id=target.id)
                 source.weapon, target.weapon = target.weapon, source.weapon
                 await action_manager.update_entity_actions(self.session, source)
                 await action_manager.update_entity_actions(self.session, target)
             else:
-                self.session.say(ls("deluxe.weapon.chained_dagger.action_miss").format(source.name, target.name),
+                self.session.say(ls("moth_vision.weapon.chained_dagger.action_miss").format(source.name, target.name),
                                  source_id=source.id, target_id=target.id)
 
         await self.event_manager.publish(DeliveryRequestEvent(self.session.id, self.session.turn))

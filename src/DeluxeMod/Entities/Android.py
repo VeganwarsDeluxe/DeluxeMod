@@ -3,6 +3,7 @@ import random
 from VegansDeluxe import rebuild
 from VegansDeluxe.core import AttachedAction, Session, ls, percentage_chance, Action, Enemies, Distance, ActionTag
 from VegansDeluxe.core.Actions.Action import filter_targets
+from VegansDeluxe.core.Actions.EntityActions import ReloadAction, SkipTurnAction, ApproachAction
 from VegansDeluxe.core.Entities import Entity
 from VegansDeluxe.matchmakery.Entities.NPC import NPC
 from VegansDeluxe.rebuild import Bleeding, ZombieState, Stun, DroppedWeapon, ThrowingKnife, Berserk, \
@@ -30,15 +31,14 @@ from VegansDeluxe.rebuild.Weapons.Shaft import KnockDown
 from VegansDeluxe.rebuild.Weapons.Sledgehammer import SledgehammerCrush
 from VegansDeluxe.rebuild.Weapons.Spear import CounterAttack
 
-from VegansDeluxe.core.Actions.EntityActions import ReloadAction, SkipTurnAction, ApproachAction
 from ..Skills.Dash import Dash, DashAction
 from ..Skills.ExplosionMagic import Explosion
 
 
 class Android(NPC):
-    weapon_pool = rebuild.all_weapons
-    item_pool = rebuild.game_items_pool
-    skill_pool = rebuild.all_skills
+    weapon_pool = rebuild.rebuild_module.weapons
+    item_pool = rebuild.rebuild_module.extra["game_items_pool"]
+    skill_pool = rebuild.rebuild_module.skills
 
     def __init__(self, session_id: str, name=ls("🤖|Android")):
         # TODO: Localization

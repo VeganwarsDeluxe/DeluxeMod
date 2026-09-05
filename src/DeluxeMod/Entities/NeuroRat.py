@@ -3,9 +3,9 @@ import random
 from VegansDeluxe.core import AttachedAction, ls
 from VegansDeluxe.core import SelfOnly
 from VegansDeluxe.core.Actions.Action import DecisiveAction
+from VegansDeluxe.matchmakery.Entities.NPC import NPC
 
 import DeluxeMod.content as content
-from VegansDeluxe.matchmakery.Entities.NPC import NPC
 
 
 class NeuroRat(NPC):
@@ -18,7 +18,7 @@ class NeuroRat(NPC):
         # else:
         #    self.battle_ai = BattleAI(engine, ai_id=rat_id)
 
-        self.weapon = random.choice(content.all_weapons)(self.session_id, self.id)
+        self.weapon = random.choice(content.deluxe_module.weapons)(self.session_id, self.id)
 
         self.hp = 4
         self.max_hp = 4
@@ -32,8 +32,8 @@ class NeuroRat(NPC):
     def choose_items(self):
         given = []
         for _ in range(2):
-            item = random.choice(content.game_items_pool)()
-            pool = list(filter(lambda i: i.id not in given, content.game_items_pool))
+            item = random.choice(content.deluxe_module.extra["game_items_pool"])()
+            pool = list(filter(lambda i: i.id not in given, content.deluxe_module.extra["game_items_pool"]))
             if pool:
                 item = random.choice(pool)()
             given.append(item.id)
@@ -42,8 +42,8 @@ class NeuroRat(NPC):
     def choose_skills(self):
         given = []
         for _ in range(2):
-            skill = random.choice(content.all_skills)()
-            pool = list(filter(lambda i: i.id not in given, content.all_skills))
+            skill = random.choice(content.deluxe_module.skills)()
+            pool = list(filter(lambda i: i.id not in given, content.deluxe_module.skills))
             if pool:
                 skill = random.choice(pool)()
             given.append(skill.id)

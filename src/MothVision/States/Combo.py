@@ -1,6 +1,6 @@
+from VegansDeluxe.core import Entity, Session
 from VegansDeluxe.core import PostTickGameEvent, PreActionsGameEvent
 from VegansDeluxe.core import RegisterEvent, RegisterState
-from VegansDeluxe.core import Entity, Session
 from VegansDeluxe.core import State
 from VegansDeluxe.core import StateContext, EventContext
 from VegansDeluxe.core.Translator.LocalizedString import ls
@@ -24,10 +24,10 @@ class Combo(State):
         self.duration = COMBO_DURATION
 
         if was_active:
-            session.say(ls("deluxe.state.combo.continue").format(source.name, self.stacks),
+            session.say(ls("moth_vision.state.combo.continue").format(source.name, self.stacks),
                         source_id=source.id, target_id=source.id)
         else:
-            session.say(ls("deluxe.state.combo.start").format(source.name),
+            session.say(ls("moth_vision.state.combo.start").format(source.name),
                         source_id=source.id, target_id=source.id)
 
     @property
@@ -70,6 +70,6 @@ async def register(root_context: StateContext[Combo]):
 
         if state.duration <= 0:
             state.revert_bonus()
-            session.say(ls("deluxe.state.combo.end").format(source.name, state.stacks),
+            session.say(ls("moth_vision.state.combo.end").format(source.name, state.stacks),
                         source_id=source.id, target_id=source.id)
             state.stacks = 0
