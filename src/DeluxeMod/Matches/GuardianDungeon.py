@@ -21,5 +21,5 @@ class GuardianDungeon(BasicMatch):
             self.guardian_created = True
             guardian = Guardian(self.id)
             self.session.attach_entity(guardian)
-            await self.engine.attach_states(guardian, DeluxeMod.content.deluxe_mod.states)
+            await self.engine.attach_states(guardian, DeluxeMod.content.deluxe_module.states)
         return player

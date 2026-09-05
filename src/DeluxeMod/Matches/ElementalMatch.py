@@ -24,7 +24,7 @@ class ElementalMatch(BasicMatch):
         elemental = Elemental(self.id)
         self.elemental = elemental
         self.session.attach_entity(elemental)
-        await self.engine.attach_states(elemental, DeluxeMod.content.deluxe_mod.states)
+        await self.engine.attach_states(elemental, DeluxeMod.content.deluxe_module.states)
         await self.engine.attach_states(elemental, elemental.skill_pool)
         return player
 

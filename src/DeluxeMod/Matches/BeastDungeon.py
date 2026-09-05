@@ -21,5 +21,5 @@ class BeastDungeon(BasicMatch):
             self.beast_created = True
             beast = Beast(self.id)
             self.session.attach_entity(beast)
-            await self.engine.attach_states(beast, DeluxeMod.content.deluxe_mod.states)
+            await self.engine.attach_states(beast, DeluxeMod.content.deluxe_module.states)
         return player

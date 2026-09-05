@@ -1,4 +1,6 @@
+from VegansDeluxe import ContentModule, register_content_module
 from VegansDeluxe.rebuild.Matches.BasicMatch import BasicMatch
+from VegansDeluxe.rebuild.Matches.TestGameMatch import TestGameMatch
 from VegansDeluxe.rebuild.Skills.Stockpile import Stockpile
 from VegansDeluxe.rebuild.Skills.Weaponsmith import Weaponsmith
 
@@ -17,7 +19,6 @@ from DeluxeMod.Matches.ElementalMatch import ElementalMatch
 from DeluxeMod.Matches.GuardianDungeon import GuardianDungeon
 from DeluxeMod.Matches.Room57 import Room57
 from DeluxeMod.Matches.SlimeMatch import SlimeMatch
-from DeluxeMod.Matches.TestGameMatch import TestGameMatch
 from DeluxeMod.Matches.TournierMatch import TournierMatch
 from DeluxeMod.Skills.Dash import Dash
 from DeluxeMod.Skills.Echo import Echo
@@ -70,3 +71,23 @@ all_matches = [AndroidMatch, BasicMatch, BeastDungeon, BotDungeon, ElementalMatc
 
 Stockpile.item_pool = Stockpile.item_pool + [CryoGrenade, EnergyGrenade, DeathGrenade]
 MagicMirror.form_pool = [weapon for weapon in all_weapons if weapon is not MagicMirror]
+
+deluxe_module = register_content_module(ContentModule(
+    id="deluxemod",
+    version="0.1.2",
+    requires=("rebuild",),
+    weapons=tuple(all_weapons),
+    states=tuple(all_states),
+    skills=tuple(all_skills),
+    items=tuple(all_items),
+    matches=tuple(all_matches),
+    extra={"game_items_pool": tuple(game_items_pool)},
+))
+
+# Specialized matches use DeluxeMod entities directly. Their dependencies are
+# expressed by the module itself rather than duplicated as string literals.
+for match in all_matches:
+    if match is not BasicMatch:
+        match.required_content_modules = frozenset(
+            {deluxe_module.id, *deluxe_module.requires}
+        )

@@ -14,7 +14,7 @@ class TournierMatch(BasicMatch):
     def __init__(self, chat_id, engine):
         super().__init__(chat_id, engine)
 
-        self.skill_pool = DeluxeMod.content.deluxe_mod.skills.copy()
+        self.skill_pool = list(DeluxeMod.content.deluxe_module.skills)
         self.skill_pool.remove(ExplosionMagic)
         self.skill_pool.remove(Heroism)
         self.skill_pool.remove(Necromancer)
