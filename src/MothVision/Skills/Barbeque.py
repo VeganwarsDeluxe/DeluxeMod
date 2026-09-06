@@ -5,7 +5,6 @@ from VegansDeluxe.core.Skills.Skill import Skill
 from VegansDeluxe.core.Translator.LocalizedString import ls
 from VegansDeluxe.rebuild import Stun
 
-COOLDOWN = 20
 STUN_DURATION = 5
 
 
@@ -16,7 +15,7 @@ class Barbeque(Skill):
 
     def __init__(self):
         super().__init__()
-        self.cooldown_turn = 0
+        self.used = False
 
 
 @RegisterState(Barbeque)
@@ -36,10 +35,10 @@ class BarbequeAction(DecisiveAction):
 
     @property
     def hidden(self) -> bool:
-        return self.session.turn < self.skill.cooldown_turn
+        return self.skill.used
 
     async def func(self, source: Entity, target: Entity):
-        self.skill.cooldown_turn = self.session.turn + COOLDOWN
+        self.skill.used = True
 
         source.get_state(Stun).stun += STUN_DURATION
         target.get_state(Stun).stun += STUN_DURATION

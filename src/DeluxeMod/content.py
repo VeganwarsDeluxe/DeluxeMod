@@ -20,6 +20,7 @@ from DeluxeMod.Matches.GuardianDungeon import GuardianDungeon
 from DeluxeMod.Matches.Room57 import Room57
 from DeluxeMod.Matches.SlimeMatch import SlimeMatch
 from DeluxeMod.Matches.TournierMatch import TournierMatch
+from DeluxeMod.Skills.ClassicSheath import ClassicSheath
 from DeluxeMod.Skills.Dash import Dash
 from DeluxeMod.Skills.Echo import Echo
 from DeluxeMod.Skills.ExplosionMagic import ExplosionMagic
@@ -38,19 +39,24 @@ from DeluxeMod.States.Mutilation import Mutilation
 from DeluxeMod.States.Regeneration import Regeneration
 from DeluxeMod.States.Weakness import Weakness
 from DeluxeMod.Weapons.AbyssalBlade import AbyssalBlade
+from DeluxeMod.Weapons.AluminiumBat import AluminiumBat
 from DeluxeMod.Weapons.Boomerang import Boomerang
+from DeluxeMod.Weapons.Briefcase import Briefcase
 from DeluxeMod.Weapons.ButterflyKnife import ButterflyKnife
 from DeluxeMod.Weapons.Chainsaw import Chainsaw
 from DeluxeMod.Weapons.CursedSword import CursedSword
 from DeluxeMod.Weapons.Dagger import Dagger
 from DeluxeMod.Weapons.ElectricWhip import ElectricWhip
 from DeluxeMod.Weapons.Emitter import Emitter
+from DeluxeMod.Weapons.FryingPan import FryingPan
 from DeluxeMod.Weapons.GrenadeLauncher import GrenadeLauncher
 from DeluxeMod.Weapons.Gunbai import Gunbai
 from DeluxeMod.Weapons.HellBow import HellBow
 from DeluxeMod.Weapons.Hook import Hook
+from DeluxeMod.Weapons.Horn import Horn
 from DeluxeMod.Weapons.MagicMirror import MagicMirror
 from DeluxeMod.Weapons.NeedleFan import NeedleFan
+from DeluxeMod.Weapons.Scalpel import Scalpel
 from DeluxeMod.Weapons.Shurikens import Shurikens
 from DeluxeMod.Weapons.StarBow import StarBow
 from DeluxeMod.Weapons.ThrowingSickles import ThrowingSickles
@@ -61,21 +67,25 @@ all_states = [Emptiness, Weakness, Hunger, Dehydration, Mutilation, Blindness, C
 all_items = [CryoGrenade, CaffeineCandy, SourCandy, SweetCandy, DeathGrenade, EnergyGrenade, MucusInTheBottle]
 all_weapons = [AbyssalBlade, Hook, HellBow, ElectricWhip, Tomahawk, CursedSword, GrenadeLauncher,
                Boomerang, Shurikens, NeedleFan, Emitter, Chainsaw, VampiricWhip, Dagger, StarBow,
-               MagicMirror, ButterflyKnife, ThrowingSickles, Gunbai]
-all_skills = [ExplosionMagic, SweetTooth, Echo, Tactician, Dash, Heroism, FinalBlow, Toad, Weaponsmith]
+               MagicMirror, ButterflyKnife, ThrowingSickles, Gunbai,
+               AluminiumBat, Horn, FryingPan, Briefcase, Scalpel]
+all_skills = [ExplosionMagic, SweetTooth, Echo, Tactician, Dash, Heroism, FinalBlow, Toad, Weaponsmith,
+              ClassicSheath]
 
 game_items_pool = [MucusInTheBottle]
 
 all_matches = [AndroidMatch, BasicMatch, BeastDungeon, BotDungeon, ElementalMatch, GuardianDungeon,
                Room57, SlimeMatch, TestGameMatch, TournierMatch, AkurukaMatch]
 
-Stockpile.item_pool = Stockpile.item_pool + [CryoGrenade, EnergyGrenade, DeathGrenade]
+# Death Grenade stays registered (still directly usable) but is kept out of the
+# random Stockpile/Flare grant pool -- see DeluxeMod.Items.DeathGrenade for why.
+Stockpile.item_pool = Stockpile.item_pool + [CryoGrenade, EnergyGrenade]
 MagicMirror.form_pool = [weapon for weapon in all_weapons if weapon is not MagicMirror]
 
 deluxe_module = register_content_module(ContentModule(
     id="deluxemod",
     version="0.1.2",
-    requires=("rebuild",),
+    requires=("rebuild", "mothvision"),
     weapons=tuple(all_weapons),
     states=tuple(all_states),
     skills=tuple(all_skills),

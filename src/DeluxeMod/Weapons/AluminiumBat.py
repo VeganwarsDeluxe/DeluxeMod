@@ -8,9 +8,9 @@ from VegansDeluxe.core.Weapons.Weapon import MeleeWeapon
 from VegansDeluxe.rebuild.States.Aflame import Aflame
 
 STEAL_ENERGY_COST = 2
-BLOCKED_GRENADE_IDS = {'grenade', 'mucus_in_the_bottle'}
+BLOCKED_GRENADE_IDS = {'grenade', 'mucus_in_the_bottle', 'flash_grenade'}
 QUICK_THROW_GRENADE_IDS = {'grenade', 'molotov', 'mucus_in_the_bottle', 'cryo_grenade', 'energy_grenade',
-                           'death_grenade'}
+                           'death_grenade', 'flash_grenade'}
 QUICK_THROW_ENERGY_COST = 3
 
 MOLOTOV_BUFF_DURATION = 2
@@ -32,6 +32,7 @@ def get_quick_throw_variant(action_type):
 
         class QuickThrowVariant(action_type):
             id = 'quick_throw_' + action_type.id
+            name = ls("deluxe.weapon.aluminium_bat.quick_throw_name").format(action_type.name)
             target_type = SelfOnly()
 
             @property

@@ -33,10 +33,12 @@ class Pen(MeleeWeapon):
                 received = sum(log.damage for log in source.inbound_dmg.damages if log.source == target)
 
                 if dealt and dealt == received:
-                    source.inbound_dmg.cancel(target)
-                    source.energy = min(source.energy + self.energy_cost, source.max_energy)
                     self.proc_count += 1
-                    session.say(ls("moth_vision.weapon.pen.text").format(source.name, target.name),
+                    if self.proc_count % 2 != 0:
+                        continue
+
+                    source.inbound_dmg.cancel(target)
+                    session.say(ls("moth_vision.weapon.pen.text").format(source.name),
                                 source_id=source.id, target_id=target.id)
 
 

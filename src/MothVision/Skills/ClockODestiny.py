@@ -7,7 +7,6 @@ from VegansDeluxe.core.Skills.Skill import Skill
 from VegansDeluxe.core.Translator.LocalizedString import ls
 from VegansDeluxe.rebuild import Stun
 
-COOLDOWN = 17
 MIN_STUN = 7
 MAX_STUN = 10
 
@@ -19,7 +18,7 @@ class ClockODestiny(Skill):
 
     def __init__(self):
         super().__init__()
-        self.cooldown_turn = 0
+        self.used = False
 
 
 @RegisterState(ClockODestiny)
@@ -39,10 +38,10 @@ class ClockODestinyAction(DecisiveAction):
 
     @property
     def hidden(self) -> bool:
-        return self.session.turn < self.state.cooldown_turn
+        return self.state.used
 
     async def func(self, source, target):
-        self.state.cooldown_turn = self.session.turn + COOLDOWN
+        self.state.used = True
         duration = random.randint(MIN_STUN, MAX_STUN)
 
         for entity in self.session.alive_entities:

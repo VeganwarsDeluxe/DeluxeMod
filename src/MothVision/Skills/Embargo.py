@@ -1,5 +1,5 @@
 from VegansDeluxe.core import ActionTag, EventContext, ExecuteActionEvent, PostUpdateActionsGameEvent, \
-    RegisterEvent, RegisterState, Session
+    PreMoveGameEvent, RegisterEvent, RegisterState, Session
 from VegansDeluxe.core import StateContext
 from VegansDeluxe.core.Skills.Skill import Skill
 from VegansDeluxe.core.Translator.LocalizedString import ls
@@ -20,6 +20,15 @@ async def register(root_context: StateContext[Embargo]):
     session: Session = root_context.session
     source = root_context.entity
     state: Embargo = root_context.state
+
+    @RegisterEvent(session.id, event=PreMoveGameEvent)
+    async def announce_mutual_negation(context: EventContext[PreMoveGameEvent]):
+        if context.session.turn != 1:
+            return
+        enemies = [e for e in session.entities if not source.is_ally(e)]
+        if any(e.get_state(Embargo) for e in enemies):
+            session.say(ls("moth_vision.skill.embargo.negated").format(source.name),
+                        source_id=source.id, target_id=source.id)
 
     @RegisterEvent(session.id, event=ExecuteActionEvent, priority=-1)
     async def detect_own_item_use(context: EventContext[ExecuteActionEvent]):
